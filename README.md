@@ -23,3 +23,7 @@
 
 - `index.html`: כל האפליקציה בקובץ אחד, בלי תלויות ובלי build.
 - `manifest.webmanifest`, `icon*.png`, `icon.svg`: התקנה למסך הבית.
+
+## המאמן בצ׳אט
+
+בגרסה הזו המאמן מתחבר ישירות ל-Claude עם מפתח API אישי של Anthropic (`sk-ant-...`), שיוצרים ב-platform.claude.com. המפתח נשמר רק בדפדפן של המכשיר ונשלח רק ל-`api.anthropic.com`. ה-SDK הרשמי (`@anthropic-ai/sdk` 1.7.0) ארוז בתוך `vendor/`.

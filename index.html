@@ -452,6 +452,12 @@ body{background:var(--paper)}
 .compare .cap b{font-size:38px;font-weight:600}
 .compare .cap small{font-size:12px;opacity:.8;margin-top:2px}
 .compare .cap.diff{top:12px;bottom:auto;left:50%;transform:translateX(-50%);flex-direction:row;align-items:center;font-size:18px;font-weight:600;background:var(--lime);color:var(--lime-ink);border:0;padding:6px 14px;border-radius:999px}
+
+.keybox{white-space:pre-line;display:flex;flex-direction:column;gap:6px;max-width:100%}
+.keybox .krow{display:flex;gap:8px;margin-top:6px}
+.keybox input{flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:color-mix(in srgb,var(--card) 70%,transparent);color:var(--ink);font:inherit;font-size:16px;direction:ltr}
+.keybox .btn{padding:9px 16px;font-size:14px}
+.keybox .kmsg{font-size:12.5px;color:var(--warn)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -623,7 +629,7 @@ body{background:var(--paper)}
   <div class="sheet chat" id="chatSheet" role="dialog" aria-modal="true" aria-labelledby="chatTitle">
     <div class="grab"></div>
     <div class="hd"><div><div class="eyebrow">מכיר את כל הנתונים שלך</div><h2 id="chatTitle">המאמן</h2></div>
-      <div style="display:flex;gap:8px"><button class="x" id="chatClear" aria-label="ניקוי שיחה" title="שיחה חדשה">↺</button><button class="x" data-close aria-label="סגירה">✕</button></div></div>
+      <div style="display:flex;gap:8px"><button class="x" id="keyBtn" aria-label="הגדרת מפתח" title="מפתח API" hidden>⚙</button><button class="x" id="chatClear" aria-label="ניקוי שיחה" title="שיחה חדשה">↺</button><button class="x" data-close aria-label="סגירה">✕</button></div></div>
     <div class="msgs" id="msgs" aria-live="polite"></div>
     <div class="chips" id="chips"></div>
     <div class="att-prev" id="attPrev" hidden></div>
@@ -1060,10 +1066,36 @@ let chat=[];try{chat=JSON.parse(localStorage.getItem(CHAT_K))||[]}catch(e){}
 let chatImg=null,busy=false,abortC=null;
 const saveChat=()=>{try{localStorage.setItem(CHAT_K,JSON.stringify(chat.slice(-40).map(m=>({role:m.role,content:m.content}))))}catch(e){}};
 function fmt(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/^#{1,3}\s*/gm,'')}
+/* ---------- direct Claude API (GitHub version, user's own key) ---------- */
+const KEY_K='hitov.apikey';
+const getKey=()=>{try{return localStorage.getItem(KEY_K)||''}catch(e){return ''}};
+let sdkP=null;
+const loadSdk=()=>sdkP||(sdkP=import('./vendor/anthropic-sdk-1.7.0.mjs').then(m=>m.default||m.Anthropic));
+const blobB64=b=>new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(String(fr.result).split(',')[1]);fr.onerror=rej;fr.readAsDataURL(b)});
+async function apiSample(messages,{onText,signal,images}={}){
+  const Anthropic=await loadSdk();
+  const client=new Anthropic({apiKey:getKey(),dangerouslyAllowBrowser:true});
+  const msgs=messages.map(m=>({role:m.role,content:m.content}));
+  if(images&&images.length){const last=msgs[msgs.length-1];const blocks=[];for(const b of images)blocks.push({type:'image',source:{type:'base64',media_type:b.type||'image/jpeg',data:await blobB64(b)}});last.content=[...blocks,{type:'text',text:last.content}]}
+  const stream=client.beta.messages.stream({model:'claude-opus-5-5',max_tokens:16000,output_config:{effort:'low'},betas:['server-side-fallback-2026-07-01'],fallbacks:'default',messages:msgs},{signal});
+  let text='';
+  for await(const ev of stream){if(ev.type==='content_block_delta'&&ev.delta.type==='text_delta'){text+=ev.delta.text;onText&&onText({text,delta:ev.delta.text})}}
+  const fin=await stream.finalMessage();
+  if(fin.stop_reason==='refusal')throw{code:'refused'};
+  return{text:text||fin.content.filter(b=>b.type==='text').map(b=>b.text).join('')};
+}
+function keySetupHtml(){return `<div class="m ai keybox"><b>חיבור המאמן בגרסה הזו</b>כאן המאמן עובד עם מפתח API אישי של Anthropic. יוצרים מפתח באתר platform.claude.com ← API Keys (התשלום לפי שימוש, שיחה רגילה עולה אגורות בודדות).
+המפתח נשמר רק בטלפון שלך ונשלח רק ל-Anthropic.
+<span class="krow"><input id="keyIn" type="password" autocomplete="off" placeholder="sk-ant-..." aria-label="מפתח API"><button class="btn lime" id="keySave" type="button">חיבור</button></span>
+<span class="kmsg" id="keyMsg"></span></div>`}
+function bindKeyBox(){const b=$('#keySave');if(!b)return;b.onclick=()=>{const v=$('#keyIn').value.trim();if(!/^sk-ant-/.test(v)){$('#keyMsg').textContent='המפתח צריך להתחיל ב-sk-ant-';return}try{localStorage.setItem(KEY_K,v)}catch(e){}chat.push({role:'assistant',content:'מחובר! אפשר לשאול אותי כל דבר על החיטוב.'});renderMsgs();toast('המאמן מחובר')}}
+$('#keyBtn').onclick=()=>{try{localStorage.removeItem(KEY_K)}catch(e){}renderMsgs();toast('המפתח הוסר')};
 function renderMsgs(){
   const el=$('#msgs');
   const intro=`<div class="m ai">היי! אני המאמן שלך. אני רואה את כל השקילות, המותן והזרועות שלך.\nאפשר לשאול על תזונה, אימונים, קצב ירידה, או לשלוח תמונה לניתוח.</div>`;
   el.innerHTML=intro+chat.map(m=>`<div class="m ${m.role==='user'?'me':'ai'}${m.typing?' typing':''}">${m.img?`<img src="${esc(m.img)}" alt="">`:''}${m.role==='user'?esc(m.content):fmt(m.content)}</div>`).join('');
+  if(!state.sample&&!getKey())el.insertAdjacentHTML('beforeend',keySetupHtml());
+  $('#keyBtn').hidden=!!state.sample||!getKey();bindKeyBox();
   el.scrollTop=el.scrollHeight;
 }
 const CHIPS=['נתח את האימון האחרון','נתח את השבוע האחרון','מה לאכול ביום אימון?','איך לשבור סטגנציה?','תכנן לי שבוע אימונים','כמה קלוריות לאכול?'];
@@ -1083,7 +1115,8 @@ ${state.workouts.slice(-6).map(w=>`${w.date}${w.title?` (${w.title})`:''}: `+(w.
 }
 async function send(text){
   text=(text||'').trim();if((!text&&!chatImg)||busy)return;
-  if(!state.sample){chat.push({role:'user',content:text},{role:'assistant',content:'המאמן זמין רק בגרסה שב-claude.ai, שם הוא מחובר ל-Claude. כאן אפשר להשתמש בתובנות ובטיפים שבדף.'});renderMsgs();return}
+  const runner=state.sample||(getKey()?apiSample:null);
+  if(!runner){renderMsgs();$('#keyIn')?.focus();return}
   const img=chatImg;chatImg=null;$('#attPrev').hidden=true;
   const um={role:'user',content:text||'מה דעתך על התמונה?'};if(img)um.img=URL.createObjectURL(img);
   chat.push(um);const am={role:'assistant',content:'חושב…',typing:true};chat.push(am);renderMsgs();busy=true;
@@ -1097,11 +1130,11 @@ async function send(text){
   try{
     const opts={cache:false,signal:abortC.signal,onText:({text})=>{am.content=text||'חושב…';am.typing=!text;renderMsgs()}};
     if(img)opts.images=[img];
-    const r=await state.sample(hist,opts);
+    const r=await runner(hist,opts);
     am.content=r.text;am.typing=false;
   }catch(err){
     am.typing=false;am.err=true;
-    am.content=err?.code==='not_granted'?'אין גישה למאמן. אפשר לאשר אותה בתפריט ההרשאות של הדף.':err?.code==='rate_limited'?'יותר מדי הודעות ברצף. נסה שוב בעוד דקה.':err?.code==='images_unavailable'||err?.code==='image_rejected'?'לא ניתן לנתח את התמונה כאן. נסה לשאול בטקסט.':(err?.text||'משהו השתבש. נסה שוב.');
+    am.content=err?.code==='not_granted'?'אין גישה למאמן. אפשר לאשר אותה בתפריט ההרשאות של הדף.':err?.code==='rate_limited'?'יותר מדי הודעות ברצף. נסה שוב בעוד דקה.':err?.code==='images_unavailable'||err?.code==='image_rejected'?'לא ניתן לנתח את התמונה כאן. נסה לשאול בטקסט.':err?.code==='refused'?'לא יכול לענות על זה. נסה לנסח אחרת.':err?.status===401?'המפתח לא תקין. לחץ על ⚙ למעלה כדי להחליף אותו.':err?.status===429?'יותר מדי הודעות ברצף או שנגמרה יתרת החשבון. נסה שוב בעוד דקה.':err?.status===400&&/credit/i.test(err?.message||'')?'אין יתרה בחשבון ה-API. אפשר להטעין ב-platform.claude.com.':err?.name==='AbortError'?'':(err?.text||'משהו השתבש. בדוק חיבור ונסה שוב.');
   }finally{busy=false;renderMsgs();saveChat()}
 }
 $('#chatForm').onsubmit=e=>{e.preventDefault();const t=$('#chatIn').value;$('#chatIn').value='';$('#chatIn').style.height='';send(t)};
@@ -1126,7 +1159,7 @@ if('IntersectionObserver' in window){const navIo=new IntersectionObserver(es=>es
     const [d,a,s]=await Promise.all([c.use('db').catch(()=>null),c.use('assets').catch(()=>null),c.use('sample').catch(()=>null)]);
     db=d;state.assets=a;state.sample=s;
     if(!s){$('#askWeek').hidden=true}
-  }else{$('#askWeek').hidden=true}
+  }else{$('#askWeek').hidden=!getKey()}
   if(store)return;clearTimeout(timer);
   store=db?dbStore(db):localStore();store._cb=onData;store.start(onData);
 })();
