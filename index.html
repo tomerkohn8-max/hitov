@@ -582,6 +582,55 @@ body{background:var(--paper)}
 .phcard>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}.phcard small{font-size:12px;color:var(--muted);line-height:1.5}
 .phcard .btn{flex:none;padding:8px 14px;font-size:13.5px}
 .phsub{font-size:12.5px;color:var(--muted);font-weight:700;margin-bottom:8px}
+
+/* calendar */
+.calwrap{margin-top:14px}
+.calhd{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.calhd .callbl{flex:1;text-align:center;font-weight:800;font-size:14px;color:#fff;padding:6px;border-radius:12px}
+.calhd .calnav{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#fff;font-size:20px;line-height:1;display:grid;place-items:center}
+.calhd .calmode{padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:700;color:#1b2a05;background:linear-gradient(90deg,#e6ff7a,#d4f24a)}
+.wkplan,.mgrid{margin-top:0}
+.cd{position:relative}
+.cd em{font-style:normal}
+.cd .okm{font-size:9.5px;font-weight:800;color:#1b2a05;background:linear-gradient(90deg,#e6ff7a,#d4f24a);padding:1px 5px;border-radius:999px;white-space:nowrap;box-shadow:0 0 8px rgba(212,242,74,.8)}
+.cd .wdm{font-size:9.5px;font-weight:800;color:#1b2a05;background:linear-gradient(90deg,#e6ff7a,#d4f24a);padding:1px 5px;border-radius:999px}
+.cd .wim{font-size:9.5px;font-weight:700;color:#e6ff7a;font-family:var(--f-num)}
+.wkplan .done{background:radial-gradient(120% 120% at 50% 0%,rgba(212,242,74,.4),rgba(160,220,40,.14) 60%,rgba(255,255,255,.04));border-color:rgba(212,242,74,.75);box-shadow:0 0 14px -4px rgba(212,242,74,.85)}
+.mgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.mgrid .cd{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:46px;padding:4px 0;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#fff;font-size:10px;min-width:0}
+.mgrid .cd b{font-size:13.5px}.mgrid .cd i{display:block;width:6px;height:6px;border-radius:50%;background:transparent}
+.mgrid .cd.plan i{background:#23c8ff;box-shadow:0 0 6px #23c8ff}
+.mgrid .cd .okm{font-size:0;padding:0;width:16px;height:16px;display:grid;place-items:center;border-radius:50%}.mgrid .cd .okm::before{content:"✓";font-size:10px}
+.mgrid .cd .wdm{font-size:0;width:7px;height:7px;padding:0}
+.mgrid .cd.done{background:radial-gradient(120% 120% at 50% 0%,rgba(212,242,74,.38),rgba(255,255,255,.04));border-color:rgba(212,242,74,.6)}
+.mgrid .cd.wd{border-color:rgba(212,242,74,.55)}
+.mgrid .cd.today{outline:2px solid rgba(255,255,255,.8);outline-offset:1px}
+.mgrid .cd.out{opacity:.35}
+.mgrid .cd.miss{border-style:dashed;border-color:rgba(35,200,255,.5)}
+.calwd{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;text-align:center;font-size:11px;color:rgba(200,215,255,.7)}
+/* day sheet */
+.daylist{display:grid;gap:10px}
+.dayitem{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;background:color-mix(in srgb,var(--card) 60%,transparent);border:1px solid var(--line)}
+.dayitem>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}.dayitem small{font-size:12.5px;color:var(--muted)}
+.dayitem .btn{flex:none;padding:8px 14px;font-size:13.5px}
+.dayitem.done{border-color:#a8cc1c;box-shadow:0 0 16px -6px rgba(212,242,74,.9)}
+.dck{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:900;color:#1b2a05;background:radial-gradient(130% 160% at 30% 10%,#f1ffb0,#d4f24a 50%,#a8cc1c)}
+.dck.pl{background:color-mix(in srgb,var(--card) 70%,transparent);color:var(--sky);border:1px solid var(--line)}
+.dayempty{padding:18px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:18px}
+.dayacts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+/* celebration */
+.fx{position:fixed;inset:0;width:100vw;height:100vh;z-index:79;pointer-events:none}
+.cele{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:24px max(20px,env(safe-area-inset-left,0px));background:rgba(4,10,26,.0);transition:background .3s}
+.cele.show{background:rgba(4,10,26,.45)}
+.celecard{width:min(360px,100%);text-align:center;padding:26px 22px 20px;border-radius:28px;color:#fff;background:radial-gradient(120% 100% at 50% 0%,rgba(29,58,114,.9),rgba(8,14,34,.94));border:1px solid rgba(212,242,74,.5);box-shadow:0 0 40px -10px rgba(212,242,74,.8),0 30px 60px -20px rgba(0,0,0,.7);transform:scale(.85) translateY(20px);opacity:0;transition:transform .45s cubic-bezier(.2,1.4,.4,1),opacity .3s}
+.cele.show .celecard{transform:none;opacity:1}
+.celeic{width:64px;height:64px;margin:0 auto 10px;border-radius:50%;display:grid;place-items:center;font-size:32px;font-weight:900;color:#1b2a05;background:radial-gradient(130% 160% at 30% 10%,#f1ffb0,#d4f24a 50%,#a8cc1c);box-shadow:0 0 30px rgba(212,242,74,.9)}
+.cele.fxon .celeic{animation:popic .7s cubic-bezier(.2,1.6,.4,1)}
+@keyframes popic{from{transform:scale(.3)}}
+.celecard h3{margin:0;font-size:24px;font-weight:900}
+.celes{margin-top:6px;font-size:13.5px;color:#e6ff7a;font-weight:700}
+.celecard p{margin:14px 0 18px;font-size:17px;line-height:1.5;text-wrap:balance}
+.celecard .btn{width:100%}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -769,6 +818,18 @@ body{background:var(--paper)}
     <div class="view"><video id="camV" playsinline muted autoplay></video><img class="g" id="camG" alt=""><span class="hint" id="camHint">מתאימים את הגוף לצל של הפעם הקודמת</span>
       <label class="ghostctl" for="camOp">צל <input type="range" id="camOp" min="0" max="80" value="40"></label></div>
     <div class="bar"><button class="x" id="camClose" type="button" aria-label="סגירה">✕</button><button class="shot" id="camShot" type="button" aria-label="צילום"></button><button class="x" id="camFlip" type="button" aria-label="החלפת מצלמה">⟲</button></div>
+  </div>
+
+  <!-- day sheet -->
+  <div class="sheet" id="daySheet" role="dialog" aria-modal="true" aria-labelledby="dayTitle">
+    <div class="grab"></div>
+    <div class="hd"><h2 id="dayTitle">יום</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <div class="bd"><div id="dayBody" class="daylist"></div>
+      <div class="dayacts"><button type="button" class="btn lime" id="dayAddWo">＋ אימון</button><button type="button" class="btn ghost" id="dayAddW">＋ שקילה</button><button type="button" class="btn ghost" id="dayPlan" style="grid-column:1/-1">תוכנית</button></div></div>
+  </div>
+
+  <div class="cele" id="cele" hidden role="dialog" aria-modal="true" aria-labelledby="celeT">
+    <div class="celecard"><div class="celeic" aria-hidden="true">✓</div><h3 id="celeT"></h3><div class="celes" id="celeS"></div><p id="celeL"></p><button type="button" class="btn lime" id="celeOk">יאללה, ממשיכים</button></div>
   </div>
 
   <!-- share sheet -->
@@ -1213,7 +1274,9 @@ $('#woEx').addEventListener('input',e=>{const t=e.target,ex=t.closest('.exed');i
   if(t.dataset.f==='group'){E.group=t.value==='auto'?null:t.value;return}
   E._saved=false;
   if(t.dataset.f==='name')E.name=t.value;else if(r){const S=E.sets[+r.dataset.si];S[t.dataset.f]=t.dataset.f==='reps'?(num(t.value)==null?null:Math.round(num(t.value))):num(t.value)}});
-$('#woEx').addEventListener('change',e=>{if(e.target.dataset.f==='name')renderExEd()});
+$('#woEx').addEventListener('change',e=>{if(e.target.dataset.f!=='name')return;setTimeout(()=>{const a=document.activeElement;let sel=null,val=null;
+  if(a&&a.closest&&a.closest('#woEx')&&a.dataset.f){const ex=a.closest('.exed'),r=a.closest('.srow');sel=`.exed[data-ei="${ex?.dataset.ei}"]${r?` .srow[data-si="${r.dataset.si}"]`:''} [data-f="${a.dataset.f}"]`;val=a.value}
+  renderExEd();if(sel){const n=$('#woEx').querySelector(sel);if(n){n.focus();if(val!=null&&n.value!==val)n.value=val}}},0)});
 $('#woEx').addEventListener('click',e=>{const ex=e.target.closest('.exed');if(!ex)return;const E=woDraft.exercises[+ex.dataset.ei];
   if(e.target.closest('[data-saveex]')){saveProgress(+ex.dataset.ei);return}
   if(e.target.closest('[data-wt]')){E.weighted=noWt(E);if(!E.weighted)E.sets.forEach(z=>z.kg=null);renderExEd();draftSave();return}
@@ -1250,7 +1313,7 @@ $('#woForm').onsubmit=async e=>{e.preventDefault();const msg=$('#woMsg');
   const id=woEditing?.id||woDraft._id||(date+'-'+Math.random().toString(36).slice(2,7));
   $('#woSave').disabled=true;msg.className='form-msg';msg.textContent='שומר…';
   const newPRs=data.exercises.filter(x=>{const b=bestSet(x);if(!b)return false;const h=exHistory(x.name).filter(z=>z.id!==id&&z.date<=data.date);return h.length&&e1rm(b)>Math.max(...h.map(z=>z.score))+0.01}).map(x=>x.name);
-  try{await store.saveWorkout(id,data);draftClear();if(newPRs.length)setTimeout(()=>toast('שיא חדש: '+newPRs.join(', ')),400);state.woOpen=id;closeSheets();toast(woEditing?'האימון עודכן':'האימון נשמר');setTimeout(()=>$('#secWorkouts').scrollIntoView({behavior:reduce?'auto':'smooth'}),250)}
+  try{await store.saveWorkout(id,data);draftClear();if(newPRs.length)0;state.woOpen=id;closeSheets();const wasEdit=woEditing&&!woDraft._id&&state.workouts.some(w=>w.id===id&&w.date<todayIso());if(wasEdit)toast('האימון עודכן');else setTimeout(()=>celebrate({title:'האימון הושלם',sub:`${data.exercises.length} תרגילים · ${data.exercises.reduce((a,e)=>a+e.sets.length,0)} סטים · ${fmtK(vol(data))} ק״ג נפח${newPRs.length?` · שיא חדש ב${newPRs.join(', ')}`:''}`,line:pick(MOT.workout),fx:true}),150);setTimeout(()=>$('#secWorkouts').scrollIntoView({behavior:reduce?'auto':'smooth'}),250)}
   catch(err){msg.className='form-msg err';msg.textContent='השמירה נכשלה. בדוק חיבור ונסה שוב.'}finally{$('#woSave').disabled=false}};
 $('#woDel').onclick=async()=>{if(!woDelArm){woDelArm=true;$('#woDel').textContent='לחץ שוב לאישור המחיקה';return}try{await store.removeWorkout(woEditing.id);draftClear();closeSheets();toast('האימון נמחק')}catch(e){$('#woMsg').textContent='המחיקה נכשלה.';$('#woMsg').className='form-msg err'}};
 $('#woNew').onclick=()=>openWorkout(null);
@@ -1307,7 +1370,8 @@ function renderToday(){
   $('#startToday')&&($('#startToday').onclick=()=>openWorkout(null,templateFromPlan(D),'plan'));
   $('#weighNow')&&($('#weighNow').onclick=()=>openEntry(null));
   $('#drGo')&&($('#drGo').onclick=resumeDraft);$('#drDel')&&($('#drDel').onclick=()=>{draftClear();renderToday();toast('הטיוטה נמחקה')});
-  el.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>openPlan(+b.dataset.day));
+  const cw=el.querySelector('.wkplan');if(cw){cw.outerHTML=`<div class="calwrap">${calHtml(P)}</div>`}
+  bindCal(el);
 }
 function templateFromPlan(D){const ti=todayIso();return{title:D.title||'',exercises:D.ex.map(x=>{const pe=lastEx(x.name,ti);return{name:x.name,group:x.group||null,sets:pe?pe.e.sets.map(s=>({kg:s.kg,reps:s.reps,drop:!!s.drop})):[{kg:null,reps:null}]}})}}
 /* plan editor */
@@ -1369,6 +1433,64 @@ $('#phaseForm').onsubmit=async e=>{e.preventDefault();const start=$('#phStart').
   let L=[...(state.phases||[])];if(!L.length&&state.weeks[0])L.push({type:'cut',start:state.weeks[0].date});
   L=L.filter(p=>p.start<start);if(L.length&&L[L.length-1].type===phSel){toast(`כבר בשלב ${PH[phSel].n}. לחזרה לשלב קודם יש כפתור למעלה.`);return}L.push({type:phSel,start});
   try{await store.setPhases(L);if(g!=null||phSel!==curPhase().type)await store.setGoal(g);closeSheets();toast(start>todayIso()?`${PH[phSel].n} יתחיל ב-${dm(start)}`:`עברת ל${PH[phSel].n} מ-${dm(start)}`)}catch(err){toast('השמירה נכשלה')}};
+
+/* ---------- calendar ---------- */
+const MON=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+const cal={mode:'week',off:0};
+function dayInfo(iso,P){const d=new Date(iso+'T12:00:00'),dw=d.getDay(),pd=P.days[dw];const wos=state.workouts.filter(w=>w.date===iso);const wi=state.weeks.find(w=>w.date===iso&&w.weight!=null);
+  return{d,dw,pd,wos,wi,plan:!!(pd&&!pd.rest&&pd.ex?.length),rest:!!pd?.rest,wd:P.weighDay===dw}}
+function calHtml(P){const ti=todayIso();let days=[],label='';
+  if(cal.mode==='week'){const b=new Date();b.setHours(12,0,0,0);b.setDate(b.getDate()-b.getDay()+cal.off*7);days=[...Array(7)].map((_,i)=>{const x=new Date(b);x.setDate(b.getDate()+i);return x});
+    const a=days[0],z=days[6];label=cal.off===0?'השבוע':cal.off===-1?'שבוע שעבר':cal.off===1?'שבוע הבא':`${a.getDate()}/${a.getMonth()+1}–${z.getDate()}/${z.getMonth()+1}`}
+  else{const m=new Date();m.setHours(12,0,0,0);m.setDate(1);m.setMonth(m.getMonth()+cal.off);label=`${MON[m.getMonth()]} ${m.getFullYear()}`;const b=new Date(m);b.setDate(1-m.getDay());days=[...Array(42)].map((_,i)=>{const x=new Date(b);x.setDate(b.getDate()+i);return x});days._m=m.getMonth()}
+  const cells=days.map(x=>{const iso=isoOf(x),I=dayInfo(iso,P),past=iso<ti,has=I.wos.length>0;
+    const cls=['cd',has?'done':'',I.plan?'plan':'',I.rest?'rest':'',(!has&&past&&I.plan)?'miss':'',iso===ti?'today':'',I.wd?'wd':'',I.wi?'wi':'',days._m!=null&&x.getMonth()!==days._m?'out':''].join(' ');
+    const mark=has?`<em class="okm">✓ אימון</em>`:I.wd&&!I.wi?`<em class="wdm">שקילה</em>`:I.wi?`<em class="wim">${f1(I.wi.weight)}</em>`:'<i></i>';
+    return `<button type="button" class="${cls}" data-date="${iso}" aria-label="${x.getDate()}/${x.getMonth()+1}${has?', אימון הושלם':''}${I.wd?', יום שקילה':''}">${cal.mode==='week'?`<span>${DAYS[I.dw]}</span>`:''}<b>${x.getDate()}</b>${mark}</button>`}).join('');
+  return `<div class="calhd"><button type="button" class="calnav" data-cal="prev" aria-label="הקודם">›</button><button type="button" class="callbl" data-cal="today">${label}</button><button type="button" class="calnav" data-cal="next" aria-label="הבא">‹</button><button type="button" class="calmode" data-cal="mode">${cal.mode==='week'?'חודש':'שבוע'}</button></div>
+    ${cal.mode==='month'?`<div class="calwd">${DAYS.map(d=>`<span>${d}</span>`).join('')}</div>`:''}<div class="${cal.mode==='week'?'wkplan':'mgrid'}">${cells}</div>`}
+function bindCal(el){el.querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>openDay(b.dataset.date));
+  el.querySelectorAll('[data-cal]').forEach(b=>b.onclick=()=>{const a=b.dataset.cal;if(a==='prev')cal.off--;else if(a==='next')cal.off++;else if(a==='today')cal.off=0;else{cal.mode=cal.mode==='week'?'month':'week';cal.off=0}renderToday()})}
+/* day sheet */
+let dayIso=null;
+function openDay(iso){dayIso=iso;const P=planState||{days:{}};const I=dayInfo(iso,P);const ti=todayIso();
+  $('#dayTitle').textContent=`יום ${DAYN[I.dw]} · ${I.d.getDate()}/${I.d.getMonth()+1}`;
+  let h='';
+  if(I.wos.length)h+=I.wos.map(w=>`<div class="dayitem done"><span class="dck">✓</span><div><b>${esc(w.title||'אימון')}</b><small>${(w.exercises||[]).length} תרגילים · ${nsets(w)} סטים · ${fmtK(vol(w))} ק״ג</small><span class="mgrow">${woGroups(w).map(k=>`<span class="mgchip">${mgIcon(k)}${MG[k].n}</span>`).join('')}</span></div><button type="button" class="btn ghost" data-dwo="${esc(w.id)}">פתיחה</button></div>`).join('');
+  if(I.wi)h+=`<div class="dayitem wi"><span class="dck">⚖</span><div><b>${f1(I.wi.weight)} ק״ג</b><small>${I.wi.waist!=null?`מותן ${fc(I.wi.waist)} ס״מ`:''}</small></div><button type="button" class="btn ghost" data-dwe="${esc(I.wi.id)}">עריכה</button></div>`;
+  if(!I.wos.length&&I.plan)h+=`<div class="dayitem"><span class="dck pl">●</span><div><b>מתוכנן: ${esc(I.pd.title||'אימון')}</b><small>${I.pd.ex.length} תרגילים</small></div>${iso>=ti?`<button type="button" class="btn lime" data-dstart>התחלה</button>`:''}</div>`;
+  if(I.rest&&!I.wos.length)h+=`<div class="dayitem"><span class="dck pl">☾</span><div><b>יום מנוחה</b></div></div>`;
+  if(!h)h=`<div class="dayempty">${iso>ti?'עוד לא תוכנן כלום ליום הזה.':'לא תועד כלום ביום הזה.'}</div>`;
+  $('#dayBody').innerHTML=h;
+  $('#dayAddWo').textContent=iso>ti?'＋ אימון ליום הזה':'＋ תיעוד אימון ליום הזה';
+  $('#dayPlan').textContent=`תוכנית קבועה ליום ${DAYN[I.dw]}`;
+  openSheet('daySheet')}
+$('#dayBody').addEventListener('click',e=>{const a=e.target.closest('[data-dwo]'),b=e.target.closest('[data-dwe]'),c=e.target.closest('[data-dstart]');
+  if(a){const w=state.workouts.find(x=>x.id===a.dataset.dwo);closeSheets(true);state.woOpen=w.id;renderWorkouts();setTimeout(()=>{$('#scrim').classList.remove('open');document.querySelector(`.wo[data-wid="${CSS.escape(w.id)}"]`)?.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})},60)}
+  if(b){openEntry(b.dataset.dwe)}
+  if(c){const P=planState;const I=dayInfo(dayIso,P);openWorkout(null,templateFromPlan(I.pd),'plan');$('#woDate').value=dayIso;woDraft.date=dayIso}});
+$('#dayAddWo').onclick=()=>{const d=dayIso;openWorkout(null,null,'fresh');if(!draftGet()||woDraft.date!==d){$('#woDate').value=d;woDraft.date=d}};
+$('#dayAddW').onclick=()=>{const d=dayIso;const ex=state.weeks.find(w=>w.date===d);openEntry(ex?ex.id:null);if(!ex)$('#fDate').value=d};
+$('#dayPlan').onclick=()=>openPlan(new Date(dayIso+'T12:00:00').getDay());
+/* ---------- celebration ---------- */
+const MOT={
+ workout:['עוד אימון בכיס. הגוף זוכר כל אחד מהם.','לא חיכית למוטיבציה, פשוט הגעת. זה ההבדל.','כל סט היום הוא השקעה בגוף של עוד חודש.','המשמעת של היום היא התוצאה של מחר.','אימון אחד לא משנה הכל. הרבה כאלה כן.','עשית את מה שאמרת שתעשה. זה כל הסוד.','הכי קשה היה להתחיל. את זה כבר עשית.'],
+ down:['המספר זז כי אתה לא זז מהתוכנית.','השומן הולך, ההרגלים נשארים.','ככה נראית עקביות על המשקל.','עוד צעד קטן. ביחד הם כבר דרך ארוכה.','מה שעשית השבוע עובד. ממשיכים בדיוק ככה.'],
+ up:['בונים. לאט ובחוכמה.','כל ק״ג נכון הוא עוד שריר בדרך.','העלייה בשליטה. זה בדיוק מה שרוצים.'],
+ flat:['משקל הוא לא קו ישר. המגמה היא מה שחשוב.','שבוע בלי שינוי זה נתון, לא כישלון. ממשיכים.','מים, מלח ושינה מזיזים את המשקל. המותן והמראה מספרים את הסיפור.','התהליך עובד גם כשהמשקל נח. תחזיק את הקו.'],
+ weigh:['תיעוד הוא חצי מהדרך. כל הכבוד על העקביות.']};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function fireworks(){if(reduce)return;const c=document.createElement('canvas');c.className='fx';document.body.appendChild(c);const x=c.getContext('2d');const dpr=Math.min(2,devicePixelRatio||1);
+  const W=c.width=innerWidth*dpr,H=c.height=innerHeight*dpr;const COLS=['#d4f24a','#e6ff7a','#23c8ff','#ff7a1a','#ffe14d','#ffffff','#7cc8ff'];const P=[];
+  const burst=(bx,by)=>{const col=pick(COLS),col2=pick(COLS),n=70;for(let i=0;i<n;i++){const a=Math.PI*2*i/n+Math.random()*.1,sp=(2+Math.random()*4.5)*dpr;P.push({x:bx,y:by,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,l:1,c:i%3?col:col2,r:(1.4+Math.random()*1.6)*dpr})}};
+  const rockets=[];for(let i=0;i<5;i++)setTimeout(()=>rockets.push({x:W*(.18+Math.random()*.64),y:H,ty:H*(.18+Math.random()*.3),vy:-(9+Math.random()*3)*dpr}),i*260);
+  const t0=performance.now();(function f(t){x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,.22)';x.fillRect(0,0,W,H);x.globalCompositeOperation='lighter';
+    for(let i=rockets.length-1;i>=0;i--){const r=rockets[i];r.y+=r.vy;x.fillStyle='#fff';x.beginPath();x.arc(r.x,r.y,2.2*dpr,0,7);x.fill();if(r.y<=r.ty){burst(r.x,r.y);rockets.splice(i,1)}}
+    for(let i=P.length-1;i>=0;i--){const p=P[i];p.vx*=.985;p.vy=p.vy*.985+.06*dpr;p.x+=p.vx;p.y+=p.vy;p.l-=.012;if(p.l<=0){P.splice(i,1);continue}x.globalAlpha=Math.max(0,p.l);x.fillStyle=p.c;x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill()}
+    x.globalAlpha=1;if(t-t0<3400||P.length)requestAnimationFrame(f);else c.remove()})(t0)}
+function celebrate({title,sub,line,fx}){if(fx)fireworks();const o=$('#cele');$('#celeT').textContent=title;$('#celeS').textContent=sub||'';$('#celeS').hidden=!sub;$('#celeL').textContent=line;o.classList.toggle('fxon',!!fx);o.hidden=false;requestAnimationFrame(()=>o.classList.add('show'));clearTimeout(celebrate.t);celebrate.t=setTimeout(closeCele,6500)}
+function closeCele(){const o=$('#cele');o.classList.remove('show');setTimeout(()=>o.hidden=true,300)}
+$('#celeOk').onclick=closeCele;$('#cele').addEventListener('click',e=>{if(e.target.id==='cele')closeCele()});
 function renderAll(){renderGoal();renderWorkouts();renderToday();renderPR();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
 
 /* ---------- sheets ---------- */
@@ -1427,7 +1549,13 @@ $('#entryForm').onsubmit=async e=>{
     Object.keys(data).forEach(k=>data[k]===undefined&&delete data[k]);
     if(editing&&editing.id!==date)await store.remove(editing.id);
     await store.save(date,data);
-    closeSheets();toast(editing?'השבוע עודכן':'השקילה נשמרה');
+    closeSheets();
+    {const prevW=[...state.weeks].filter(w=>w.date<date&&w.weight!=null).pop();const dir=(PH[phaseAt(date).type]||PH.cut).dir;
+     if(data.weight!=null&&prevW&&!(editing&&editing.weight===data.weight)){const d=+(data.weight-prevW.weight).toFixed(1);const good=dir<0?d<0:dir>0?d>0:Math.abs(d)<=.3;
+       const sub=`${d<0?'ירדת':d>0?'עלית':'נשארת על'} ${d?Math.abs(d).toFixed(1)+' ק״ג':f1(data.weight)+' ק״ג'}${d?` · עכשיו ${f1(data.weight)} ק״ג`:''}`;
+       setTimeout(()=>celebrate({title:good?(dir<0?'ירידה במשקל':dir>0?'עלייה במשקל':'משקל יציב'):'השקילה נשמרה',sub,line:pick(good?(dir>0?MOT.up:MOT.down):MOT.flat),fx:good}),150)}
+     else if(data.weight!=null&&!editing)setTimeout(()=>celebrate({title:'השקילה נשמרה',sub:`${f1(data.weight)} ק״ג`,line:pick(MOT.weigh),fx:false}),150);
+     else toast(editing?'השבוע עודכן':'השקילה נשמרה')}
     if(!reduce)setTimeout(()=>scrollTo({top:0,behavior:'smooth'}),200);
   }catch(err){
     msg.className='form-msg err';
