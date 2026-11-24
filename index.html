@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="חיטוב">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -58,7 +58,7 @@ h2{font-family:var(--f-display);font-weight:900;font-size:26px;line-height:1.1;m
 .brand{font-family:var(--f-display);font-weight:900;font-size:22px;letter-spacing:-.02em}
 .brand b{color:var(--lime)}
 .brand{display:flex;align-items:center;gap:10px}
-.brand .logo{width:40px;height:40px;flex:none;filter:drop-shadow(0 6px 14px rgba(40,10,90,.45))}
+.brand .logo{width:40px;height:40px;flex:none;border-radius:12px;object-fit:cover;box-shadow:0 0 0 1px rgba(255,255,255,.25),0 6px 16px rgba(60,20,120,.45)}
 .pill{display:inline-flex;align-items:center;gap:6px;background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(8px);padding:5px 12px;font-size:12.5px;font-weight:500}
 .hero-main{position:relative;margin-top:18px}
 .since{font-size:13px;opacity:.9}
@@ -425,7 +425,7 @@ body{background:var(--paper)}
     <span class="cloud c1"></span><span class="cloud c2"></span>
     <div class="wrap">
       <div class="topbar">
-        <div class="brand"><svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" aria-hidden="true"><defs><linearGradient id="lgRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5fd0d8"/><stop offset=".35" stop-color="#9b5cff"/><stop offset=".7" stop-color="#7a2fd6"/><stop offset="1" stop-color="#3fb6c6"/></linearGradient><linearGradient id="lgCore" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eee8f7"/><stop offset=".55" stop-color="#bdb2d4"/><stop offset="1" stop-color="#8f7fb3"/></linearGradient><filter id="lgGlow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><g id="lgShape" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M52 124 L132 110 L162 132"/><path d="M48 246 L196 164 L304 150"/><path d="M186 210 L226 222 L176 258"/></g></defs><rect width="360" height="360" rx="78" fill="#050507"/><g filter="url(#lgGlow)"><use href="#lgShape" stroke="#4a1d8f" stroke-width="40"/><circle cx="218" cy="110" r="26" fill="#4a1d8f"/><use href="#lgShape" stroke="url(#lgRim)" stroke-width="34"/><circle cx="218" cy="110" r="23" fill="url(#lgRim)"/></g><use href="#lgShape" stroke="url(#lgCore)" stroke-width="18"/><circle cx="218" cy="110" r="13" fill="url(#lgCore)"/><use href="#lgShape" stroke="#ffffff" stroke-opacity=".55" stroke-width="4" transform="translate(-2,-4)"/></svg><span>חיטוב<b>.</b></span></div>
+        <div class="brand"><img class="logo" src="data:image/webp;base64,UklGRqwEAABXRUJQVlA4IKAEAAAQHACdASqAAIAAPmEuk0YkIqGhKxXZIIAMCWIDvr1T5IIz50lt/tH4w6ZQ2HaBPD/PnogdN3zFeVN+sful/YD8M/kW/qX+Z62z0IfLX9l792vSVBdB6ovy4ttE+cATLtrO6hseqcWdic9ZmTrXzI0WFbuM7pcjptyNC2dZxLKNPF8iVil4pgZCSMvgkKAfAYoXMEwfdqapc6LsElWy5+lfeEt+V9Hl0M4xfWpgggLkxZUeajPEZgseTUTnLfvPdkJkfvP1l+ooI7MdVum7zkWfKpik/4L0z/kaSLiK4evgi2EMSFINepCx+AD++1Xj7tTxVRXytpQ0Qq/2Df9ksrt9Od0gh47EP2NOiywm/UDIUnyjNfLDiN+Q3NMvbRncKx7cDa0j2R5lC8ROz5V+7Na9DPwadiQbKx65Zmg3dU9rfGrjf9KxqFsd/Tga7GyS7d5ZVxkNzDyH+IPKGpZm3LBX9ppfn88ndeRh1Uegju1nOusNSRZAAWuvDc8bwupoTEfAu4I0DyAgUNvanYbJh5o6diAOwENI1U4ixXDZUPwWnd246JeI3QyuO4zAQClcri04x8SonyifyLJpq0OKMWff+M4Yq+3kXD1XGbFuRaTNKfedt8YEF+V+BX+KQ+VyUCa2l7z04JTf6y/L3xqpbK4rSSDNlGgTMOt6fNLO6UX9SegatR6nCipsY1qVPEhHhPR45/81xJSGJj65g9tEqwk/5dBhwtxb+nz44O0eBIYvWM2FBSQi1Nrmmbm+UTHcK0xfgu7sdxmhwV2hFBDLm74iC54cko0iR10tX3udZ68IfGV8nFVfsaTsCQX/keyXDv+VmpE+cROFrQM7UKZHRNe12rTl0xWVpzkx/9tnPQ+xmUM0d09Cn/CHe0h+eaTzkcSKTFMcnqDuEt295xHE0GfPkNadOtUmxCzMWorqHbycDAVbbJ1ZikmrVGb4Buuui20jc1HA0AEStoWhfAltiZNuXxTDex70pfiXgYCldvFIfTzcHl9vgv25dqWiDTNZes8c373Ef/ZBT7dH/MmTlXCUnhPbZtHRbfLoShJ7kI3DayQW8gqGWxaH0YFvcORbeS99M7vd36qxVE4pu/NJTyzDHfyEtnesk9LjQvAEXU9eFFhSlNJa3bPadLn/TanTjR6KgwHsuV4NVe/YfEtqMxUk5Y+RJeKe1/xl8IUgVlL1X9copV7q1cSVnS7YgCIdV9pV8BLcKtv1c8a4pjOL4PUD9FVkBerzRiGh3lu4YuPTA71OKpvjoa1VY+qRRySzSC+l5+IWnve44Zkow++P5wgyzYVYe772w7jV0OE6oNScV6AVGboZsN/01hXP2Qk3lI7xjrFPGJlXdj0YrCBHx/r31aCBC4fp5ry9/vM76/38liZwgAcaE9ShHr3UsUHRmbcdRgFw7wIAHntDsBhoRSx6+7RvxebfnT73wDwAXW+QJfLfz192O0jJHC7alradNVeJnpQV0Rv7nnFreaTgCX/YE0p9L6wyIy562Sk7HREND352Hf5M49B1ru+fgLqrNR61WaFvAjGESHCIwu+cAPtdcPE9i0IRj08lIPU/HMAAAA==" alt="" width="40" height="40"><span>חיטוב<b>.</b></span></div>
         <span class="pill" id="weekPill">טוען נתונים…</span>
       </div>
       <div class="hero-main hero-anim">
