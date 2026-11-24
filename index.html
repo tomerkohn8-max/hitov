@@ -7,16 +7,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;900&family=Oswald:wght@500;600;700&display=swap">
 <meta name="theme-color" content="#1d6fd0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="חיטוב">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 <script>
-(function(){var V='1795549218';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
+(function(){var V='1795549790';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
 </script>
 </head>
 <body>
@@ -1692,7 +1689,7 @@ function moveInd(){const b=document.querySelector('.nav button.on'),ind=$('#navI
 new MutationObserver(moveInd).observe(document.querySelector('.nav .in'),{subtree:true,attributes:true,attributeFilter:['class']});addEventListener('resize',moveInd);setTimeout(moveInd,50);
 document.querySelectorAll('.nav [data-go]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById(b.dataset.go).scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})});
 $('#bkOut').onclick=()=>{try{const d=localStorage.getItem('hitov.local.v1')||'{}';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([d],{type:'application/json'}));a.download='hitov-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();toast('הגיבוי נשמר')}catch(e){toast('לא הצלחנו לשמור גיבוי')}};
-$('#bkIn').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!d||typeof d.weeks!=='object')throw 0;const cur=JSON.parse(localStorage.getItem('hitov.local.v1')||'{}');const m={weeks:{...(cur.weeks||{}),...d.weeks},workouts:{...(cur.workouts||{}),...(d.workouts||{})},goal:d.goal??cur.goal??null};for(const w of Object.values(m.weeks)){if(cur.weeks?.[w.date]){w.photoKey=w.photoKey||cur.weeks[w.date].photoKey;w.videoKey=w.videoKey||cur.weeks[w.date].videoKey}}localStorage.setItem('hitov.local.v1',JSON.stringify(m));store.start(store._cb);toast('הנתונים שוחזרו')}catch(err){toast('הקובץ לא נראה כמו גיבוי של חיטוב.')}e.target.value=''};
+$('#bkIn').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!d||typeof d.weeks!=='object')throw 0;const cur=JSON.parse(localStorage.getItem('hitov.local.v1')||'{}');const m={...cur,weeks:{...(cur.weeks||{}),...d.weeks},workouts:{...(cur.workouts||{}),...(d.workouts||{})},steps:{...(d.steps||{}),...(cur.steps||{})},goal:d.goal??cur.goal??null,plan:cur.plan||d.plan,phases:(cur.phases&&cur.phases.length?cur.phases:d.phases)||[]};for(const w of Object.values(m.weeks)){if(cur.weeks?.[w.date]){w.photoKey=w.photoKey||cur.weeks[w.date].photoKey;w.videoKey=w.videoKey||cur.weeks[w.date].videoKey}}localStorage.setItem('hitov.local.v1',JSON.stringify(m));store.start(store._cb);toast('הנתונים שוחזרו')}catch(err){toast('הקובץ לא נראה כמו גיבוי של חיטוב.')}e.target.value=''};
 let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>renderChart(false),150)});
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>renderChart(false));
 
@@ -1781,6 +1778,7 @@ $('#chatClear').onclick=()=>{abortC?.abort();chat=[];saveChat();renderMsgs()};
 function openChat(){renderMsgs();openSheet('chatSheet')}
 
 /* ---------- boot ---------- */
+try{if(navigator.standalone||matchMedia('(display-mode: standalone)').matches)document.documentElement.classList.add('pwa')}catch(e){}
 try{navigator.storage?.persist?.().catch(()=>{})}catch(e){}
 renderAll();
 if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});

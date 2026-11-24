@@ -4,7 +4,7 @@
   "lang": "he",
   "dir": "rtl",
   "start_url": "./",
-  "display": "standalone",
+  "display": "browser",
   "background_color": "#403beb",
   "theme_color": "#1d6fd0",
   "icons": [
