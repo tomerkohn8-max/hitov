@@ -416,6 +416,27 @@ body{background:var(--paper)}
 .hcal i.today{outline:1.5px solid rgba(255,255,255,.6);outline-offset:1px}
 .hlegend{display:flex;align-items:center;gap:8px;font-size:11px;color:rgba(200,215,255,.65);margin-top:12px}
 .hlegend b{flex:1;height:6px;border-radius:9px;background:linear-gradient(90deg,#0a0f3c,#1a3cff,#23c8ff,#ffe14d,#ff7a1a,#ff2a2a)}
+
+/* ===== thermal accents on UI ===== */
+@property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes spin{to{--ang:360deg}}
+.btn.lime,.composer .send,.nav .add,.tile.go{background:radial-gradient(130% 150% at 30% 15%,rgba(70,130,255,.82),rgba(27,63,224,.72) 45%,rgba(10,20,112,.82) 100%);box-shadow:inset 0 1px 1.5px rgba(255,255,255,.6),inset 0 -8px 14px rgba(255,110,40,.28),inset 0 8px 14px rgba(35,200,255,.22),0 0 22px -6px rgba(255,122,26,.55),0 0 26px -8px rgba(35,200,255,.6)}
+.btn.lime::after,.composer .send::after,.nav .add::after,.tile.go::after,.nav .ind::after,.seg button[aria-pressed="true"]::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:2px;pointer-events:none;
+  background:conic-gradient(from var(--ang),#23c8ff,#1a3cff 18%,#23c8ff 30%,#ffe14d 38%,#ff7a1a 44%,#ff2a2a 48%,#23c8ff 58%,#1a3cff 74%,#ffb14d 86%,#23c8ff);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:spin 7s linear infinite}
+.seg button{position:relative}
+.seg button[aria-pressed="true"]{background:radial-gradient(130% 150% at 30% 15%,rgba(70,130,255,.85),rgba(27,63,224,.75) 50%,rgba(10,20,112,.85))}
+.nav .ind{background:radial-gradient(130% 150% at 30% 15%,rgba(70,130,255,.35),rgba(10,20,112,.35));box-shadow:0 0 18px -6px rgba(255,122,26,.6),0 0 20px -6px rgba(35,200,255,.6)}
+.gicon,.gicon.v2,.gicon.v3,.gicon.v4{background:radial-gradient(120% 120% at 35% 25%,#3a7dff,#1b3fe0 48%,#0a1470 100%);box-shadow:inset 0 0 0 1.5px rgba(35,200,255,.65),inset 0 -8px 12px rgba(255,100,40,.55),inset 0 7px 12px rgba(35,200,255,.35),0 0 18px -4px rgba(255,122,26,.55),0 0 20px -6px rgba(35,200,255,.55)}
+.gicon.v2{box-shadow:inset 0 0 0 1.5px rgba(255,180,77,.65),inset 0 8px 12px rgba(255,60,40,.5),inset 0 -7px 12px rgba(35,200,255,.4),0 0 18px -4px rgba(255,90,40,.6)}
+.gicon.v3{box-shadow:inset 0 0 0 1.5px rgba(35,200,255,.7),inset 6px 0 12px rgba(255,120,40,.5),inset -6px 0 12px rgba(35,200,255,.4),0 0 18px -4px rgba(35,200,255,.65)}
+.gicon::before{opacity:.45}
+.wo-date{background:radial-gradient(120% 120% at 35% 25%,#3a7dff,#1b3fe0 48%,#0a1470);box-shadow:inset 0 0 0 1.5px rgba(35,200,255,.6),inset 0 -6px 10px rgba(255,100,40,.5),0 0 14px -4px rgba(255,122,26,.5)}
+.liq::before{background:linear-gradient(90deg,#23c8ff,#ffe14d 40%,#ff7a1a 60%,#23c8ff);box-shadow:0 0 14px 3px rgba(255,140,40,.75),0 0 20px 4px rgba(35,200,255,.6)}
+.liq{background:linear-gradient(180deg,#3a7dff 0%,#1b3fe0 30%,#0a1470 100%)}
+.capsule{box-shadow:inset 0 0 22px rgba(120,170,255,.25),0 0 30px -10px rgba(255,122,26,.45),0 20px 40px -18px rgba(40,120,255,.6)}
+.tile .v{background:linear-gradient(90deg,#d4f24a,#ffe14d);-webkit-background-clip:text;background-clip:text}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -479,7 +500,7 @@ body{background:var(--paper)}
         <div class="hstrip" id="hStrip"></div>
         <div class="heat-sub" style="margin-top:16px"><span>אימונים · 12 שבועות אחרונים</span><span id="hCalNote"></span></div>
         <div class="hcal" id="hCal"></div>
-        <div class="hlegend"><span>קר</span><b></b><span>חם</span></div>
+        <div class="hlegend" style="direction:ltr"><span>קר</span><b></b><span>חם</span></div>
       </div>
     </section>
 
@@ -729,16 +750,23 @@ function renderChart(animate=true){
   let g='';
   for(let v=lo;v<=hi+1e-9;v+=step){const y=Y(v);g+=`<line x1="${pl}" x2="${Wd-pr}" y1="${y}" y2="${y}" stroke="${C.line}" stroke-dasharray="2 4"/><text class="ax" x="${pl-6}" y="${y+3.5}" text-anchor="end">${+v.toFixed(1)}</text>`}
   const uniq=[...new Set(W.map(w=>w.date))];const every=Math.ceil(uniq.length/(Wd<380?5:7));
-  uniq.forEach((d,i)=>{if(i%every===0||i===uniq.length-1){if(i!==uniq.length-1&&uniq.length-1-i<every*.6)return;g+=`<text class="ax" x="${X(+new Date(d))}" y="${H-6}" text-anchor="middle">${dm(d)}</text>`}});
+  uniq.forEach((d,i)=>{if(i%every===0||i===uniq.length-1){if(i!==uniq.length-1&&uniq.length-1-i<every*.6)return;g+=`<text class="ax" x="${X(+new Date(d))}" y="${H-6}" text-anchor="${i===0?'start':i===uniq.length-1?'end':'middle'}">${dm(d)}</text>`}});
   let paths='';
   pts.forEach((p,si)=>{
     if(!p.length)return;const c=series[si].c;
     const dPath=p.map((q,i)=>`${i?'L':'M'}${X(+new Date(q.d)).toFixed(1)},${Y(q.v).toFixed(1)}`).join('');
     if(series.length===1)paths+=`<path class="fade-in" d="${dPath}L${X(+new Date(p[p.length-1].d))},${H-pb}L${X(+new Date(p[0].d))},${H-pb}Z" fill="url(#ga)"/>`;
-    paths+=`<path class="${animate?'draw':''}" d="${dPath}" fill="none" stroke="${c}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" pathLength="1000" style="stroke-dasharray:1000;--len:1000"/>`;
-    p.forEach((q,i)=>{const last=i===p.length-1;paths+=`<circle cx="${X(+new Date(q.d))}" cy="${Y(q.v)}" r="${last?6:3.4}" fill="${last?C.lime:C.card}" stroke="${last?C.ink:c}" stroke-width="${last?2:1.8}" class="fade-in"/>`});
+    const thermalLine=series.length===1;const sc=thermalLine?'url(#gl)':c;
+    if(thermalLine)paths+=`<path class="fade-in" d="${dPath}" fill="none" stroke="url(#gl)" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" opacity=".55" filter="url(#glw)"/>`;
+    paths+=`<path class="${animate?'draw':''}" d="${dPath}" fill="none" stroke="${sc}" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" pathLength="1000" style="stroke-dasharray:1000;--len:1000"/>`;
+    p.forEach((q,i)=>{const last=i===p.length-1;const tc=thermalLine?thermal(.4+.6*(p.length>1?i/(p.length-1):1)):c;const cx=X(+new Date(q.d)),cy=Y(q.v);
+      if(last&&thermalLine)paths+=`<circle cx="${cx}" cy="${cy}" r="13" fill="url(#orbG)" class="fade-in" filter="url(#glw)"/><circle cx="${cx}" cy="${cy}" r="7" fill="url(#orbG)" stroke="url(#gl)" stroke-width="2.4" class="fade-in"/>`;
+      else paths+=`<circle cx="${cx}" cy="${cy}" r="${last?6:3.4}" fill="${C.card}" stroke="${tc}" stroke-width="${last?2.4:1.9}" class="fade-in"/>`});
   });
-  box.innerHTML=`<svg viewBox="0 0 ${Wd} ${H}" role="img" aria-label="גרף ${series.map(s=>s.name).join(' ו')}"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.sky}" stop-opacity=".28"/><stop offset="1" stop-color="${C.sky}" stop-opacity="0"/></linearGradient></defs>${g}${paths}<line id="cur" y1="${pt}" y2="${H-pb}" stroke="${C.ink}" stroke-opacity=".35" stroke-dasharray="3 3" hidden/></svg>`;
+  box.innerHTML=`<svg viewBox="0 0 ${Wd} ${H}" role="img" aria-label="גרף ${series.map(s=>s.name).join(' ו')}"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7a1a" stop-opacity=".22"/><stop offset=".45" stop-color="#23c8ff" stop-opacity=".16"/><stop offset="1" stop-color="#1a3cff" stop-opacity="0"/></linearGradient>
+<linearGradient id="gl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#23c8ff"/><stop offset=".35" stop-color="#1a3cff"/><stop offset=".6" stop-color="#23c8ff"/><stop offset=".8" stop-color="#ffb14d"/><stop offset="1" stop-color="#ff3a2a"/></linearGradient>
+<radialGradient id="orbG" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#3a7dff"/><stop offset=".55" stop-color="#1b3fe0"/><stop offset="1" stop-color="#0a1470"/></radialGradient>
+<filter id="glw" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="4"/></filter></defs>${g}${paths}<line id="cur" y1="${pt}" y2="${H-pb}" stroke="${C.ink}" stroke-opacity=".35" stroke-dasharray="3 3" hidden/></svg>`;
   const svg=box.querySelector('svg'),cur=svg.querySelector('#cur');
   const pick=ev=>{const r=svg.getBoundingClientRect(),x=(ev.clientX-r.left)*(Wd/r.width);let best=null,bd=1e9;uniq.forEach(d=>{const dd=Math.abs(X(+new Date(d))-x);if(dd<bd){bd=dd;best=d}});if(!best)return;cur.setAttribute('x1',X(+new Date(best)));cur.setAttribute('x2',X(+new Date(best)));cur.removeAttribute('hidden');setReadout(best)};
   svg.addEventListener('pointermove',pick);svg.addEventListener('pointerdown',pick);
