@@ -8,12 +8,15 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;900&family=Oswald:wght@500;600;700&display=swap">
 <meta name="theme-color" content="#1d6fd0">
 <meta name="apple-mobile-web-app-title" content="חיטוב">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 <script>
-(function(){var V='1795549790';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
+(function(){var V='1795549858';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
 </script>
 </head>
 <body>
@@ -736,8 +739,8 @@ body{background:var(--paper)}
     </section>
 
     <section id="secSteps">
-      <div class="sec-head"><div><div class="eyebrow">Apple Watch · בריאות</div><h2>צעדים</h2><p id="stSub">ממוצע יומי ב-7 הימים האחרונים</p></div>
-        <button class="btn ghost" id="stConnect" style="padding:9px 14px;font-size:14px;white-space:nowrap;flex:none">חיבור לשעון</button></div>
+      <div class="sec-head"><div><div class="eyebrow">מד צעדים</div><h2>צעדים</h2><p id="stSub">ממוצע יומי ב-7 הימים האחרונים</p></div>
+        <button class="btn lime" id="stConnect" style="padding:9px 14px;font-size:14px;white-space:nowrap;flex:none">＋ צעדים</button></div>
       <div class="card stcard" id="stCard"></div>
     </section>
 
@@ -881,21 +884,9 @@ body{background:var(--paper)}
   <!-- steps sheet -->
   <div class="sheet chat" id="stepsSheet" role="dialog" aria-modal="true" aria-labelledby="stTitle">
     <div class="grab"></div>
-    <div class="hd"><h2 id="stTitle">חיבור צעדים מהשעון</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <div class="hd"><h2 id="stTitle">הזנת צעדים</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
     <div class="bd stguide">
-      <p class="stlead">קיצור דרך באייפון קורא כל ערב את הצעדים מאפליקציית <b>בריאות</b> ושולח אותם לכאן. בונים אותו פעם אחת, בערך 2 דקות.</p>
-      <ol class="ststeps">
-        <li><b>פותחים את אפליקציית "קיצורים"</b> ← ＋ (קיצור חדש) ← נותנים לו שם: <em>צעדים לחיטוב</em></li>
-        <li><b>מוסיפים פעולה "מצא דגימות בריאות"</b><span class="en">Find Health Samples</span><small>סוג: <b>צעדים</b> · תאריך התחלה: <b>היום</b></small></li>
-        <li><b>מוסיפים פעולה "חשב סטטיסטיקה"</b><span class="en">Calculate Statistics</span><small>בוחרים <b>סכום</b> של דגימות הבריאות</small></li>
-        <li><b>מוסיפים פעולה "עגל מספר"</b><span class="en">Round Number</span><small>לשלם הקרוב</small></li>
-        <li><b>מוסיפים פעולה "כתובת URL"</b> ומדביקים את הכתובת הזו, ואז בסוף שלה מוסיפים את המשתנה <b>"מספר מעוגל"</b>:
-          <span class="stcopy"><code id="stUrl">https://tomerkohn8-max.github.io/hitov/?steps=</code><button type="button" class="btn ghost" id="stCopy">העתקה</button></span></li>
-        <li><b>מוסיפים פעולה "פתח כתובות URL"</b><span class="en">Open URLs</span></li>
-        <li><b>אוטומציה יומית:</b> בלשונית "אוטומציה" ← ＋ ← <b>שעה ביום</b> ← 23:30 · כל יום ← <b>הפעל מיד</b> ← בוחרים את הקיצור <em>צעדים לחיטוב</em></li>
-      </ol>
-      <p class="stnote">בדיקה: מריצים את הקיצור פעם אחת ידנית. האפליקציה תיפתח עם ההודעה "נשמרו X צעדים". הצעדים נשמרים בגרסה שנפתחת בספארי, אז כדאי לפתוח את האפליקציה מספארי (ולא מאייקון במסך הבית, שהוא אחסון נפרד באייפון).</p>
-      <div class="stmanual"><div class="eyebrow" style="margin-bottom:6px">או הזנה ידנית</div>
+      <div class="stmanual" style="margin-top:0">
         <div class="fgrid"><div class="fld"><label for="stDate">תאריך</label><input id="stDate" type="date"></div><div class="fld"><label for="stVal">צעדים</label><input class="n" id="stVal" inputmode="numeric" placeholder="8500"></div></div>
         <div class="row-btns"><button type="button" class="btn lime" id="stSave">שמירה</button></div></div>
     </div>
@@ -1588,7 +1579,7 @@ function stepsRange(endIso,n){const out=[];const e=new Date(endIso+'T12:00:00');
 function avgOf(a){const v=a.map(x=>x.v).filter(x=>x!=null);return v.length?Math.round(v.reduce((s,x)=>s+x,0)/v.length):null}
 function renderSteps(){const el=$('#stCard');if(!el)return;const ti=todayIso();const L=stepsRange(ti,7),P=stepsRange(isoOf(new Date(new Date(ti+'T12:00:00').getTime()-7*864e5)),7);
   const any=Object.keys(state.steps).length;
-  if(!any){el.innerHTML=`<div class="stempty"><b>עוד אין צעדים</b><span>מחברים את השעון דרך קיצור דרך באייפון, והצעדים יופיעו כאן כל ערב.</span><button type="button" class="btn lime" id="stGo">איך מחברים</button></div>`;$('#stGo').onclick=openSteps;$('#stSub').textContent='ממוצע יומי ב-7 הימים האחרונים';return}
+  if(!any){el.innerHTML=`<div class="stempty"><b>עוד אין צעדים</b><span>מקלידים כמה צעדים הלכת היום, והגרף יתמלא יום אחרי יום.</span><button type="button" class="btn lime" id="stGo">＋ צעדים של היום</button></div>`;$('#stGo').onclick=openSteps;$('#stSub').textContent='ממוצע יומי ב-7 הימים האחרונים';return}
   const avg=avgOf(L),pavg=avgOf(P),GOAL=8000,mx=Math.max(GOAL*1.15,...L.map(x=>x.v||0));
   const bars=L.map(x=>{const h=x.v!=null?Math.max(4,x.v/mx*100):0,t=x.v!=null?Math.min(1,x.v/12000):0;return `<div class="stb${x.iso===ti?' today':''}" title="${x.d.getDate()}/${x.d.getMonth()+1}: ${x.v??'—'}"><span class="stv">${x.v!=null?fmtSteps(x.v):''}</span><i style="height:${h}%;background:linear-gradient(180deg,${thermal(.35+.6*t)},${thermal(.25+.3*t)});--glow:${thermal(.35+.6*t,.7)}"></i><span class="std">${DAYS[x.d.getDay()]}</span></div>`}).join('');
   const goalY=(1-GOAL/mx)*100;
@@ -1598,7 +1589,7 @@ function renderSteps(){const el=$('#stCard');if(!el)return;const ti=todayIso();c
   $('#stSub').textContent=`היום: ${state.steps[ti]!=null?state.steps[ti].toLocaleString('he-IL')+' צעדים':'עוד לא עודכן'}`}
 function openSteps(){$('#stDate').value=todayIso();$('#stVal').value=state.steps[todayIso()]??'';openSheet('stepsSheet')}
 $('#stConnect').onclick=openSteps;
-$('#stCopy').onclick=async()=>{const t=$('#stUrl').textContent;try{await navigator.clipboard.writeText(t);toast('הכתובת הועתקה')}catch(e){const r=document.createRange();r.selectNodeContents($('#stUrl'));const g=getSelection();g.removeAllRanges();g.addRange(r);toast('הכתובת מסומנת, אפשר להעתיק')}};
+void 0;const _stc=async()=>{const t=$('#stUrl').textContent;try{await navigator.clipboard.writeText(t);toast('הכתובת הועתקה')}catch(e){const r=document.createRange();r.selectNodeContents($('#stUrl'));const g=getSelection();g.removeAllRanges();g.addRange(r);toast('הכתובת מסומנת, אפשר להעתיק')}};
 $('#stSave').onclick=async()=>{const d=$('#stDate').value,v=num($('#stVal').value);if(!d||v==null||v<0){toast('צריך תאריך ומספר צעדים');return}try{await store.setSteps(d,Math.round(v));closeSheets();toast(`נשמרו ${Math.round(v).toLocaleString('he-IL')} צעדים`)}catch(e){toast('השמירה נכשלה')}};
 async function handleStepsParam(){try{const q=new URLSearchParams(location.search);if(!q.has('steps'))return;const v=num(q.get('steps'));let d=q.get('date');if(!d||!/^\d{4}-\d{2}-\d{2}$/.test(d))d=todayIso();
   q.delete('steps');q.delete('date');history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:'')+location.hash);
@@ -1794,7 +1785,7 @@ if('IntersectionObserver' in window){const navIo=new IntersectionObserver(es=>es
   }
   if(store)return;clearTimeout(timer);
   store=db?dbStore(db):localStore();store._cb=onData;store.start(onData);
-  handleStepsParam();
+  
 })();
 </script>
 </body>
