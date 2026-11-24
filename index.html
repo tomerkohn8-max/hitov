@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>יומן חיטוב</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;900&family=Oswald:wght@500;600;700&display=swap">
+<meta name="theme-color" content="#1d6fd0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="חיטוב">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<style>
+/* Layout: mobile-first single column (max 520px) — sky hero with giant number + stat tiles, then chart, photo strip, before/after, insight cards; fixed bottom nav + bottom sheets */
+:root{
+  --sky:#1d6fd0; --sky-2:#5aa9f2; --navy:#0d2547; --lime:#d4f24a; --lime-ink:#1b2a05;
+  --violet:#6a63d8; --ink:#121a33; --muted:#5b6884; --paper:#edf2f8; --card:#ffffff;
+  --line:rgba(18,26,51,.12); --glass:rgba(255,255,255,.16); --glass-line:rgba(255,255,255,.32);
+  --good:#1f9d61; --warn:#d9822b; --shadow:0 14px 40px -18px rgba(13,37,71,.35);
+  --f-display:"Heebo",system-ui,sans-serif; --f-num:"Oswald","Arial Narrow",system-ui,sans-serif; --f-body:"Heebo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --sky:#124f9c; --sky-2:#2d78c9; --navy:#081a33; --violet:#a7a2ff; --ink:#e8eefa; --muted:#93a4c3;
+  --paper:#071224; --card:#0f2140; --line:rgba(232,238,250,.12); --good:#4fd18f; --warn:#f3a95a;
+  --shadow:0 14px 40px -18px rgba(0,0,0,.7); color-scheme:dark }}
+:root[data-theme="dark"]{
+  --sky:#124f9c; --sky-2:#2d78c9; --navy:#081a33; --violet:#a7a2ff; --ink:#e8eefa; --muted:#93a4c3;
+  --paper:#071224; --card:#0f2140; --line:rgba(232,238,250,.12); --good:#4fd18f; --warn:#f3a95a;
+  --shadow:0 14px 40px -18px rgba(0,0,0,.7); color-scheme:dark }
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--sky)}
+#app{max-width:520px;margin:0 auto;padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,input:focus-visible,textarea:focus-visible,label:focus-within{outline:2px solid var(--lime);outline-offset:2px}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums;letter-spacing:.01em}
+h2{font-family:var(--f-display);font-weight:900;font-size:26px;line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:500}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;color:#fff;background:linear-gradient(180deg,var(--sky) 0%,var(--sky-2) 100%);
+  margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:calc(env(safe-area-inset-top,0px) + 14px);padding-bottom:22px;border-radius:0 0 28px 28px}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.35) 1px,transparent 1.2px);background-size:16px 16px;opacity:.55;pointer-events:none}
+.cloud{position:absolute;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.75),rgba(255,255,255,0));filter:blur(4px);pointer-events:none;animation:drift 22s ease-in-out infinite alternate}
+.c1{width:260px;height:120px;bottom:40px;left:-60px}
+.c2{width:200px;height:90px;bottom:120px;right:-50px;animation-duration:28s;opacity:.7}
+@keyframes drift{to{transform:translateX(40px)}}
+.topbar{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-family:var(--f-display);font-weight:900;font-size:22px;letter-spacing:-.02em}
+.brand b{color:var(--lime)}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(8px);padding:5px 12px;font-size:12.5px;font-weight:500}
+.hero-main{position:relative;margin-top:18px}
+.since{font-size:13px;opacity:.9}
+.giant{display:flex;align-items:flex-end;gap:10px;direction:ltr;justify-content:flex-end;margin-top:4px}
+.giant .big{font-family:var(--f-num);font-weight:700;font-size:clamp(110px,38vw,190px);line-height:.82;letter-spacing:-.02em;text-shadow:0 10px 30px rgba(13,37,71,.25)}
+.giant .unit{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding-bottom:8px}
+.tag{background:var(--lime);color:var(--lime-ink);font-weight:900;font-family:var(--f-display);padding:2px 10px;font-size:18px}
+.giant .arrow{font-size:28px;line-height:1}
+.glassbox{position:relative;margin-top:16px;background:linear-gradient(135deg,rgba(255,255,255,.26),rgba(255,255,255,.08));border:1px solid var(--glass-line);backdrop-filter:blur(10px);padding:14px 16px;max-width:330px}
+.glassbox .lead{font-size:20px;line-height:1.3;font-weight:500;text-wrap:balance}
+.glassbox .lead b{font-weight:900}
+.tiles{position:relative;display:grid;grid-template-columns:1fr 1.25fr 64px;gap:8px;margin-top:18px}
+.tile{padding:12px 12px 10px;min-width:0;color:#fff;text-align:start}
+.tile.dark{background:linear-gradient(160deg,#1b2333,#0e1422)}
+.tile.blue{background:linear-gradient(110deg,#1e2c44,#1f5aa0)}
+.tile .v{font-family:var(--f-num);font-weight:600;color:var(--lime);font-size:30px;line-height:1}
+.tile .v small{font-size:15px;margin-inline-start:2px}
+.tile .l{font-size:12.5px;letter-spacing:.04em;margin-top:6px;font-weight:500}
+.tile.go{background:#2563a8;display:grid;place-items:center;transition:transform .2s}
+.tile.go:active{transform:scale(.94)}
+.tile.go svg{width:30px;height:30px}
+
+/* sections */
+section{margin-top:30px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
+.sec-head p{margin:4px 0 0;color:var(--muted);font-size:13.5px}
+.card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--line)}
+
+/* chart */
+.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.seg button{padding:6px 12px;border-radius:999px;font-size:13px;font-weight:500;color:var(--muted);transition:background .25s,color .25s}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.chart-card{padding:16px 14px 10px}
+.readout{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:0 4px 6px}
+.readout .val{font-family:var(--f-num);font-size:34px;font-weight:600;line-height:1}
+.readout .val small{font-size:15px;color:var(--muted);margin-inline-start:4px}
+.readout .when{font-size:13px;color:var(--muted)}
+.delta{font-size:12.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--good) 14%,transparent);color:var(--good)}
+.delta.up{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+#chart{direction:ltr;width:100%;touch-action:pan-y}
+#chart svg{display:block;width:100%;height:auto;overflow:visible}
+.ax{fill:var(--muted);font-size:10.5px;font-family:var(--f-num)}
+.legend{display:flex;gap:14px;font-size:12.5px;color:var(--muted);padding:4px 4px 2px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:6px;vertical-align:-1px}
+.draw{animation:draw 1.4s cubic-bezier(.6,.1,.2,1) both}
+@keyframes draw{from{stroke-dashoffset:var(--len)}to{stroke-dashoffset:0}}
+.fade-in{animation:fadein .9s .5s both}
+@keyframes fadein{from{opacity:0}}
+
+/* weeks strip */
+.strip{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px max(16px,env(safe-area-inset-left,0px)) 14px;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.wk{flex:0 0 132px;scroll-snap-align:start;text-align:start;overflow:hidden;padding:0;transition:transform .2s}
+.wk:active{transform:scale(.97)}
+.wk .ph{aspect-ratio:3/4;max-width:100%;background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--sky) 10%,transparent) 0 8px,transparent 8px 16px);display:grid;place-items:center;position:relative;border-bottom:1px dashed var(--line)}
+.wk .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.wk .ph .plus{width:38px;height:38px;border-radius:50%;border:1.5px dashed var(--muted);display:grid;place-items:center;color:var(--muted);font-size:22px}
+.wk .ph .lab{position:absolute;top:8px;inset-inline-start:8px;background:var(--lime);color:var(--lime-ink);font-size:11px;font-weight:700;padding:1px 7px}
+.wk .ph .vb{position:absolute;bottom:8px;inset-inline-end:8px;width:28px;height:28px;border-radius:50%;background:rgba(13,20,34,.72);color:#fff;display:grid;place-items:center;font-size:11px}
+.vid{width:100%;max-height:52vh;border-radius:16px;background:#000;display:block}
+.reveal{transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.reveal.pre{transform:translateY(26px)}
+.wk .meta{padding:9px 11px 11px}
+.wk .meta .w{font-family:var(--f-num);font-size:22px;font-weight:600;line-height:1}
+.wk .meta .d{font-size:12px;color:var(--muted);margin-top:4px;display:flex;justify-content:space-between;gap:6px}
+.wk .meta .d b{font-weight:700}
+.g{color:var(--good)} .u{color:var(--warn)}
+
+/* compare */
+.compare{position:relative;aspect-ratio:3/4;max-width:100%;overflow:hidden;border-radius:20px;background:var(--navy);user-select:none;touch-action:pan-y}
+.compare img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.compare .after-clip{position:absolute;inset:0;clip-path:inset(0 0 0 var(--cut,50%))}
+.compare .handle{position:absolute;top:0;bottom:0;left:var(--cut,50%);width:2px;background:var(--lime);transform:translateX(-1px)}
+.compare .handle::after{content:"⟷";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;background:var(--lime);color:var(--lime-ink);display:grid;place-items:center;font-weight:900}
+.compare .cap{position:absolute;bottom:12px;padding:4px 10px;background:rgba(13,20,34,.72);color:#fff;font-size:12.5px;font-weight:500}
+.compare .cap.l{left:12px}.compare .cap.r{right:12px}
+.compare input[type=range]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.cmp-empty{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cmp-empty .fr{position:relative;overflow:hidden;aspect-ratio:3/4;max-width:100%;border:1.5px dashed var(--line);border-radius:18px;display:flex;flex-direction:column;justify-content:flex-end;padding:12px;background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--sky) 8%,transparent) 0 8px,transparent 8px 16px)}
+.cmp-empty .fr video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cmp-empty .fr .ov{position:relative;background:color-mix(in srgb,var(--card) 82%,transparent);backdrop-filter:blur(6px);padding:8px 10px;border-radius:12px}
+.cmp-empty .fr .w{font-family:var(--f-num);font-size:34px;font-weight:600;line-height:1}
+.cmp-empty .fr .t{font-size:12.5px;color:var(--muted)}
+.pickers{display:flex;gap:8px;margin-top:10px}
+.pickers select{flex:1;min-width:0;padding:9px 10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:13.5px}
+
+/* insights */
+.ins{display:grid;gap:14px}
+.ic{display:grid;grid-template-columns:78px 1fr;gap:0;padding:16px 14px;position:relative;animation:rise .7s both}
+.ic:nth-child(2){animation-delay:.08s}.ic:nth-child(3){animation-delay:.16s}.ic:nth-child(4){animation-delay:.24s}.ic:nth-child(5){animation-delay:.32s}
+@keyframes rise{from{transform:translateY(14px)}}
+.ic .art{display:grid;place-items:start center;border-inline-end:1.5px dashed var(--line);padding-inline-end:12px}
+.ic .art svg{width:60px;height:60px}
+.ic .tx{padding-inline-start:14px;min-width:0}
+.ic h3{margin:0 0 4px;font-family:var(--f-display);font-weight:700;font-size:17.5px;line-height:1.25;color:var(--ink)}
+.ic p{margin:0;font-size:14px;color:var(--muted);line-height:1.6}
+.ic p em{font-style:normal;color:var(--violet);font-weight:500}
+.ic .chip{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px}
+.chip.ok{background:color-mix(in srgb,var(--good) 14%,transparent);color:var(--good)}
+.chip.mid{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+.chip.info{background:color-mix(in srgb,var(--violet) 14%,transparent);color:var(--violet)}
+.ic .act{margin-top:10px;font-size:13px;font-weight:700;color:var(--sky);text-decoration:underline;text-underline-offset:3px}
+.ask-row{display:flex;gap:10px;margin-top:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:14px;font-weight:700;font-size:15px;transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.lime{background:var(--lime);color:var(--lime-ink)}
+.btn.ink{background:var(--ink);color:var(--paper)}
+.btn.ghost{border:1px solid var(--line);background:var(--card)}
+.btn.full{width:100%}
+
+.empty{padding:22px 18px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-size:17px;margin-bottom:4px}
+
+/* bottom nav */
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:20;padding:8px max(12px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+.nav .in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);align-items:center}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--muted);padding:4px 0;font-weight:500}
+.nav button svg{width:22px;height:22px}
+.nav button.on{color:var(--ink)}
+.nav .add{width:54px;height:54px;border-radius:18px;background:var(--lime);color:var(--lime-ink);margin:-26px auto 0;box-shadow:0 10px 24px -8px rgba(80,110,0,.55);justify-content:center}
+.nav .add svg{width:26px;height:26px}
+
+/* sheets */
+.scrim{position:fixed;inset:0;z-index:30;background:rgba(6,14,30,.5);opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:31;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;background:var(--paper);border-radius:24px 24px 0 0;transform:translateY(105%);transition:transform .42s cubic-bezier(.2,.9,.2,1);max-height:92vh;max-height:92dvh;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheet.open{transform:none}
+.sheet .grab{width:42px;height:5px;border-radius:9px;background:var(--line);margin:9px auto 2px}
+.sheet .hd{display:flex;align-items:center;justify-content:space-between;padding:8px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+.sheet .hd h2{font-size:22px}
+.x{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;font-size:18px}
+.sheet .bd{overflow-y:auto;padding:4px max(16px,env(safe-area-inset-right,0px)) 18px max(16px,env(safe-area-inset-left,0px));-webkit-overflow-scrolling:touch}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.fld.full{grid-column:1/-1}
+.fld label{font-size:12.5px;color:var(--muted);font-weight:500}
+.fld input,.fld textarea{width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:16px}
+.fld input.n{font-family:var(--f-num);font-size:20px}
+.photo-pick{display:flex;gap:12px;align-items:center;padding:10px;border-radius:16px;border:1.5px dashed var(--line);background:var(--card);cursor:pointer}
+.photo-pick .th{width:64px;height:84px;border-radius:10px;overflow:hidden;background:var(--paper);display:grid;place-items:center;flex:none;color:var(--muted)}
+.photo-pick .th img{width:100%;height:100%;object-fit:cover}
+.photo-pick input{position:absolute;width:1px;height:1px;opacity:0}
+.form-msg{font-size:13px;min-height:20px;margin-top:6px}
+.form-msg.err{color:var(--warn)}
+.row-btns{display:flex;gap:10px;margin-top:12px}
+.row-btns .btn{flex:1}
+.danger{color:var(--warn)}
+
+/* chat */
+.sheet.chat{height:92vh;height:92dvh}
+.msgs{flex:1;overflow-y:auto;padding:6px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:10px}
+.m{max-width:86%;padding:10px 13px;border-radius:18px;font-size:14.5px;line-height:1.6;white-space:pre-wrap;word-wrap:break-word;animation:pop .3s both}
+@keyframes pop{from{transform:translateY(6px) scale(.98)}}
+.m.me{align-self:flex-start;background:var(--sky);color:#fff;border-end-start-radius:6px}
+.m.ai{align-self:flex-end;background:var(--card);border:1px solid var(--line);border-end-end-radius:6px}
+.m.ai b{color:var(--ink)}
+.m img{display:block;max-width:160px;border-radius:12px;margin-bottom:6px}
+.m.typing{color:var(--muted)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;padding:7px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:13px;white-space:nowrap}
+.composer{display:flex;gap:8px;align-items:flex-end;padding:8px max(12px,env(safe-area-inset-right,0px)) 10px max(12px,env(safe-area-inset-left,0px));border-top:1px solid var(--line)}
+.composer textarea{flex:1;min-width:0;resize:none;max-height:120px;padding:11px 14px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:16px;line-height:1.4}
+.composer .ib{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex:none}
+.composer .send{background:var(--lime);color:var(--lime-ink)}
+.composer .att{border:1px solid var(--line);background:var(--card);position:relative}
+.composer .att input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.att-prev{display:flex;align-items:center;gap:8px;padding:0 16px 6px;font-size:12.5px;color:var(--muted)}
+.att-prev img{width:36px;height:36px;object-fit:cover;border-radius:8px}
+
+.wo{padding:14px 16px;animation:rise .6s both}
+.wo-h{display:flex;align-items:center;gap:12px;width:100%;text-align:start}
+.wo-date{flex:none;width:54px;height:58px;border-radius:14px;background:var(--navy);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.wo-date .dd{font-family:var(--f-num);font-size:24px;font-weight:600;color:var(--lime)}
+.wo-date .mm{font-size:11px;margin-top:3px;opacity:.85}
+.wo-h .tt{flex:1;min-width:0}
+.wo-h .tt b{display:block;font-size:16.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wo-h .tt span{font-size:12.5px;color:var(--muted)}
+.wo-h .chev{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:transform .35s}
+.wo.open .chev{transform:rotate(180deg)}
+.wo-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.wo-stats div{background:var(--paper);border-radius:12px;padding:8px 10px}
+.wo-stats .v{font-family:var(--f-num);font-size:19px;font-weight:600;line-height:1.1}
+.wo-stats .l{font-size:11.5px;color:var(--muted)}
+.wo-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.2,.8,.2,1)}
+.wo.open .wo-body{grid-template-rows:1fr}
+.wo-body > div{overflow:hidden;min-height:0}
+.ex{padding:12px 0 2px;border-top:1.5px dashed var(--line);margin-top:12px}
+.ex + .ex{margin-top:0}
+.ex .nm{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:700;font-size:14.5px}
+.ex .pr{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.sets{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;direction:ltr;justify-content:flex-end}
+.set{font-family:var(--f-num);font-size:14px;padding:4px 9px;border-radius:9px;background:var(--paper);border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.set.drop{border-color:var(--lime);background:color-mix(in srgb,var(--lime) 22%,var(--card))}
+.set i{font-style:normal;color:var(--muted);font-size:12px}
+.wo-act{display:flex;gap:8px;margin-top:12px}
+.wo-act .btn{padding:9px 12px;font-size:13.5px;flex:1}
+.wo-more{width:100%;margin-top:12px}
+.exed{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-top:10px;animation:pop .3s both}
+.exed .top{display:flex;gap:8px;align-items:center}
+.exed .top input{flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-size:16px;font-weight:700}
+.srow{display:grid;grid-template-columns:26px 1fr 1fr 44px 30px;gap:6px;align-items:center;margin-top:8px}
+.srow .ix{font-family:var(--f-num);color:var(--muted);text-align:center;font-size:14px}
+.srow input{width:100%;min-width:0;padding:9px 8px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-family:var(--f-num);font-size:17px;text-align:center}
+.srow .dp{height:36px;border-radius:10px;border:1px solid var(--line);font-size:11px;font-weight:700;color:var(--muted)}
+.srow .dp[aria-pressed="true"]{background:var(--lime);color:var(--lime-ink);border-color:var(--lime)}
+.srow .rm,.exed .rm{width:30px;height:30px;border-radius:50%;color:var(--muted);display:grid;place-items:center;font-size:15px}
+.shead{display:grid;grid-template-columns:26px 1fr 1fr 44px 30px;gap:6px;font-size:11.5px;color:var(--muted);text-align:center;margin-top:10px}
+.addset{margin-top:8px;font-size:13px;font-weight:700;color:var(--sky);padding:6px 2px}
+.menu-opts{display:grid;gap:10px}
+.menu-opts button{display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;background:var(--card);border:1px solid var(--line);text-align:start;transition:transform .15s}
+.menu-opts button:active{transform:scale(.98)}
+.menu-opts .mi{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;flex:none}
+.menu-opts b{display:block;font-size:16px}
+.menu-opts span{font-size:13px;color:var(--muted)}
+.toast{position:fixed;z-index:40;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.3s;pointer-events:none;max-width:90vw}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.hero-anim > *{animation:up .8s cubic-bezier(.2,.8,.2,1) both}
+.hero-anim > *:nth-child(2){animation-delay:.08s}.hero-anim > *:nth-child(3){animation-delay:.16s}.hero-anim > *:nth-child(4){animation-delay:.24s}
+@keyframes up{from{transform:translateY(22px)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<div id="app" dir="rtl" lang="he">
+  <header class="hero" id="top">
+    <span class="cloud c1"></span><span class="cloud c2"></span>
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand">חיטוב<b>.</b></div>
+        <span class="pill" id="weekPill">טוען נתונים…</span>
+      </div>
+      <div class="hero-main hero-anim">
+        <div class="since" id="since">— ההתקדמות שלך</div>
+        <div class="giant" aria-live="polite">
+          <div class="unit"><span class="tag">ק״ג</span><span class="arrow">↓</span></div>
+          <div class="big num" id="bigNum">0.0</div>
+        </div>
+        <div class="glassbox"><div class="lead" id="lead">מוסיפים שקילה ראשונה ומתחילים לראות התקדמות.</div></div>
+        <div class="tiles">
+          <div class="tile dark"><div class="v num" id="tW">—</div><div class="l">משקל נוכחי</div></div>
+          <div class="tile blue"><div class="v num" id="tWa">—</div><div class="l">היקף מותן (ס״מ)</div></div>
+          <button class="tile go" id="goAdd" aria-label="הוספת שקילה">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="secChart">
+      <div class="sec-head">
+        <div><div class="eyebrow">מגמה שבועית</div><h2>הגרף שלך</h2></div>
+        <div class="seg" role="group" aria-label="בחירת מדד">
+          <button data-m="weight" aria-pressed="true">משקל</button>
+          <button data-m="waist" aria-pressed="false">מותן</button>
+          <button data-m="arms" aria-pressed="false">זרועות</button>
+        </div>
+      </div>
+      <div class="card chart-card">
+        <div class="readout"><div><div class="val num" id="rVal">—</div><div class="when" id="rWhen"></div></div><span class="delta" id="rDelta" hidden></span></div>
+        <div id="chart"></div>
+        <div class="legend" id="legend"></div>
+      </div>
+    </section>
+
+    <section id="secWorkouts">
+      <div class="sec-head">
+        <div><div class="eyebrow">יומן כוח</div><h2>אימונים</h2><p>כל אימון, כל סט, וההתקדמות מול הפעם הקודמת</p></div>
+        <button class="btn lime" id="woNew" style="padding:9px 14px;font-size:14px;white-space:nowrap;flex:none">＋ אימון</button>
+      </div>
+      <div class="ins" id="woList"></div>
+    </section>
+
+    <section id="secWeeks">
+      <div class="sec-head">
+        <div><div class="eyebrow">שבוע אחרי שבוע</div><h2>שקילות ותמונות</h2><p>לחיצה על שבוע לעריכה או להוספת תמונה</p></div>
+      </div>
+      <div class="strip" id="strip"></div>
+    </section>
+
+    <section id="secCompare">
+      <div class="sec-head"><div><div class="eyebrow">לפני / אחרי</div><h2>השוואה</h2><p id="cmpHint">גוררים את הפס כדי להשוות</p></div></div>
+      <div id="cmp"></div>
+    </section>
+
+    <section id="localBox" hidden>
+      <div class="card" style="padding:16px">
+        <h3 style="margin:0 0 4px;font-size:16.5px">הנתונים שמורים בטלפון הזה</h3>
+        <p style="margin:0;color:var(--muted);font-size:13.5px">השקילות והאימונים לא עולים לשום שרת. כדאי לשמור גיבוי מדי פעם, ומגיבוי אפשר לשחזר הכל במכשיר חדש. תמונות וסרטונים נשארים במכשיר ולא נכנסים לקובץ הגיבוי.</p>
+        <div class="row-btns"><button class="btn ghost" id="bkOut">שמירת גיבוי</button><label class="btn ghost" for="bkIn" style="cursor:pointer">שחזור מגיבוי</label><input type="file" id="bkIn" accept="application/json,.json" hidden></div>
+      </div>
+    </section>
+
+    <section id="secTips">
+      <div class="sec-head"><div><div class="eyebrow">מבוסס על הנתונים שלך</div><h2>תובנות וטיפים</h2></div></div>
+      <div class="ins" id="ins"></div>
+      <div class="ask-row"><button class="btn ink full" id="askWeek">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.8 4.6L18 9.4l-4.2 1.8L12 16l-1.8-4.8L6 9.4l4.2-1.8z"/></svg>
+        ניתוח שבועי מהמאמן</button></div>
+    </section>
+  </main>
+
+  <nav class="nav" aria-label="ניווט">
+    <div class="in">
+      <button data-go="top" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9m6 10V5m6 14v-7m4 7H2"/></svg>סקירה</button>
+      <button data-go="secWorkouts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>אימונים</button>
+      <button class="add" id="navAdd" aria-label="הוספה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button data-go="secWeeks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="15" rx="3"/><circle cx="12" cy="12.5" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg>תמונות</button>
+      <button id="navChat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v11H9l-5 4z"/></svg>מאמן</button>
+    </div>
+  </nav>
+
+  <div class="scrim" id="scrim"></div>
+
+  <!-- entry sheet -->
+  <div class="sheet" id="entrySheet" role="dialog" aria-modal="true" aria-labelledby="entryTitle">
+    <div class="grab"></div>
+    <div class="hd"><h2 id="entryTitle">שקילה חדשה</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <form class="bd" id="entryForm" novalidate>
+      <div class="fgrid">
+        <div class="fld full"><label for="fDate">תאריך</label><input id="fDate" type="date" required></div>
+        <div class="fld"><label for="fW">משקל (ק״ג)</label><input class="n" id="fW" inputmode="decimal" placeholder="61.8"></div>
+        <div class="fld"><label for="fWa">היקף מותן (ס״מ)</label><input class="n" id="fWa" inputmode="decimal" placeholder="79"></div>
+        <div class="fld"><label for="fAR">זרוע ימין (ס״מ)</label><input class="n" id="fAR" inputmode="decimal" placeholder="36"></div>
+        <div class="fld"><label for="fAL">זרוע שמאל (ס״מ)</label><input class="n" id="fAL" inputmode="decimal" placeholder="36"></div>
+        <div class="fld full"><span style="font-size:12.5px;color:var(--muted);font-weight:500">תמונת התקדמות</span>
+          <label class="photo-pick" for="fPhoto"><span class="th" id="fThumb">＋</span>
+            <span><b id="fPhotoLbl">הוספת תמונה לשבוע</b><br><span style="font-size:12.5px;color:var(--muted)" id="fPhotoSub">מומלץ: אותה תאורה, אותה זווית, בוקר</span></span>
+            <input id="fPhoto" type="file" accept="image/*"></label></div>
+        <div class="fld full" id="vidWrap"><span style="font-size:12.5px;color:var(--muted);font-weight:500">סרטון (לא חובה)</span>
+          <div id="vidHolder"></div>
+          <label class="photo-pick" for="fVideo"><span class="th">▶</span><span><b id="fVidLbl">הוספת סרטון לשבוע</b><br><span style="font-size:12.5px;color:var(--muted)">עד 20MB</span></span><input id="fVideo" type="file" accept="video/*"></label></div>
+        <div class="fld full"><label for="fNote">הערה (לא חובה)</label><textarea id="fNote" rows="2" placeholder="שינה, אימונים, תחושה…"></textarea></div>
+      </div>
+      <div class="form-msg" id="fMsg" role="status"></div>
+      <div class="row-btns"><button type="submit" class="btn lime" id="fSave">שמירה</button></div>
+      <div class="row-btns" id="delRow" hidden><button type="button" class="btn ghost danger" id="fDel">מחיקת השבוע</button></div>
+    </form>
+  </div>
+
+  <!-- add menu -->
+  <div class="sheet" id="menuSheet" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+    <div class="grab"></div>
+    <div class="hd"><h2 id="menuTitle">מה מוסיפים?</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <div class="bd"><div class="menu-opts">
+      <button id="mWeigh"><span class="mi" style="background:var(--sky);color:#fff"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M8 9a5 5 0 018 0l-3 3"/></svg></span><span><b>שקילה שבועית</b><span>משקל, מותן, זרועות, תמונה</span></span></button>
+      <button id="mWork"><span class="mi" style="background:var(--lime);color:var(--lime-ink)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></span><span><b>אימון</b><span>תרגילים, סטים, משקלים וחזרות</span></span></button>
+    </div></div>
+  </div>
+
+  <!-- workout sheet -->
+  <div class="sheet chat" id="woSheet" role="dialog" aria-modal="true" aria-labelledby="woTitle">
+    <div class="grab"></div>
+    <div class="hd"><h2 id="woTitle">אימון חדש</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <form class="bd" id="woForm" novalidate style="flex:1">
+      <div class="fgrid">
+        <div class="fld"><label for="woDate">תאריך</label><input id="woDate" type="date"></div>
+        <div class="fld"><label for="woName">שם האימון</label><input id="woName" placeholder="פלג גוף עליון"></div>
+      </div>
+      <button type="button" class="btn ghost full" id="woCopy" style="margin-top:10px">העתקת התרגילים מהאימון האחרון</button>
+      <div id="woEx"></div>
+      <datalist id="exNames"></datalist>
+      <button type="button" class="btn ghost full" id="woAddEx" style="margin-top:10px">＋ תרגיל</button>
+      <div class="fld full" style="margin-top:12px"><label for="woNote">הערות</label><textarea id="woNote" rows="2" placeholder="תחושה, אנרגיה, כאבים…"></textarea></div>
+      <div class="form-msg" id="woMsg" role="status"></div>
+      <div class="row-btns"><button type="submit" class="btn lime" id="woSave">שמירת אימון</button></div>
+      <div class="row-btns" id="woDelRow" hidden><button type="button" class="btn ghost danger" id="woDel">מחיקת האימון</button></div>
+    </form>
+  </div>
+
+  <!-- goal sheet -->
+  <div class="sheet" id="goalSheet" role="dialog" aria-modal="true" aria-labelledby="goalTitle">
+    <div class="grab"></div>
+    <div class="hd"><h2 id="goalTitle">משקל יעד</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <form class="bd" id="goalForm" novalidate>
+      <div class="fld"><label for="gW">יעד (ק״ג)</label><input class="n" id="gW" inputmode="decimal" placeholder="59"></div>
+      <div class="row-btns"><button type="submit" class="btn lime">שמירת יעד</button></div>
+    </form>
+  </div>
+
+  <!-- chat sheet -->
+  <div class="sheet chat" id="chatSheet" role="dialog" aria-modal="true" aria-labelledby="chatTitle">
+    <div class="grab"></div>
+    <div class="hd"><div><div class="eyebrow">מכיר את כל הנתונים שלך</div><h2 id="chatTitle">המאמן</h2></div>
+      <div style="display:flex;gap:8px"><button class="x" id="chatClear" aria-label="ניקוי שיחה" title="שיחה חדשה">↺</button><button class="x" data-close aria-label="סגירה">✕</button></div></div>
+    <div class="msgs" id="msgs" aria-live="polite"></div>
+    <div class="chips" id="chips"></div>
+    <div class="att-prev" id="attPrev" hidden></div>
+    <form class="composer" id="chatForm">
+      <span class="ib att" id="attBtn" title="צירוף תמונה"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="15" rx="3"/><circle cx="12" cy="12.5" r="3.5"/></svg><input type="file" id="chatImg" accept="image/*" aria-label="צירוף תמונה"></span>
+      <textarea id="chatIn" rows="1" placeholder="שאל אותי כל דבר על החיטוב…"></textarea>
+      <button class="ib send" type="submit" aria-label="שליחה"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 12H5m6-7l-7 7 7 7"/></svg></button>
+    </form>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+</div>
+
+<script>
+document.documentElement.lang='he';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=v=>{if(v===''||v==null)return null;const n=parseFloat(String(v).replace(',','.'));return isFinite(n)?n:null};
+const f1=n=>n==null?'—':(Math.round(n*10)/10).toFixed(1);
+const fc=n=>n==null?'—':String(Math.round(n*10)/10);
+const dm=iso=>{const [y,m,d]=iso.split('-');return `${+d}/${+m}`};
+const days=(a,b)=>(new Date(b)-new Date(a))/864e5;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MONTHS=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+
+const state={workouts:[],woOpen:null,weeks:[],goal:null,metric:'weight',ready:false,canEdit:true,assets:null,sample:null,blobUrls:{}};
+let store=null;
+
+function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2600)}
+function photoUrl(w){return w.photoId?'/_blob/'+w.photoId:w.photoKey?(state.blobUrls[w.photoKey]||null):(w.photoLocal||null)}
+function videoUrl(w){return w.videoId?'/_blob/'+w.videoId:w.videoKey?(state.blobUrls[w.videoKey]||null):null}
+const idb={p:null,open(){return this.p||(this.p=new Promise((res,rej)=>{const r=indexedDB.open('hitov',1);r.onupgradeneeded=()=>r.result.createObjectStore('media');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}))},
+  async put(k,b){const d=await this.open();return new Promise((res,rej)=>{const t=d.transaction('media','readwrite');t.objectStore('media').put(b,k);t.oncomplete=()=>res();t.onerror=()=>rej(t.error)})},
+  async get(k){const d=await this.open();return new Promise((res,rej)=>{const q=d.transaction('media').objectStore('media').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})}};
+async function hydrate(){let changed=false;for(const w of state.weeks)for(const k of [w.photoKey,w.videoKey])if(k&&!state.blobUrls[k]){try{const b=await idb.get(k);if(b){state.blobUrls[k]=URL.createObjectURL(b);changed=true}}catch(e){}}if(changed){renderStrip();renderCompare()}}
+
+/* ---------- storage ---------- */
+function localStore(){
+  const K='hitov.local.v1';
+  const read=()=>{try{return JSON.parse(localStorage.getItem(K))||{weeks:{},goal:null}}catch(e){return{weeks:{},goal:null}}};
+  const write=d=>{try{localStorage.setItem(K,JSON.stringify(d))}catch(e){}};
+  return{kind:'local',
+    start(cb){const d=read();cb(Object.entries(d.weeks).map(([id,v])=>({id,...v})),d.goal);onWorkouts(Object.entries(d.workouts||{}).map(([id,v])=>({id,...v})))},
+    async saveWorkout(id,data){const d=read();d.workouts=d.workouts||{};d.workouts[id]=data;write(d);this.start(store._cb)},
+    async removeWorkout(id){const d=read();delete (d.workouts||{})[id];write(d);this.start(store._cb)},
+    async save(id,data){const d=read();d.weeks[id]=data;write(d);this.start(store._cb)},
+    async remove(id){const d=read();delete d.weeks[id];write(d);this.start(store._cb)},
+    async setGoal(g){const d=read();d.goal=g;write(d);this.start(store._cb)}};
+}
+function dbStore(db){
+  let weeks=[],goal=null;
+  return{kind:'db',
+    start(cb){
+      db.collection('weeks').onSnapshot(s=>{weeks=s.docs.map(d=>({id:d.id,...d.data()}));cb(weeks,goal)},e=>{console.warn(e);toast('לא הצלחנו לטעון את הנתונים. נסה לרענן.')});
+      db.collection('workouts').onSnapshot(s=>onWorkouts(s.docs.map(d=>({id:d.id,...d.data()}))),e=>console.warn(e));
+      db.doc('settings/main').onSnapshot(s=>{goal=s.exists?(s.data().goal??null):null;cb(weeks,goal)},()=>{});
+    },
+    save(id,data){return db.doc('weeks/'+id).set(data)},
+    remove(id){return db.doc('weeks/'+id).delete()},
+    setGoal(g){return db.doc('settings/main').set({goal:g})},
+    saveWorkout(id,data){return db.doc('workouts/'+id).set(data)},
+    removeWorkout(id){return db.doc('workouts/'+id).delete()}};
+}
+function onData(weeks,goal){
+  state.weeks=weeks.filter(w=>w.date).sort((a,b)=>a.date<b.date?-1:1);
+  state.goal=goal;state.ready=true;renderAll();hydrate();
+  $('#localBox').hidden=store?.kind!=='local';
+}
+
+/* ---------- derived ---------- */
+function stats(){
+  const W=state.weeks;if(!W.length)return null;
+  const first=W[0],last=W[W.length-1];
+  const fw=W.find(w=>w.weight!=null),lw=[...W].reverse().find(w=>w.weight!=null);
+  const fwa=W.find(w=>w.waist!=null),lwa=[...W].reverse().find(w=>w.waist!=null);
+  const span=days(first.date,last.date);
+  const lostKg=fw&&lw?fw.weight-lw.weight:0;
+  const lostWaist=fwa&&lwa?fwa.waist-lwa.waist:0;
+  const ws=W.filter(w=>w.weight!=null);
+  const recent=ws.slice(-4);
+  const rRate=recent.length>1?(recent[0].weight-recent[recent.length-1].weight)/(days(recent[0].date,recent[recent.length-1].date)/7):null;
+  const allRate=ws.length>1?(ws[0].weight-ws[ws.length-1].weight)/(days(ws[0].date,ws[ws.length-1].date)/7):null;
+  const arms=W.filter(w=>w.armR!=null||w.armL!=null);
+  return{first,last,fw,lw,fwa,lwa,span,lostKg,lostWaist,rRate,allRate,arms,weeksN:Math.round(span/7)};
+}
+
+/* ---------- hero ---------- */
+function countTo(el,to,dec=1){
+  if(reduce){el.textContent=to.toFixed(dec);return}
+  const from=parseFloat(el.textContent)||0,t0=performance.now(),d=1100;
+  const step=t=>{const p=Math.min(1,(t-t0)/d),e=1-Math.pow(1-p,3);el.textContent=(from+(to-from)*e).toFixed(dec);if(p<1)requestAnimationFrame(step)};
+  requestAnimationFrame(step);
+}
+function renderHero(){
+  const s=stats();
+  if(!s){$('#weekPill').textContent=state.ready?'עדיין אין שקילות':'טוען נתונים…';$('#tW').textContent='—';$('#tWa').textContent='—';return}
+  const [y,m,d]=s.first.date.split('-');
+  $('#since').textContent=`— מאז ${+d} ב${MONTHS[+m-1]}`;
+  $('#weekPill').textContent=`שבוע ${s.weeksN+1} · ${state.weeks.length} שקילות`;
+  countTo($('#bigNum'),Math.max(0,s.lostKg));
+  const pct=s.fw?(s.lostKg/s.fw.weight*100):0;
+  $('#lead').innerHTML=`ירדו <b>${f1(s.lostKg)} ק״ג</b> (${pct.toFixed(1)}%) ו-<b>${fc(s.lostWaist)} ס״מ</b> מהמותן ב-${s.weeksN} שבועות.`;
+  $('#tW').innerHTML=`${f1(s.lw?.weight)}<small>ק״ג</small>`;
+  $('#tWa').innerHTML=`<span dir="ltr">${fc(s.lwa?.waist)}<small> −${fc(s.lostWaist)}</small></span>`;
+}
+
+/* ---------- chart ---------- */
+function niceStep(range,count){const raw=range/count,p=Math.pow(10,Math.floor(Math.log10(raw))),n=raw/p;return(n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p}
+function renderChart(animate=true){
+  const box=$('#chart'),W=state.weeks,m=state.metric;
+  const css=getComputedStyle(document.documentElement);
+  const C={sky:css.getPropertyValue('--sky').trim(),lime:css.getPropertyValue('--lime').trim(),violet:css.getPropertyValue('--violet').trim(),line:css.getPropertyValue('--line').trim(),card:css.getPropertyValue('--card').trim(),ink:css.getPropertyValue('--ink').trim()};
+  const series=m==='weight'?[{k:'weight',name:'משקל',c:C.sky,u:'ק״ג'}]:m==='waist'?[{k:'waist',name:'מותן',c:C.sky,u:'ס״מ'}]:[{k:'armR',name:'זרוע ימין',c:C.sky,u:'ס״מ'},{k:'armL',name:'זרוע שמאל',c:C.violet,u:'ס״מ'}];
+  const pts=series.map(s=>W.filter(w=>w[s.k]!=null).map(w=>({d:w.date,v:w[s.k],w})));
+  const all=pts.flat();
+  $('#legend').innerHTML=series.length>1?series.map(s=>`<span><i style="background:${s.c}"></i>${s.name}</span>`).join(''):'';
+  if(all.length<1){box.innerHTML=`<div class="empty"><b>אין עדיין נתונים למדד הזה</b>מוסיפים שקילה ב־＋ והגרף יתמלא.</div>`;setReadout(null);return}
+  const Wd=Math.max(280,box.clientWidth||340),H=230,pl=34,pr=16,pt=18,pb=26;
+  const ts=all.map(p=>+new Date(p.d)),t0=Math.min(...ts),t1=Math.max(...ts)||t0+1;
+  let lo=Math.min(...all.map(p=>p.v)),hi=Math.max(...all.map(p=>p.v));
+  const step=niceStep(Math.max(hi-lo,1),4);lo=Math.floor((lo-step*.3)/step)*step;hi=Math.ceil((hi+step*.3)/step)*step;
+  const X=t=>pl+(t1===t0?.5:(t-t0)/(t1-t0))*(Wd-pl-pr),Y=v=>pt+(hi-v)/(hi-lo)*(H-pt-pb);
+  let g='';
+  for(let v=lo;v<=hi+1e-9;v+=step){const y=Y(v);g+=`<line x1="${pl}" x2="${Wd-pr}" y1="${y}" y2="${y}" stroke="${C.line}" stroke-dasharray="2 4"/><text class="ax" x="${pl-6}" y="${y+3.5}" text-anchor="end">${+v.toFixed(1)}</text>`}
+  const uniq=[...new Set(W.map(w=>w.date))];const every=Math.ceil(uniq.length/(Wd<380?5:7));
+  uniq.forEach((d,i)=>{if(i%every===0||i===uniq.length-1){if(i!==uniq.length-1&&uniq.length-1-i<every*.6)return;g+=`<text class="ax" x="${X(+new Date(d))}" y="${H-6}" text-anchor="middle">${dm(d)}</text>`}});
+  let paths='';
+  pts.forEach((p,si)=>{
+    if(!p.length)return;const c=series[si].c;
+    const dPath=p.map((q,i)=>`${i?'L':'M'}${X(+new Date(q.d)).toFixed(1)},${Y(q.v).toFixed(1)}`).join('');
+    if(series.length===1)paths+=`<path class="fade-in" d="${dPath}L${X(+new Date(p[p.length-1].d))},${H-pb}L${X(+new Date(p[0].d))},${H-pb}Z" fill="url(#ga)"/>`;
+    paths+=`<path class="${animate?'draw':''}" d="${dPath}" fill="none" stroke="${c}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" pathLength="1000" style="stroke-dasharray:1000;--len:1000"/>`;
+    p.forEach((q,i)=>{const last=i===p.length-1;paths+=`<circle cx="${X(+new Date(q.d))}" cy="${Y(q.v)}" r="${last?6:3.4}" fill="${last?C.lime:C.card}" stroke="${last?C.ink:c}" stroke-width="${last?2:1.8}" class="fade-in"/>`});
+  });
+  box.innerHTML=`<svg viewBox="0 0 ${Wd} ${H}" role="img" aria-label="גרף ${series.map(s=>s.name).join(' ו')}"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.sky}" stop-opacity=".28"/><stop offset="1" stop-color="${C.sky}" stop-opacity="0"/></linearGradient></defs>${g}${paths}<line id="cur" y1="${pt}" y2="${H-pb}" stroke="${C.ink}" stroke-opacity=".35" stroke-dasharray="3 3" hidden/></svg>`;
+  const svg=box.querySelector('svg'),cur=svg.querySelector('#cur');
+  const pick=ev=>{const r=svg.getBoundingClientRect(),x=(ev.clientX-r.left)*(Wd/r.width);let best=null,bd=1e9;uniq.forEach(d=>{const dd=Math.abs(X(+new Date(d))-x);if(dd<bd){bd=dd;best=d}});if(!best)return;cur.setAttribute('x1',X(+new Date(best)));cur.setAttribute('x2',X(+new Date(best)));cur.removeAttribute('hidden');setReadout(best)};
+  svg.addEventListener('pointermove',pick);svg.addEventListener('pointerdown',pick);
+  svg.addEventListener('pointerleave',()=>{cur.setAttribute('hidden','');setReadout(null)});
+  setReadout(null);
+}
+function setReadout(date){
+  const W=state.weeks,m=state.metric;
+  const key=m==='weight'?'weight':m==='waist'?'waist':null;
+  const list=key?W.filter(w=>w[key]!=null):W.filter(w=>w.armR!=null||w.armL!=null);
+  const el=$('#rVal'),when=$('#rWhen'),dl=$('#rDelta');
+  if(!list.length){el.textContent='—';when.textContent='';dl.hidden=true;return}
+  const cur=date?list.find(w=>w.date===date)||list[list.length-1]:list[list.length-1];
+  const idx=list.indexOf(cur),prev=idx>0?list[idx-1]:null;
+  if(key){el.innerHTML=`${key==='weight'?f1(cur[key]):fc(cur[key])}<small>${key==='weight'?'ק״ג':'ס״מ'}</small>`;
+    const d=prev?cur[key]-prev[key]:null;
+    if(d==null){dl.hidden=true}else{dl.hidden=false;dl.className='delta'+(d>0?' up':'');dl.textContent=(d>0?'+':d<0?'−':'±')+Math.abs(d).toFixed(1)+' משבוע קודם'}}
+  else{el.innerHTML=`${fc(cur.armR)} / ${fc(cur.armL)}<small>ימין / שמאל</small>`;dl.hidden=true}
+  when.textContent=(date?'':'אחרון · ')+dm(cur.date);
+}
+
+/* ---------- weeks strip ---------- */
+function renderStrip(){
+  const W=state.weeks,el=$('#strip');
+  if(!W.length){el.innerHTML=`<div class="card empty" style="flex:1"><b>${state.ready?'עוד אין שבועות':'טוען…'}</b>${state.ready?'לוחצים על ＋ למטה ומוסיפים שקילה ראשונה.':''}</div>`;return}
+  el.innerHTML=[...W].reverse().map((w,ri)=>{
+    const i=W.length-1-ri,prev=i>0?W[i-1]:null,d=prev&&w.weight!=null&&prev.weight!=null?w.weight-prev.weight:null;
+    const u=photoUrl(w);
+    return `<button class="card wk" data-id="${esc(w.id)}" style="animation:rise .6s ${Math.min(ri,6)*.05}s both">
+      <div class="ph">${u?`<img src="${esc(u)}" alt="תמונת ${dm(w.date)}" loading="lazy">`:videoUrl(w)?`<video src="${esc(videoUrl(w))}#t=0.5" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block"></video>`:`<span class="plus">＋</span>`}${ri===0?'<span class="lab">השבוע</span>':''}${(w.videoId||w.videoKey)?'<span class="vb" aria-label="יש סרטון">▶</span>':''}</div>
+      <div class="meta"><div class="w num">${f1(w.weight)}</div><div class="d"><span>${dm(w.date)}</span>${d==null?'':`<b class="${d<=0?'g':'u'}">${d>0?'+':d<0?'−':'±'}${Math.abs(d).toFixed(1)}</b>`}</div></div></button>`}).join('');
+}
+
+/* ---------- compare ---------- */
+let cmpSel={a:null,b:null};
+function renderCompare(){
+  const withP=state.weeks.filter(w=>photoUrl(w)||videoUrl(w)),el=$('#cmp');
+  const media=(w,alt)=>photoUrl(w)?`<img src="${esc(photoUrl(w))}" alt="${alt}">`:`<video src="${esc(videoUrl(w))}" autoplay muted loop playsinline aria-label="${alt}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>`;
+  if(withP.length<2){
+    const s=stats();
+    $('#cmpHint').textContent='מעלים תמונה בשני שבועות לפחות והשוואה תופיע כאן';
+    el.innerHTML=`<div class="cmp-empty">
+      <button class="fr" data-id="${s?esc(s.first.id):''}">${s&&videoUrl(s.first)?`<video src="${esc(videoUrl(s.first))}#t=0.5" muted playsinline preload="metadata"></video>`:''}<div class="ov"><div class="t">לפני · ${s?dm(s.first.date):'—'}</div><div class="w num">${s?f1(s.fw?.weight):'—'}</div><div class="t">${withP[0]&&s&&withP[0].id===s.first.id?'יש תמונה':'＋ הוספת תמונה'}</div></div></button>
+      <button class="fr" data-id="${s?esc(s.last.id):''}"><div class="ov"><div class="t">אחרי · ${s?dm(s.last.date):'—'}</div><div class="w num">${s?f1(s.lw?.weight):'—'}</div><div class="t">${withP.find(w=>s&&w.id===s.last.id)?'יש תמונה':'＋ הוספת תמונה'}</div></div></button></div>`;
+    el.querySelectorAll('.fr').forEach(b=>b.onclick=()=>b.dataset.id&&openEntry(b.dataset.id));
+    return;
+  }
+  $('#cmpHint').textContent='גוררים את הפס כדי להשוות';
+  if(!withP.find(w=>w.id===cmpSel.a))cmpSel.a=withP[0].id;
+  if(!withP.find(w=>w.id===cmpSel.b))cmpSel.b=withP[withP.length-1].id;
+  const A=withP.find(w=>w.id===cmpSel.a),B=withP.find(w=>w.id===cmpSel.b);
+  const opt=sel=>withP.map(w=>`<option value="${esc(w.id)}" ${w.id===sel?'selected':''}>${dm(w.date)}${w.weight!=null?' · '+f1(w.weight)+' ק״ג':''}${photoUrl(w)?'':' · סרטון'}</option>`).join('');
+  el.innerHTML=`<div class="compare" id="cmpBox" style="--cut:50%">
+      ${media(A,'לפני')}
+      <div class="after-clip">${media(B,'אחרי')}</div>
+      <div class="handle"></div>
+      <span class="cap l">לפני · ${dm(A.date)}${A.weight!=null?' · '+f1(A.weight):''}</span><span class="cap r">אחרי · ${dm(B.date)}${B.weight!=null?' · '+f1(B.weight):''}</span>
+      <input type="range" id="cmpRange" min="0" max="100" value="50" aria-label="פס השוואה"></div>
+    <div class="pickers"><select id="selA" aria-label="תמונת לפני">${opt(cmpSel.a)}</select><select id="selB" aria-label="תמונת אחרי">${opt(cmpSel.b)}</select></div>`;
+  $('#cmpRange').oninput=e=>$('#cmpBox').style.setProperty('--cut',e.target.value+'%');
+  $('#selA').onchange=e=>{cmpSel.a=e.target.value;renderCompare()};
+  $('#selB').onchange=e=>{cmpSel.b=e.target.value;renderCompare()};
+  if(!reduce&&!renderCompare.done){renderCompare.done=1;let t=0;const box=$('#cmpBox');const anim=()=>{t+=.025;const v=50+Math.sin(t*2.2)*22*(1-t/1.6);box.style.setProperty('--cut',v+'%');if(t<1.6)requestAnimationFrame(anim);else box.style.setProperty('--cut','50%')};requestAnimationFrame(anim)}
+}
+
+/* ---------- insights ---------- */
+const ICONS={
+ pace:`<svg viewBox="0 0 64 64" fill="none" stroke="var(--ink)" stroke-width="1.6"><circle cx="32" cy="34" r="22"/><circle cx="32" cy="34" r="14" fill="var(--lime)" stroke="none" opacity=".9"/><path d="M32 34l9-9"/><circle cx="32" cy="34" r="2.5" fill="var(--ink)"/><path d="M28 8h8M32 8v4"/><circle cx="54" cy="18" r="3" fill="var(--card)"/></svg>`,
+ waist:`<svg viewBox="0 0 64 64" fill="none" stroke="var(--ink)" stroke-width="1.6"><path d="M18 10c4 10 4 16 0 22s-4 14 0 22M46 10c-4 10-4 16 0 22s4 14 0 22"/><rect x="12" y="28" width="40" height="9" rx="3" fill="var(--lime)"/><path d="M18 28v4M24 28v6M30 28v4M36 28v6M42 28v4"/><circle cx="8" cy="32" r="3" fill="var(--card)"/></svg>`,
+ arm:`<svg viewBox="0 0 64 64" fill="none" stroke="var(--ink)" stroke-width="1.6"><circle cx="32" cy="32" r="24"/><path d="M20 40c2-8 6-14 12-16 4-1 8 1 9 5 1 3-1 6-4 6-3 0-4-2-4-2"/><path d="M33 33c2 4 8 6 12 4" /><circle cx="40" cy="27" r="5" fill="var(--lime)"/><circle cx="56" cy="32" r="3" fill="var(--card)"/></svg>`,
+ food:`<svg viewBox="0 0 64 64" fill="none" stroke="var(--ink)" stroke-width="1.6"><circle cx="32" cy="34" r="20"/><circle cx="32" cy="34" r="12" fill="var(--lime)" opacity=".9"/><path d="M8 14v14c0 3 2 4 4 4v20M12 14v10M16 14v14c0 3-2 4-4 4"/><path d="M54 12c-4 4-4 12 0 16v24"/></svg>`,
+ goal:`<svg viewBox="0 0 64 64" fill="none" stroke="var(--ink)" stroke-width="1.6"><circle cx="32" cy="32" r="22"/><circle cx="32" cy="32" r="14"/><circle cx="32" cy="32" r="6" fill="var(--lime)"/><path d="M32 32L52 12M46 12h6v6"/><circle cx="10" cy="32" r="3" fill="var(--card)"/></svg>`,
+};
+function insights(){
+  const s=stats();if(!s||state.weeks.length<2)return[];
+  const out=[],cw=s.lw?.weight??s.fw?.weight;
+  if(s.rRate!=null){const pct=s.rRate/cw*100;
+    let chip,cls,txt;
+    if(pct>1.1){chip='קצב מהיר';cls='mid';txt=`<em>שווה להוסיף 150–200 קלוריות ביום</em> כדי לשמור על שריר ואנרגיה באימונים.`}
+    else if(pct>=.4){chip='קצב אידיאלי';cls='ok';txt=`זה הטווח שבו שומרים על מסת שריר. <em>לא לשנות כלום, רק להמשיך.</em>`}
+    else if(pct>=.15){chip='האטה קלה';cls='mid';txt=`<em>אפשר להוסיף 2,000 צעדים ביום</em> או להוריד 100–150 קלוריות. בודקים שוב בעוד שבועיים.`}
+    else{chip='מישור';cls='mid';txt=`שבועיים בלי ירידה זה דבר נורמלי. <em>שבוע דיאט-ברייק או רענון של ספירת הקלוריות</em> בדרך כלל פותר את זה.`}
+    out.push({ic:'pace',h:`יורדים ${f1(s.rRate)} ק״ג בשבוע`,p:`ב-4 השקילות האחרונות: ${pct.toFixed(2)}% ממשקל הגוף בשבוע. ${txt}`,chip,cls});}
+  if(s.lostWaist>0&&s.lostKg>0){const r=s.lostWaist/s.lostKg;
+    out.push({ic:'waist',h:`${r.toFixed(1)} ס״מ מותן לכל ק״ג`,p:`המותן ירד ${fc(s.lostWaist)} ס״מ מול ${f1(s.lostKg)} ק״ג. ${r>=1.2?'<em>זה סימן חזק שהירידה היא בעיקר שומן</em> ולא שריר או נוזלים.':'<em>מדידה באותה שעה ובאותו מקום (בגובה הטבור)</em> תיתן תמונה מדויקת יותר.'}`,chip:r>=1.2?'ירידת שומן':'למעקב',cls:r>=1.2?'ok':'info'});}
+  if(s.arms.length>=2){const a0=s.arms[0],a1=s.arms[s.arms.length-1];const sum0=(a0.armR||0)+(a0.armL||0),sum1=(a1.armR||0)+(a1.armL||0);const gap0=Math.abs((a0.armR||0)-(a0.armL||0)),gap1=Math.abs((a1.armR||0)-(a1.armL||0));
+    out.push({ic:'arm',h:sum1>=sum0?'הזרועות נשמרות בזמן החיטוב':'ירידה קלה בהיקף הזרועות',p:`ימין ${fc(a0.armR)}→${fc(a1.armR)}, שמאל ${fc(a0.armL)}→${fc(a1.armL)} ס״מ. ${sum1>=sum0?'<em>המשקל יורד והזרועות לא, כלומר השריר נשמר.</em>':'<em>שווה להעלות נפח אימון לזרועות</em> ולוודא חלבון מספיק.'}${gap1<gap0?' הפער בין הצדדים נסגר.':''}`,chip:gap1<gap0?'סימטריה השתפרה':'כוח נשמר',cls:'ok'});}
+  const pLo=Math.round(cw*1.8),pHi=Math.round(cw*2.2);
+  out.push({ic:'food',h:`${pLo}–${pHi} גרם חלבון ביום`,p:`לפי ${f1(cw)} ק״ג: 1.8–2.2 ג׳ לק״ג. <em>3–4 ארוחות של 30–40 ג׳</em> (ביצים, עוף, יוגורט, טונה, קוטג׳) שומרות על השריר בגירעון.`,chip:'תזונה',cls:'info'});
+  if(state.goal){const left=cw-state.goal;const rate=s.rRate>0?s.rRate:s.allRate;
+    if(left<=0)out.push({ic:'goal',h:'הגעת ליעד',p:`<em>${f1(state.goal)} ק״ג הושג.</em> אפשר לעבור לתחזוקה: להעלות 150–250 קלוריות בשבוע עד שהמשקל מתייצב.`,chip:'יעד',cls:'ok',act:'שינוי יעד'});
+    else{const wk=rate>0?Math.ceil(left/rate):null;let when='';if(wk){const dt=new Date(s.last.date);dt.setDate(dt.getDate()+wk*7);when=` צפי: <em>${dt.getDate()}/${dt.getMonth()+1}, בעוד כ-${wk} שבועות</em> בקצב הנוכחי.`}
+      out.push({ic:'goal',h:`נשארו ${f1(left)} ק״ג ליעד`,p:`יעד ${f1(state.goal)} ק״ג.${when}`,chip:'יעד',cls:'info',act:'שינוי יעד'});}}
+  else out.push({ic:'goal',h:'מה היעד שלך?',p:'קובעים משקל יעד ומקבלים <em>תאריך צפוי להגעה</em> לפי הקצב שלך.',chip:'יעד',cls:'info',act:'הגדרת יעד'});
+  return out;
+}
+function renderInsights(){
+  const list=insights(),el=$('#ins');
+  if(!list.length){el.innerHTML=`<div class="card empty"><b>התובנות יופיעו אחרי שתי שקילות</b>אחרי שתי שקילות אפשר לחשב קצב ומגמה.</div>`;return}
+  el.innerHTML=list.map(x=>`<article class="card ic"><div class="art">${ICONS[x.ic]}</div><div class="tx"><h3>${x.h}</h3><p>${x.p}</p><span class="chip ${x.cls}">${x.chip}</span>${x.act?`<br><button class="act" data-goal>${x.act}</button>`:''}</div></article>`).join('');
+  el.querySelectorAll('[data-goal]').forEach(b=>b.onclick=()=>{$('#gW').value=state.goal??'';openSheet('goalSheet')});
+}
+
+/* ---------- workouts ---------- */
+const MSHORT=['ינו','פבר','מרץ','אפר','מאי','יונ','יול','אוג','ספט','אוק','נוב','דצמ'];
+const vol=w=>(w.exercises||[]).reduce((a,e)=>a+(e.sets||[]).reduce((b,x)=>b+(x.kg||0)*(x.reps||0),0),0);
+const nsets=w=>(w.exercises||[]).reduce((a,e)=>a+(e.sets||[]).length,0);
+const e1rm=x=>(x.kg||0)*(1+(x.reps||0)/30);
+const bestSet=ex=>(ex.sets||[]).filter(x=>x.kg!=null&&x.reps).reduce((b,x)=>!b||e1rm(x)>e1rm(b)?x:b,null);
+const fmtK=n=>n>=1000?(n/1000).toFixed(1)+'K':String(Math.round(n));
+function prevEx(w,name){const before=state.workouts.filter(o=>o.date<w.date||(o.date===w.date&&o.id<w.id));for(let i=before.length-1;i>=0;i--){const e=(before[i].exercises||[]).find(x=>x.name.trim()===name.trim());if(e)return e}return null}
+function onWorkouts(list){state.workouts=list.filter(w=>w.date).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:(a.id<b.id?-1:1));if(state.woOpen==null&&state.workouts.length)state.woOpen=state.workouts[state.workouts.length-1].id;renderWorkouts()}
+let woShowAll=false;
+function renderWorkouts(){
+  const el=$('#woList'),L=[...state.workouts].reverse();
+  if(!L.length){el.innerHTML=`<div class="card empty"><b>${state.ready?'עוד אין אימונים':'טוען…'}</b>${state.ready?'לוחצים על ＋ אימון ומתעדים תרגילים, סטים ומשקלים.':''}</div>`;return}
+  const shown=woShowAll?L:L.slice(0,4);
+  el.innerHTML=shown.map((w,i)=>{
+    const [y,m,d]=w.date.split('-');const open=state.woOpen===w.id;
+    const exHtml=(w.exercises||[]).map(e=>{
+      const b=bestSet(e),pe=prevEx(w,e.name),pb=pe&&bestSet(pe);
+      let pr='';if(b&&pb){const top=x=>{const mk=Math.max(...(x.sets||[]).filter(z=>!z.drop&&z.kg!=null).map(z=>z.kg));return{kg:mk,reps:Math.max(...(x.sets||[]).filter(z=>z.kg===mk).map(z=>z.reps||0))}};const A=top(e),B=top(pe);const dd=A.kg!==B.kg?A.kg-B.kg:A.reps-B.reps;pr=dd===0||!isFinite(dd)?`<span class="pr chip info">כמו בפעם הקודמת</span>`:dd>0?`<span class="pr chip ok">↑ התקדמות</span>`:`<span class="pr chip mid">↓ ירידה</span>`}
+      return `<div class="ex"><div class="nm"><span>${esc(e.name)}</span>${pr}</div><div class="sets">${(e.sets||[]).map(x=>`<span class="set${x.drop?' drop':''}">${fc(x.kg)}<i>kg</i> × ${x.reps??'—'}${x.drop?' <i>דרופ</i>':''}</span>`).join('')}</div></div>`}).join('');
+    return `<article class="card wo${open?' open':''}" data-wid="${esc(w.id)}" style="animation-delay:${Math.min(i,5)*.06}s">
+      <button class="wo-h" data-tog aria-expanded="${open}"><span class="wo-date"><span class="dd">${+d}</span><span class="mm">${MSHORT[+m-1]}</span></span>
+        <span class="tt"><b>${esc(w.title||'אימון')}</b><span>${(w.exercises||[]).map(e=>esc(e.name)).slice(0,3).join(' · ')}${(w.exercises||[]).length>3?' …':''}</span></span>
+        <span class="chev" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></span></button>
+      <div class="wo-stats"><div><div class="v num">${(w.exercises||[]).length}</div><div class="l">תרגילים</div></div><div><div class="v num">${nsets(w)}</div><div class="l">סטים</div></div><div><div class="v num">${fmtK(vol(w))}</div><div class="l">נפח (ק״ג)</div></div></div>
+      <div class="wo-body"><div>${exHtml}${w.note?`<p style="margin:12px 0 0;font-size:13.5px;color:var(--muted)">${esc(w.note)}</p>`:''}
+        <div class="wo-act"><button class="btn ghost" data-edit>עריכה</button><button class="btn ghost" data-again>אימון חוזר</button></div></div></div></article>`}).join('')+(L.length>4?`<button class="btn ghost wo-more" id="woMore">${woShowAll?'הצגת פחות':`הצגת כל ${L.length} האימונים`}</button>`:'');
+  $('#woMore')&&($('#woMore').onclick=()=>{woShowAll=!woShowAll;renderWorkouts()});
+}
+$('#woList').addEventListener('click',e=>{const card=e.target.closest('.wo');if(!card)return;const id=card.dataset.wid,w=state.workouts.find(x=>x.id===id);
+  if(e.target.closest('[data-tog]')){state.woOpen=state.woOpen===id?null:id;card.classList.toggle('open',state.woOpen===id);card.querySelector('[data-tog]').setAttribute('aria-expanded',state.woOpen===id);document.querySelectorAll('.wo').forEach(c=>{if(c!==card)c.classList.remove('open')});return}
+  if(e.target.closest('[data-edit]'))openWorkout(w);
+  if(e.target.closest('[data-again]'))openWorkout(null,w);});
+
+let woEditing=null,woDraft=null,woDelArm=false;
+function cloneEx(w){return(w.exercises||[]).map(e=>({name:e.name,sets:(e.sets||[]).map(x=>({kg:x.kg,reps:x.reps,drop:!!x.drop}))}))}
+function openWorkout(w,template){
+  woEditing=w||null;woDelArm=false;
+  woDraft={date:w?w.date:new Date().toISOString().slice(0,10),title:w?.title||template?.title||'',note:w?.note||'',exercises:w?cloneEx(w):template?cloneEx(template):[{name:'',sets:[{kg:null,reps:null}]}]};
+  $('#woTitle').textContent=w?'עריכת אימון':template?'אימון חוזר':'אימון חדש';
+  $('#woDate').value=woDraft.date;$('#woName').value=woDraft.title;$('#woNote').value=woDraft.note;
+  $('#woMsg').textContent='';$('#woMsg').className='form-msg';$('#woDelRow').hidden=!w;$('#woDel').textContent='מחיקת האימון';
+  $('#woCopy').hidden=!!w||!!template||!state.workouts.length;
+  $('#exNames').innerHTML=[...new Set(state.workouts.flatMap(o=>(o.exercises||[]).map(e=>e.name)))].map(n=>`<option value="${esc(n)}"></option>`).join('');
+  renderExEd();openSheet('woSheet');
+}
+function renderExEd(){
+  $('#woEx').innerHTML=woDraft.exercises.map((e,i)=>`<div class="exed" data-ei="${i}">
+    <div class="top"><input list="exNames" data-f="name" value="${esc(e.name)}" placeholder="שם התרגיל (למשל: חזה מכשיר)" aria-label="שם תרגיל ${i+1}"><button type="button" class="rm" data-rmex aria-label="הסרת תרגיל">✕</button></div>
+    <div class="shead"><span>סט</span><span>ק״ג</span><span>חזרות</span><span>דרופ</span><span></span></div>
+    ${e.sets.map((x,j)=>`<div class="srow" data-si="${j}"><span class="ix">${j+1}</span><input inputmode="decimal" data-f="kg" value="${x.kg??''}" aria-label="משקל סט ${j+1}"><input inputmode="numeric" data-f="reps" value="${x.reps??''}" aria-label="חזרות סט ${j+1}"><button type="button" class="dp" data-drop aria-pressed="${!!x.drop}" aria-label="דרופ סט">D</button><button type="button" class="rm" data-rmset aria-label="הסרת סט">−</button></div>`).join('')}
+    <button type="button" class="addset" data-addset>＋ סט</button></div>`).join('');
+}
+$('#woEx').addEventListener('input',e=>{const t=e.target,ex=t.closest('.exed');if(!ex)return;const E=woDraft.exercises[+ex.dataset.ei];const r=t.closest('.srow');
+  if(t.dataset.f==='name')E.name=t.value;else if(r){const S=E.sets[+r.dataset.si];S[t.dataset.f]=t.dataset.f==='reps'?(num(t.value)==null?null:Math.round(num(t.value))):num(t.value)}});
+$('#woEx').addEventListener('click',e=>{const ex=e.target.closest('.exed');if(!ex)return;const E=woDraft.exercises[+ex.dataset.ei];const r=e.target.closest('.srow');
+  if(e.target.closest('[data-addset]')){const last=E.sets[E.sets.length-1];E.sets.push({kg:last?.kg??null,reps:last?.reps??null});renderExEd();const ins=$('#woEx').querySelectorAll(`.exed[data-ei="${ex.dataset.ei}"] .srow input[data-f="reps"]`);ins[ins.length-1]?.focus()}
+  else if(e.target.closest('[data-rmset]')){E.sets.splice(+r.dataset.si,1);renderExEd()}
+  else if(e.target.closest('[data-drop]')){const S=E.sets[+r.dataset.si];S.drop=!S.drop;e.target.closest('[data-drop]').setAttribute('aria-pressed',S.drop)}
+  else if(e.target.closest('[data-rmex]')){woDraft.exercises.splice(+ex.dataset.ei,1);renderExEd()}});
+$('#woAddEx').onclick=()=>{woDraft.exercises.push({name:'',sets:[{kg:null,reps:null}]});renderExEd();const n=$('#woEx').querySelectorAll('input[data-f="name"]');n[n.length-1]?.focus()};
+$('#woCopy').onclick=()=>{const l=state.workouts[state.workouts.length-1];if(!l)return;woDraft.exercises=cloneEx(l);if(!$('#woName').value)$('#woName').value=l.title||'';renderExEd();$('#woCopy').hidden=true};
+$('#woForm').onsubmit=async e=>{e.preventDefault();const msg=$('#woMsg');
+  const exercises=woDraft.exercises.map(x=>({name:x.name.trim(),sets:x.sets.filter(s=>s.kg!=null||s.reps!=null).map(s=>({kg:s.kg??null,reps:s.reps??null,...(s.drop?{drop:true}:{})}))})).filter(x=>x.name&&x.sets.length);
+  const date=$('#woDate').value;
+  if(!date){msg.textContent='צריך לבחור תאריך.';msg.className='form-msg err';return}
+  if(!exercises.length){msg.textContent='צריך לפחות תרגיל אחד עם שם וסט אחד.';msg.className='form-msg err';return}
+  const data={date,title:$('#woName').value.trim()||null,note:$('#woNote').value.trim()||null,exercises};
+  const id=woEditing?.id||(date+'-'+Math.random().toString(36).slice(2,7));
+  $('#woSave').disabled=true;msg.className='form-msg';msg.textContent='שומר…';
+  try{await store.saveWorkout(id,data);state.woOpen=id;closeSheets();toast(woEditing?'האימון עודכן':'האימון נשמר');setTimeout(()=>$('#secWorkouts').scrollIntoView({behavior:reduce?'auto':'smooth'}),250)}
+  catch(err){msg.className='form-msg err';msg.textContent='השמירה נכשלה. בדוק חיבור ונסה שוב.'}finally{$('#woSave').disabled=false}};
+$('#woDel').onclick=async()=>{if(!woDelArm){woDelArm=true;$('#woDel').textContent='לחץ שוב לאישור המחיקה';return}try{await store.removeWorkout(woEditing.id);closeSheets();toast('האימון נמחק')}catch(e){$('#woMsg').textContent='המחיקה נכשלה.';$('#woMsg').className='form-msg err'}};
+$('#woNew').onclick=()=>openWorkout(null);
+$('#mWeigh').onclick=()=>openEntry(null);
+$('#mWork').onclick=()=>openWorkout(null);
+
+function renderAll(){renderWorkouts();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
+
+/* ---------- sheets ---------- */
+let openId=null;
+function openSheet(id){closeSheets(true);$('#scrim').classList.add('open');$('#'+id).classList.add('open');openId=id}
+function closeSheets(silent){document.querySelectorAll('.sheet.open').forEach(s=>s.classList.remove('open'));if(!silent)$('#scrim').classList.remove('open');openId=null}
+$('#scrim').onclick=()=>closeSheets();
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeSheets());
+addEventListener('keydown',e=>{if(e.key==='Escape')closeSheets()});
+
+/* entry form */
+let editing=null,pendingPhoto=null,pendingVideo=null,delArm=false;
+function setThumb(url){$('#fThumb').innerHTML=url?`<img src="${esc(url)}" alt="">`:'＋';$('#fPhotoLbl').textContent=url?'החלפת תמונה':'הוספת תמונה לשבוע'}
+function openEntry(id){
+  const w=id?state.weeks.find(x=>x.id===id):null;editing=w;pendingPhoto=null;delArm=false;
+  const last=state.weeks[state.weeks.length-1];
+  $('#entryTitle').textContent=w?`שבוע ${dm(w.date)}`:'שקילה חדשה';
+  $('#fDate').value=w?w.date:new Date().toISOString().slice(0,10);
+  $('#fW').value=w?.weight??'';$('#fWa').value=w?.waist??'';
+  $('#fAR').value=w?.armR??'';$('#fAL').value=w?.armL??'';$('#fNote').value=w?.note??'';
+  $('#fW').placeholder=last?.weight??'';$('#fWa').placeholder=last?.waist??'';$('#fAR').placeholder=last?.armR??'';$('#fAL').placeholder=last?.armL??'';
+  setThumb(w?photoUrl(w):null);$('#fPhoto').value='';pendingVideo=null;$('#fVideo').value='';setVid(w?videoUrl(w):null);$('#vidWrap').hidden=!state.assets&&store?.kind!=='local'&&!w?.videoId;
+  $('#fMsg').textContent='';$('#fMsg').className='form-msg';
+  $('#delRow').hidden=!w;$('#fDel').textContent='מחיקת השבוע';
+  $('#fPhotoSub').textContent=state.assets||store?.kind==='local'?'מומלץ: אותה תאורה, אותה זווית, בוקר':'העלאת תמונות זמינה לבעלי הרשאת עריכה';
+  openSheet('entrySheet');
+}
+async function shrink(file,max=1400){
+  const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(file)});
+  const k=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);
+  c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(img.src);
+  return await new Promise(r=>c.toBlob(r,'image/jpeg',.85));
+}
+$('#fPhoto').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{pendingPhoto=await shrink(f);setThumb(URL.createObjectURL(pendingPhoto))}catch(err){$('#fMsg').textContent='לא הצלחנו לקרוא את התמונה. נסה קובץ JPG או PNG.';$('#fMsg').className='form-msg err'}};
+function setVid(u){$('#vidHolder').innerHTML=u?`<video class="vid" src="${esc(u)}" controls playsinline preload="metadata"></video>`:'';$('#fVidLbl').textContent=u?'החלפת סרטון':'הוספת סרטון לשבוע'}
+$('#fVideo').onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>20*1024*1024){$('#fMsg').textContent='הסרטון גדול מ-20MB.';$('#fMsg').className='form-msg err';e.target.value='';return}pendingVideo=f;setVid(URL.createObjectURL(f))};
+$('#entryForm').onsubmit=async e=>{
+  e.preventDefault();
+  const date=$('#fDate').value,msg=$('#fMsg');
+  const data={date,weight:num($('#fW').value),waist:num($('#fWa').value),armR:num($('#fAR').value),armL:num($('#fAL').value),note:$('#fNote').value.trim()||null};
+  if(!date){msg.textContent='צריך לבחור תאריך.';msg.className='form-msg err';return}
+  if(data.weight==null&&data.waist==null&&data.armR==null&&data.armL==null&&!pendingPhoto&&!pendingVideo&&!editing){msg.textContent='צריך למלא לפחות מדד אחד.';msg.className='form-msg err';return}
+  if(data.weight!=null&&(data.weight<30||data.weight>250)){msg.textContent='המשקל נראה לא סביר. בדוק את המספר.';msg.className='form-msg err';return}
+  $('#fSave').disabled=true;msg.className='form-msg';msg.textContent='שומר…';
+  try{
+    data.photoId=editing?.photoId??null;data.videoId=editing?.videoId??null;
+    if(editing?.photoKey)data.photoKey=editing.photoKey;if(editing?.videoKey)data.videoKey=editing.videoKey;
+    if(pendingVideo&&state.assets){msg.textContent='מעלה סרטון…';const rv=await state.assets.upload(pendingVideo);data.videoId=rv.id}
+    else if(pendingVideo&&store.kind==='local'){const k='v-'+Date.now();await idb.put(k,pendingVideo);data.videoKey=k}
+    if(editing?.photoLocal)data.photoLocal=editing.photoLocal;
+    if(pendingPhoto){
+      if(state.assets){msg.textContent='מעלה תמונה…';const r=await state.assets.upload(pendingPhoto);data.photoId=r.id}
+      else if(store.kind==='local'){const k='p-'+Date.now();await idb.put(k,pendingPhoto);data.photoKey=k;delete data.photoLocal}
+      else throw{code:'no_assets'};
+    }
+    Object.keys(data).forEach(k=>data[k]===undefined&&delete data[k]);
+    if(editing&&editing.id!==date)await store.remove(editing.id);
+    await store.save(date,data);
+    closeSheets();toast(editing?'השבוע עודכן':'השקילה נשמרה');
+    if(!reduce)setTimeout(()=>scrollTo({top:0,behavior:'smooth'}),200);
+  }catch(err){
+    msg.className='form-msg err';
+    msg.textContent=err?.code==='no_assets'?'אין לך הרשאה להעלות תמונות כאן. הנתונים לא נשמרו, נסה בלי תמונה.':err?.code==='too_large'?'התמונה גדולה מדי.':'השמירה נכשלה. בדוק חיבור ונסה שוב.';
+  }finally{$('#fSave').disabled=false}
+};
+$('#fDel').onclick=async()=>{
+  if(!delArm){delArm=true;$('#fDel').textContent='לחץ שוב לאישור המחיקה';return}
+  try{await store.remove(editing.id);closeSheets();toast('השבוע נמחק')}catch(e){$('#fMsg').textContent='המחיקה נכשלה.';$('#fMsg').className='form-msg err'}
+};
+$('#goalForm').onsubmit=async e=>{e.preventDefault();const g=num($('#gW').value);try{await store.setGoal(g);closeSheets();toast(g?'היעד נשמר':'היעד הוסר')}catch(err){toast('השמירה נכשלה')}};
+
+$('#strip').addEventListener('click',e=>{const b=e.target.closest('.wk');if(b)openEntry(b.dataset.id)});
+$('#goAdd').onclick=()=>openEntry(null);
+$('#navAdd').onclick=()=>openSheet('menuSheet');
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));state.metric=b.dataset.m;renderChart()});
+document.querySelectorAll('.nav [data-go]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById(b.dataset.go).scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})});
+$('#bkOut').onclick=()=>{try{const d=localStorage.getItem('hitov.local.v1')||'{}';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([d],{type:'application/json'}));a.download='hitov-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();toast('הגיבוי נשמר')}catch(e){toast('לא הצלחנו לשמור גיבוי')}};
+$('#bkIn').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!d||typeof d.weeks!=='object')throw 0;const cur=JSON.parse(localStorage.getItem('hitov.local.v1')||'{}');const m={weeks:{...(cur.weeks||{}),...d.weeks},workouts:{...(cur.workouts||{}),...(d.workouts||{})},goal:d.goal??cur.goal??null};for(const w of Object.values(m.weeks)){if(cur.weeks?.[w.date]){w.photoKey=w.photoKey||cur.weeks[w.date].photoKey;w.videoKey=w.videoKey||cur.weeks[w.date].videoKey}}localStorage.setItem('hitov.local.v1',JSON.stringify(m));store.start(store._cb);toast('הנתונים שוחזרו')}catch(err){toast('הקובץ לא נראה כמו גיבוי של חיטוב.')}e.target.value=''};
+let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>renderChart(false),150)});
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>renderChart(false));
+
+/* ---------- chat ---------- */
+const CHAT_K='hitov.chat.v1';
+let chat=[];try{chat=JSON.parse(localStorage.getItem(CHAT_K))||[]}catch(e){}
+let chatImg=null,busy=false,abortC=null;
+const saveChat=()=>{try{localStorage.setItem(CHAT_K,JSON.stringify(chat.slice(-40).map(m=>({role:m.role,content:m.content}))))}catch(e){}};
+function fmt(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/^#{1,3}\s*/gm,'')}
+function renderMsgs(){
+  const el=$('#msgs');
+  const intro=`<div class="m ai">היי! אני המאמן שלך. אני רואה את כל השקילות, המותן והזרועות שלך.\nאפשר לשאול על תזונה, אימונים, קצב ירידה, או לשלוח תמונה לניתוח.</div>`;
+  el.innerHTML=intro+chat.map(m=>`<div class="m ${m.role==='user'?'me':'ai'}${m.typing?' typing':''}">${m.img?`<img src="${esc(m.img)}" alt="">`:''}${m.role==='user'?esc(m.content):fmt(m.content)}</div>`).join('');
+  el.scrollTop=el.scrollHeight;
+}
+const CHIPS=['נתח את האימון האחרון','נתח את השבוע האחרון','מה לאכול ביום אימון?','איך לשבור סטגנציה?','תכנן לי שבוע אימונים','כמה קלוריות לאכול?'];
+$('#chips').innerHTML=CHIPS.map(c=>`<button type="button">${c}</button>`).join('');
+$('#chips').onclick=e=>{const b=e.target.closest('button');if(b)send(b.textContent)};
+function context(){
+  const s=stats();
+  const rows=state.weeks.map(w=>`${w.date}: משקל ${w.weight??'-'} ק"ג, מותן ${w.waist??'-'} ס"מ, זרוע ימין ${w.armR??'-'}, זרוע שמאל ${w.armL??'-'}${w.note?`, הערה: ${w.note}`:''}`).join('\n');
+  return `אתה מאמן כושר ותזונה אישי, מומחה לחיטוב (ירידה בשומן תוך שמירה על שריר). ענה תמיד בעברית, בגוף שני זכר, בטון חם, ישיר ומקצועי. תשובות קצרות וממוקדות (עד כ-150 מילים אלא אם ביקשו תוכנית), עם מספרים מעשיים מתוך הנתונים. אפשר רשימות קצרות. בלי כותרות markdown. אל תאבחן מצבים רפואיים; אם עולה משהו רפואי, המלץ לפנות לרופא או לדיאטן.
+היום: ${new Date().toISOString().slice(0,10)}.
+נתוני המעקב השבועיים של המשתמש:
+${rows||'אין עדיין נתונים.'}
+${s?`סיכום: ירידה של ${f1(s.lostKg)} ק"ג ו-${fc(s.lostWaist)} ס"מ במותן ב-${s.weeksN} שבועות. קצב אחרון: ${s.rRate!=null?f1(s.rRate):'-'} ק"ג לשבוע.`:''}
+${state.goal?`משקל יעד: ${state.goal} ק"ג.`:'לא הוגדר משקל יעד.'}
+אימונים אחרונים (משקל×חזרות, D=דרופ סט):
+${state.workouts.slice(-6).map(w=>`${w.date}${w.title?` (${w.title})`:''}: `+(w.exercises||[]).map(e=>`${e.name}: ${(e.sets||[]).map(x=>`${x.kg??'-'}×${x.reps??'-'}${x.drop?'D':''}`).join(', ')}`).join(' | ')).join('\n')||'אין עדיין אימונים מתועדים.'}`;
+}
+async function send(text){
+  text=(text||'').trim();if((!text&&!chatImg)||busy)return;
+  if(!state.sample){chat.push({role:'user',content:text},{role:'assistant',content:'המאמן זמין רק בגרסה שב-claude.ai, שם הוא מחובר ל-Claude. כאן אפשר להשתמש בתובנות ובטיפים שבדף.'});renderMsgs();return}
+  const img=chatImg;chatImg=null;$('#attPrev').hidden=true;
+  const um={role:'user',content:text||'מה דעתך על התמונה?'};if(img)um.img=URL.createObjectURL(img);
+  chat.push(um);const am={role:'assistant',content:'חושב…',typing:true};chat.push(am);renderMsgs();busy=true;
+  const hist=chat.filter(m=>m!==am&&!m.typing&&!m.err).slice(-16).map(m=>({role:m.role,content:m.content}));
+  while(hist.length&&hist[0].role!=='user')hist.shift();
+  if(hist.length)hist[0]={role:'user',content:context()+'\n\n---\nהודעת המשתמש:\n'+hist[0].content};
+  if(hist.length===1&&hist[0].content!==context()){}
+  if(hist.length>1)hist[hist.length-1]={role:'user',content:(img?'(המשתמש צירף תמונת התקדמות. התייחס למה שנראה בה בעדינות ובאופן מקצועי.)\n':'')+hist[hist.length-1].content};
+  if(hist.length>1)hist[0]={role:'user',content:hist[0].content};
+  abortC=new AbortController();
+  try{
+    const opts={cache:false,signal:abortC.signal,onText:({text})=>{am.content=text||'חושב…';am.typing=!text;renderMsgs()}};
+    if(img)opts.images=[img];
+    const r=await state.sample(hist,opts);
+    am.content=r.text;am.typing=false;
+  }catch(err){
+    am.typing=false;am.err=true;
+    am.content=err?.code==='not_granted'?'אין גישה למאמן. אפשר לאשר אותה בתפריט ההרשאות של הדף.':err?.code==='rate_limited'?'יותר מדי הודעות ברצף. נסה שוב בעוד דקה.':err?.code==='images_unavailable'||err?.code==='image_rejected'?'לא ניתן לנתח את התמונה כאן. נסה לשאול בטקסט.':(err?.text||'משהו השתבש. נסה שוב.');
+  }finally{busy=false;renderMsgs();saveChat()}
+}
+$('#chatForm').onsubmit=e=>{e.preventDefault();const t=$('#chatIn').value;$('#chatIn').value='';$('#chatIn').style.height='';send(t)};
+$('#chatIn').addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=Math.min(120,e.target.scrollHeight)+'px'});
+$('#chatIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!matchMedia('(pointer:coarse)').matches){e.preventDefault();$('#chatForm').requestSubmit()}});
+$('#chatImg').onchange=async e=>{const f=e.target.files[0];if(!f)return;chatImg=await shrink(f,1100);const p=$('#attPrev');p.innerHTML=`<img src="${URL.createObjectURL(chatImg)}" alt=""> תמונה מצורפת <button type="button" class="act" id="rmImg">הסרה</button>`;p.hidden=false;$('#rmImg').onclick=()=>{chatImg=null;p.hidden=true};e.target.value=''};
+$('#chatClear').onclick=()=>{abortC?.abort();chat=[];saveChat();renderMsgs()};
+function openChat(){renderMsgs();openSheet('chatSheet')}
+$('#navChat').onclick=openChat;
+$('#askWeek').onclick=()=>{openChat();send('תן לי ניתוח של השבוע האחרון מול המגמה הכללית, ו-3 דברים ספציפיים לשבוע הבא.')};
+
+/* ---------- boot ---------- */
+renderAll();
+if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('main section').forEach(sec=>{const r=sec.getBoundingClientRect();if(r.top>innerHeight){sec.classList.add('reveal','pre');io.observe(sec)}})}
+if('IntersectionObserver' in window){const navIo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const id=e.target.id==='secChart'||e.target.id==='secTips'?'top':e.target.id==='secCompare'?'secWeeks':e.target.id;document.querySelectorAll('.nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===id))}}),{rootMargin:'-45% 0px -50% 0px'});['top','secChart','secWorkouts','secWeeks','secCompare','secTips'].forEach(i=>navIo.observe(document.getElementById(i)))}
+(async()=>{
+  const c=window.claude;
+  let db=null;
+  const timer=setTimeout(()=>{if(!store){store=localStore();store._cb=onData;store.start(onData)}},10000);
+  if(c?.use){
+    const [d,a,s]=await Promise.all([c.use('db').catch(()=>null),c.use('assets').catch(()=>null),c.use('sample').catch(()=>null)]);
+    db=d;state.assets=a;state.sample=s;
+    if(!s){$('#askWeek').hidden=true}
+  }else{$('#askWeek').hidden=true}
+  if(store)return;clearTimeout(timer);
+  store=db?dbStore(db):localStore();store._cb=onData;store.start(onData);
+})();
+</script>
+</body>
+</html>
