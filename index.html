@@ -479,6 +479,74 @@ body{background:var(--paper)}
 .share-pre{white-space:pre-wrap;font-size:14px;line-height:1.65;padding:14px;border-radius:16px;background:color-mix(in srgb,var(--card) 65%,transparent);border:1px solid var(--line);max-height:46vh;overflow:auto;direction:rtl;user-select:text;-webkit-user-select:text}
 .share-act{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .share-act .wa{grid-column:1/-1;background:radial-gradient(130% 150% at 30% 15%,rgba(80,220,140,.9),rgba(20,160,90,.85) 55%,rgba(8,90,50,.9));color:#fff;text-decoration:none}
+
+/* ===== v2: thermal training tools ===== */
+.therm-rim{position:relative}
+.therm-rim::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;background:conic-gradient(from var(--ang),#23c8ff,#1a3cff 18%,#23c8ff 30%,#ffe14d 38%,#ff7a1a 44%,#ff2a2a 48%,#23c8ff 58%,#1a3cff 74%,#ffb14d 86%,#23c8ff);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:spin 7s linear infinite}
+.thermcard{border-radius:26px;padding:18px 16px;color:#fff;background:radial-gradient(120% 100% at 85% 0%,rgba(29,58,114,.85),rgba(10,18,44,.9) 55%,rgba(5,9,24,.92));-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:0 24px 50px -26px rgba(5,15,45,.9),0 0 30px -14px rgba(255,122,26,.45)}
+.thermcard .eyebrow{color:rgba(200,215,255,.72)}
+/* week plan strip */
+.wkplan{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px}
+.wkplan button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0 7px;border-radius:16px;color:rgba(220,232,255,.85);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);font-size:11px;min-width:0;transition:transform .2s}
+.wkplan button:active{transform:scale(.94)}
+.wkplan b{font-size:15px;font-weight:700;color:#fff}
+.wkplan i{display:block;width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.18)}
+.wkplan .plan i{background:#23c8ff;box-shadow:0 0 8px #23c8ff}
+.wkplan .done{background:radial-gradient(120% 120% at 50% 0%,rgba(255,180,77,.55),rgba(255,90,40,.25) 60%,rgba(255,255,255,.04));border-color:rgba(255,160,60,.6);box-shadow:0 0 14px -4px rgba(255,122,26,.8)}
+.wkplan .done i{background:#ffb14d;box-shadow:0 0 10px #ff7a1a}
+.wkplan .miss{border-style:dashed;border-color:rgba(35,200,255,.45)}
+.wkplan .rest{opacity:.55}
+.wkplan .today{outline:2px solid rgba(255,255,255,.75);outline-offset:1px}
+.wkplan .wd::after{content:"⚖";font-size:9px;opacity:.8}
+.today-row{display:flex;align-items:center;gap:12px;margin-top:6px}
+.today-row .tt{flex:1;min-width:0}
+.today-row h3{margin:2px 0 0;font-size:22px;font-weight:900;line-height:1.2}
+.today-row .mgrow .mgchip{color:#fff;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
+.weighbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:9px 12px;border-radius:14px;background:linear-gradient(90deg,rgba(255,180,77,.22),rgba(255,90,40,.12));border:1px solid rgba(255,170,70,.45);font-size:13.5px}
+.weighbar .btn{padding:7px 12px;font-size:13px}
+/* previous + suggestion in editor */
+.prevrow{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;padding:8px 10px;border-radius:12px;background:color-mix(in srgb,var(--paper) 55%,transparent);border:1px dashed var(--line)}
+.prevrow .prev{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);min-width:0}
+.prevrow .prev em{font-style:normal}
+.pvsets{display:flex;flex-wrap:wrap;gap:4px}
+.pvs{font-family:var(--f-num);font-size:13px;color:var(--ink);direction:ltr;padding:1px 7px;border-radius:7px;background:color-mix(in srgb,var(--card) 70%,transparent);border:1px solid var(--line)}
+.pvs.d{border-color:#ffb14d}
+#plFrom{width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);background:color-mix(in srgb,var(--card) 60%,transparent);color:var(--ink);font:inherit;font-size:16px}
+.sug{border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;color:#fff;background:radial-gradient(130% 150% at 30% 15%,rgba(70,130,255,.9),rgba(27,63,224,.85) 50%,rgba(10,20,112,.9));box-shadow:0 0 14px -4px rgba(255,122,26,.7)}
+.sug small{display:block;font-weight:500;font-size:10.5px;opacity:.85}
+.srow input::placeholder{color:color-mix(in srgb,var(--muted) 55%,transparent)}
+/* PR */
+.pr-chip{background:linear-gradient(90deg,#ffe14d,#ff7a1a);color:#3a1200;font-size:11px;font-weight:900;padding:2px 8px;border-radius:999px;box-shadow:0 0 12px -2px rgba(255,122,26,.8)}
+.prlist{display:grid;gap:10px}
+.prc{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 14px}
+.prc .nm{font-weight:700;font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prc .sub{font-size:12px;color:var(--muted);margin-top:2px}
+.prc .best{font-family:var(--f-num);font-size:22px;font-weight:600;line-height:1;direction:ltr;text-align:end}
+.prc .best small{font-size:12px;color:var(--muted)}
+.prc svg.spark{display:block;width:96px;height:30px;margin-top:4px}
+/* plan editor */
+.dayname{font-size:13px;color:var(--muted)}
+.planex{display:flex;gap:8px;align-items:center;margin-top:8px}
+.planex input{flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:color-mix(in srgb,var(--card) 60%,transparent);color:var(--ink);font:inherit;font-size:16px}
+.planex select{width:104px;flex:none;padding:10px 6px;border-radius:12px;border:1px solid var(--line);background:color-mix(in srgb,var(--card) 60%,transparent);color:var(--ink);font:inherit;font-size:14px}
+.tgl{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--card) 55%,transparent);border:1px solid var(--line);font-weight:500}
+.tgl input{width:20px;height:20px;accent-color:#ff7a1a}
+/* ghost photo */
+.ghostbox{position:relative;aspect-ratio:3/4;max-width:100%;border-radius:16px;overflow:hidden;background:#000;margin-top:8px}
+.ghostbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ghostbox .g{opacity:var(--go,.4);filter:grayscale(1) sepia(1) saturate(5) hue-rotate(-25deg) contrast(1.2);mix-blend-mode:screen}
+.ghostbox .lbl{position:absolute;top:8px;inset-inline-start:8px;font-size:11.5px;color:#fff;background:rgba(8,14,30,.6);padding:3px 9px;border-radius:999px}
+.ghostctl{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:12.5px;color:var(--muted)}
+.ghostctl input{flex:1;accent-color:#ff7a1a}
+.cam{position:fixed;inset:0;z-index:60;background:#000;display:flex;flex-direction:column}
+.cam .view{position:relative;flex:1;overflow:hidden}
+.cam video,.cam .g{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cam .g{opacity:var(--go,.4);filter:grayscale(1) sepia(1) saturate(5) hue-rotate(-25deg) contrast(1.2);mix-blend-mode:screen;pointer-events:none}
+.cam .bar{display:flex;align-items:center;justify-content:space-around;gap:10px;padding:14px max(16px,env(safe-area-inset-left,0px)) calc(18px + env(safe-area-inset-bottom,0px));background:rgba(5,9,24,.9)}
+.cam .shot{width:74px;height:74px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe14d,#ff7a1a 55%,#c2240a);box-shadow:0 0 0 4px rgba(255,255,255,.85),0 0 30px rgba(255,122,26,.8)}
+.cam .x{color:#fff}
+.cam .ghostctl{position:absolute;bottom:14px;left:16px;right:16px;color:#fff;background:rgba(8,14,30,.55);padding:8px 12px;border-radius:999px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.cam .hint{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);color:#fff;font-size:13px;background:rgba(8,14,30,.55);padding:5px 12px;border-radius:999px;white-space:nowrap}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -536,7 +604,13 @@ body{background:var(--paper)}
         <div><div class="eyebrow">יומן כוח</div><h2>אימונים</h2><p>כל אימון, כל סט, וההתקדמות מול הפעם הקודמת</p></div>
         <button class="btn lime" id="woNew" style="padding:9px 14px;font-size:14px;white-space:nowrap;flex:none">＋ אימון</button>
       </div>
-      <div class="ins" id="woList"></div>
+      <div class="thermcard" id="todayCard"></div>
+      <div class="ins" id="woList" style="margin-top:14px"></div>
+    </section>
+
+    <section id="secPR">
+      <div class="sec-head"><div><div class="eyebrow">שיאים אישיים</div><h2>כמה חזק אתה</h2><p>הסט הכי טוב בכל תרגיל, והמגמה לאורך האימונים</p></div></div>
+      <div class="prlist" id="prList"></div>
     </section>
 
     <section id="secWeeks">
@@ -592,7 +666,10 @@ body{background:var(--paper)}
         <div class="fld full"><span style="font-size:12.5px;color:var(--muted);font-weight:500">תמונת התקדמות</span>
           <label class="photo-pick" for="fPhoto"><span class="th" id="fThumb">＋</span>
             <span><b id="fPhotoLbl">הוספת תמונה לשבוע</b><br><span style="font-size:12.5px;color:var(--muted)" id="fPhotoSub">מומלץ: אותה תאורה, אותה זווית, בוקר</span></span>
-            <input id="fPhoto" type="file" accept="image/*"></label></div>
+            <input id="fPhoto" type="file" accept="image/*"></label>
+          <button type="button" class="btn ghost full" id="fCam" hidden style="margin-top:8px">צילום עם צל של הפעם הקודמת</button>
+          <div id="ghostWrap" hidden><div class="ghostbox" id="ghostBox"><img id="ghNew" alt="התמונה החדשה"><img class="g" id="ghOld" alt="הפעם הקודמת"><span class="lbl" id="ghLbl"></span></div>
+            <label class="ghostctl" for="ghOp">צל הפעם הקודמת <input type="range" id="ghOp" min="0" max="80" value="40"></label></div></div>
         <div class="fld full" id="vidWrap"><span style="font-size:12.5px;color:var(--muted);font-weight:500">סרטון (לא חובה)</span>
           <div id="vidHolder"></div>
           <label class="photo-pick" for="fVideo"><span class="th">▶</span><span><b id="fVidLbl">הוספת סרטון לשבוע</b><br><span style="font-size:12.5px;color:var(--muted)">עד 20MB</span></span><input id="fVideo" type="file" accept="video/*"></label></div>
@@ -632,6 +709,30 @@ body{background:var(--paper)}
       <div class="row-btns"><button type="submit" class="btn lime" id="woSave">שמירת אימון</button></div>
       <div class="row-btns" id="woDelRow" hidden><button type="button" class="btn ghost danger" id="woDel">מחיקת האימון</button></div>
     </form>
+  </div>
+
+  <!-- plan sheet -->
+  <div class="sheet chat" id="planSheet" role="dialog" aria-modal="true" aria-labelledby="planTitle">
+    <div class="grab"></div>
+    <div class="hd"><div><div class="dayname" id="planDayName"></div><h2 id="planTitle">תוכנית ליום</h2></div><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <form class="bd" id="planForm" novalidate style="flex:1">
+      <label class="tgl" for="plRest"><input type="checkbox" id="plRest"> יום מנוחה</label>
+      <label class="tgl" for="plWeigh" style="margin-top:8px"><input type="checkbox" id="plWeigh"> יום שקילה</label>
+      <div id="plBody">
+        <div class="fld" style="margin-top:12px"><label for="plName">שם האימון</label><input id="plName" placeholder="למשל: חזה + כתפיים"></div>
+        <div class="fld" style="margin-top:12px"><label for="plFrom">מילוי לפי אימון קודם</label><select id="plFrom"></select></div>
+        <div style="margin-top:12px;font-size:12.5px;color:var(--muted);font-weight:500">תרגילים</div>
+        <div id="plEx"></div>
+        <button type="button" class="btn ghost full" id="plAdd" style="margin-top:10px">＋ תרגיל</button>
+      </div>
+      <div class="row-btns"><button type="submit" class="btn lime">שמירת התוכנית</button></div>
+    </form>
+  </div>
+
+  <div class="cam" id="cam" hidden>
+    <div class="view"><video id="camV" playsinline muted autoplay></video><img class="g" id="camG" alt=""><span class="hint" id="camHint">מתאימים את הגוף לצל של הפעם הקודמת</span>
+      <label class="ghostctl" for="camOp">צל <input type="range" id="camOp" min="0" max="80" value="40"></label></div>
+    <div class="bar"><button class="x" id="camClose" type="button" aria-label="סגירה">✕</button><button class="shot" id="camShot" type="button" aria-label="צילום"></button><button class="x" id="camFlip" type="button" aria-label="החלפת מצלמה">⟲</button></div>
   </div>
 
   <!-- share sheet -->
@@ -701,12 +802,13 @@ function localStore(){
 const read=()=>{const fresh=()=>JSON.parse(JSON.stringify(SEED));try{const v=localStorage.getItem(K);let d=v?JSON.parse(v):null;if(!d||typeof d!=='object')d={weeks:{},workouts:{},goal:null};if(d.seeded!==3){d.weeks=d.weeks||{};d.workouts=d.workouts||{};for(const[k,w]of Object.entries(SEED.weeks)){if(!d.weeks[k])d.weeks[k]=w;else{const e=d.weeks[k];if(w.photoLocal&&!e.photoLocal&&!e.photoKey)e.photoLocal=w.photoLocal;if(w.videoSrc&&!e.videoSrc&&!e.videoKey)e.videoSrc=w.videoSrc}}for(const[k,w]of Object.entries(SEED.workouts))if(!d.workouts[k])d.workouts[k]=w;d.seeded=3;localStorage.setItem(K,JSON.stringify(d))}return d}catch(e){return fresh()}};
   const write=d=>{try{localStorage.setItem(K,JSON.stringify(d))}catch(e){}};
   return{kind:'local',
-    start(cb){const d=read();cb(Object.entries(d.weeks).map(([id,v])=>({id,...v})),d.goal);onWorkouts(Object.entries(d.workouts||{}).map(([id,v])=>({id,...v})))},
+    start(cb){const d=read();onPlan(d.plan||null);cb(Object.entries(d.weeks).map(([id,v])=>({id,...v})),d.goal);onWorkouts(Object.entries(d.workouts||{}).map(([id,v])=>({id,...v})))},
     async saveWorkout(id,data){const d=read();d.workouts=d.workouts||{};d.workouts[id]=data;write(d);this.start(store._cb)},
     async removeWorkout(id){const d=read();delete (d.workouts||{})[id];write(d);this.start(store._cb)},
     async save(id,data){const d=read();d.weeks[id]=data;write(d);this.start(store._cb)},
     async remove(id){const d=read();delete d.weeks[id];write(d);this.start(store._cb)},
-    async setGoal(g){const d=read();d.goal=g;write(d);this.start(store._cb)}};
+    async setGoal(g){const d=read();d.goal=g;write(d);this.start(store._cb)},
+    async setPlan(pl){const d=read();d.plan=pl;write(d);onPlan(pl)}};
 }
 function dbStore(db){
   let weeks=[],goal=null;
@@ -714,13 +816,15 @@ function dbStore(db){
     start(cb){
       db.collection('weeks').onSnapshot(s=>{weeks=s.docs.map(d=>({id:d.id,...d.data()}));cb(weeks,goal)},e=>{console.warn(e);toast('לא הצלחנו לטעון את הנתונים. נסה לרענן.')});
       db.collection('workouts').onSnapshot(s=>onWorkouts(s.docs.map(d=>({id:d.id,...d.data()}))),e=>console.warn(e));
+      db.doc('settings/plan').onSnapshot(s=>onPlan(s.exists?s.data():null),()=>{});
       db.doc('settings/main').onSnapshot(s=>{goal=s.exists?(s.data().goal??null):null;cb(weeks,goal)},()=>{});
     },
     save(id,data){return db.doc('weeks/'+id).set(data)},
     remove(id){return db.doc('weeks/'+id).delete()},
     setGoal(g){return db.doc('settings/main').set({goal:g})},
     saveWorkout(id,data){return db.doc('workouts/'+id).set(data)},
-    removeWorkout(id){return db.doc('workouts/'+id).delete()}};
+    removeWorkout(id){return db.doc('workouts/'+id).delete()},
+    setPlan(pl){return db.doc('settings/plan').set(pl)}};
 }
 function onData(weeks,goal){
   state.weeks=weeks.filter(w=>w.date).sort((a,b)=>a.date<b.date?-1:1);
@@ -948,7 +1052,7 @@ const e1rm=x=>(x.kg||0)*(1+(x.reps||0)/30);
 const bestSet=ex=>(ex.sets||[]).filter(x=>x.kg!=null&&x.reps).reduce((b,x)=>!b||e1rm(x)>e1rm(b)?x:b,null);
 const fmtK=n=>n>=1000?(n/1000).toFixed(1)+'K':String(Math.round(n));
 function prevEx(w,name){const before=state.workouts.filter(o=>o.date<w.date||(o.date===w.date&&o.id<w.id));for(let i=before.length-1;i>=0;i--){const e=(before[i].exercises||[]).find(x=>x.name.trim()===name.trim());if(e)return e}return null}
-function onWorkouts(list){state.workouts=list.filter(w=>w.date).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:(a.id<b.id?-1:1));if(state.woOpen==null&&state.workouts.length)state.woOpen=state.workouts[state.workouts.length-1].id;renderWorkouts()}
+function onWorkouts(list){state.workouts=list.filter(w=>w.date).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:(a.id<b.id?-1:1));if(state.woOpen==null&&state.workouts.length)state.woOpen=state.workouts[state.workouts.length-1].id;renderWorkouts();if(typeof renderToday==='function'){renderToday();renderPR()}}
 let woShowAll=false;
 function renderWorkouts(){
   const el=$('#woList'),L=[...state.workouts].reverse();
@@ -959,6 +1063,7 @@ function renderWorkouts(){
     const exHtml=(w.exercises||[]).map(e=>{
       const b=bestSet(e),pe=prevEx(w,e.name),pb=pe&&bestSet(pe);
       let pr='';if(b&&pb){const top=x=>{const mk=Math.max(...(x.sets||[]).filter(z=>!z.drop&&z.kg!=null).map(z=>z.kg));return{kg:mk,reps:Math.max(...(x.sets||[]).filter(z=>z.kg===mk).map(z=>z.reps||0))}};const A=top(e),B=top(pe);const dd=A.kg!==B.kg?A.kg-B.kg:A.reps-B.reps;pr=dd===0||!isFinite(dd)?`<span class="pr chip info">כמו בפעם הקודמת</span>`:dd>0?`<span class="pr chip ok">↑ התקדמות</span>`:`<span class="pr chip mid">↓ ירידה</span>`}
+      if(isPR(w,e))pr=`<span class="pr-chip">שיא חדש</span>`;
       return `<div class="ex"><div class="nm"><span>${mgIcon(exGroup(e))}${esc(e.name)}</span>${pr}</div><div class="sets">${(e.sets||[]).map(x=>`<span class="set${x.drop?' drop':''}">${fc(x.kg)}<i>kg</i> × ${x.reps??'—'}${x.drop?' <i>דרופ</i>':''}</span>`).join('')}</div></div>`}).join('');
     return `<article class="card wo${open?' open':''}" data-wid="${esc(w.id)}" style="animation-delay:${Math.min(i,5)*.06}s">
       <button class="wo-h" data-tog aria-expanded="${open}"><span class="wo-date"><span class="dd">${+d}</span><span class="mm">${MSHORT[+m-1]}</span></span>
@@ -977,10 +1082,10 @@ $('#woList').addEventListener('click',e=>{const card=e.target.closest('.wo');if(
 
 let woEditing=null,woDraft=null,woDelArm=false;
 function cloneEx(w){return(w.exercises||[]).map(e=>({name:e.name,group:e.group||null,sets:(e.sets||[]).map(x=>({kg:x.kg,reps:x.reps,drop:!!x.drop}))}))}
-function openWorkout(w,template){
+function openWorkout(w,template,src){
   woEditing=w||null;woDelArm=false;
   woDraft={date:w?w.date:new Date().toISOString().slice(0,10),title:w?.title||template?.title||'',note:w?.note||'',exercises:w?cloneEx(w):template?cloneEx(template):[{name:'',sets:[{kg:null,reps:null}]}]};
-  $('#woTitle').textContent=w?'עריכת אימון':template?'אימון חוזר':'אימון חדש';
+  $('#woTitle').textContent=w?'עריכת אימון':src==='plan'?'האימון של היום':template?'אימון חוזר':'אימון חדש';
   $('#woDate').value=woDraft.date;$('#woName').value=woDraft.title;$('#woNote').value=woDraft.note;
   $('#woMsg').textContent='';$('#woMsg').className='form-msg';$('#woDelRow').hidden=!w;$('#woDel').textContent='מחיקת האימון';
   $('#woCopy').hidden=!!w||!!template||!state.workouts.length;
@@ -990,14 +1095,18 @@ function openWorkout(w,template){
 function renderExEd(){
   $('#woEx').innerHTML=woDraft.exercises.map((e,i)=>`<div class="exed" data-ei="${i}">
     <div class="top"><input list="exNames" data-f="name" value="${esc(e.name)}" placeholder="שם התרגיל (למשל: חזה מכשיר)" aria-label="שם תרגיל ${i+1}"><select class="gsel" data-f="group" aria-label="קבוצת שריר">${['auto',...MG_ORDER].map(k=>`<option value="${k}" ${(e.group||'auto')===k?'selected':''}>${k==='auto'?(e.name?`${MG[exGroup({name:e.name})].n} (אוטו׳)`:'זיהוי אוטו׳'):MG[k].n}</option>`).join('')}</select><button type="button" class="rm" data-rmex aria-label="הסרת תרגיל">✕</button></div>
+    ${(()=>{const pv=lastEx(e.name,woDraft.date,woEditing?.id);if(!pv)return '';const sg=suggestFor(pv.e);e._prev=pv.e;
+      return `<div class="prevrow"><span class="prev"><em>פעם קודמת · ${dm(pv.w.date)}</em><span class="pvsets">${(pv.e.sets||[]).map(z=>`<span class="pvs${z.drop?' d':''}">${fc(z.kg)}×${z.reps??'—'}</span>`).join('')}</span></span>${sg?`<button type="button" class="sug therm-rim" data-sug>הצעה: ${fc(sg.kg)} ק״ג × ${sg.reps}<small>${sg.why}</small></button>`:''}</div>`})()}
     <div class="shead"><span>סט</span><span>ק״ג</span><span>חזרות</span><span>דרופ</span><span></span></div>
-    ${e.sets.map((x,j)=>`<div class="srow" data-si="${j}"><span class="ix">${j+1}</span><input inputmode="decimal" data-f="kg" value="${x.kg??''}" aria-label="משקל סט ${j+1}"><input inputmode="numeric" data-f="reps" value="${x.reps??''}" aria-label="חזרות סט ${j+1}"><button type="button" class="dp" data-drop aria-pressed="${!!x.drop}" aria-label="דרופ סט">D</button><button type="button" class="rm" data-rmset aria-label="הסרת סט">−</button></div>`).join('')}
+    ${e.sets.map((x,j)=>`<div class="srow" data-si="${j}"><span class="ix">${j+1}</span><input inputmode="decimal" data-f="kg" value="${x.kg??''}" placeholder="${e._prev?.sets?.[j]?.kg??''}" aria-label="משקל סט ${j+1}"><input inputmode="numeric" data-f="reps" value="${x.reps??''}" placeholder="${e._prev?.sets?.[j]?.reps??''}" aria-label="חזרות סט ${j+1}"><button type="button" class="dp" data-drop aria-pressed="${!!x.drop}" aria-label="דרופ סט">D</button><button type="button" class="rm" data-rmset aria-label="הסרת סט">−</button></div>`).join('')}
     <button type="button" class="addset" data-addset>＋ סט</button></div>`).join('');
 }
 $('#woEx').addEventListener('input',e=>{const t=e.target,ex=t.closest('.exed');if(!ex)return;const E=woDraft.exercises[+ex.dataset.ei];const r=t.closest('.srow');
   if(t.dataset.f==='group'){E.group=t.value==='auto'?null:t.value;return}
   if(t.dataset.f==='name')E.name=t.value;else if(r){const S=E.sets[+r.dataset.si];S[t.dataset.f]=t.dataset.f==='reps'?(num(t.value)==null?null:Math.round(num(t.value))):num(t.value)}});
-$('#woEx').addEventListener('click',e=>{const ex=e.target.closest('.exed');if(!ex)return;const E=woDraft.exercises[+ex.dataset.ei];const r=e.target.closest('.srow');
+$('#woEx').addEventListener('change',e=>{if(e.target.dataset.f==='name')renderExEd()});
+$('#woEx').addEventListener('click',e=>{const ex=e.target.closest('.exed');if(!ex)return;const E=woDraft.exercises[+ex.dataset.ei];
+  if(e.target.closest('[data-sug]')){const sg=suggestFor(E._prev);if(sg){E.sets.forEach((s,j)=>{if(!s.drop){s.kg=sg.kg;if(j===0||s.reps==null)s.reps=sg.reps}});renderExEd();toast('ההצעה הוחלה')}return}const r=e.target.closest('.srow');
   if(e.target.closest('[data-addset]')){const last=E.sets[E.sets.length-1];E.sets.push({kg:last?.kg??null,reps:last?.reps??null});renderExEd();const ins=$('#woEx').querySelectorAll(`.exed[data-ei="${ex.dataset.ei}"] .srow input[data-f="reps"]`);ins[ins.length-1]?.focus()}
   else if(e.target.closest('[data-rmset]')){E.sets.splice(+r.dataset.si,1);renderExEd()}
   else if(e.target.closest('[data-drop]')){const S=E.sets[+r.dataset.si];S.drop=!S.drop;e.target.closest('[data-drop]').setAttribute('aria-pressed',S.drop)}
@@ -1012,7 +1121,8 @@ $('#woForm').onsubmit=async e=>{e.preventDefault();const msg=$('#woMsg');
   const data={date,title:$('#woName').value.trim()||null,note:$('#woNote').value.trim()||null,exercises};
   const id=woEditing?.id||(date+'-'+Math.random().toString(36).slice(2,7));
   $('#woSave').disabled=true;msg.className='form-msg';msg.textContent='שומר…';
-  try{await store.saveWorkout(id,data);state.woOpen=id;closeSheets();toast(woEditing?'האימון עודכן':'האימון נשמר');setTimeout(()=>$('#secWorkouts').scrollIntoView({behavior:reduce?'auto':'smooth'}),250)}
+  const newPRs=data.exercises.filter(x=>{const b=bestSet(x);if(!b)return false;const h=exHistory(x.name).filter(z=>z.id!==id&&z.date<=data.date);return h.length&&e1rm(b)>Math.max(...h.map(z=>z.score))+0.01}).map(x=>x.name);
+  try{await store.saveWorkout(id,data);if(newPRs.length)setTimeout(()=>toast('שיא חדש: '+newPRs.join(', ')),400);state.woOpen=id;closeSheets();toast(woEditing?'האימון עודכן':'האימון נשמר');setTimeout(()=>$('#secWorkouts').scrollIntoView({behavior:reduce?'auto':'smooth'}),250)}
   catch(err){msg.className='form-msg err';msg.textContent='השמירה נכשלה. בדוק חיבור ונסה שוב.'}finally{$('#woSave').disabled=false}};
 $('#woDel').onclick=async()=>{if(!woDelArm){woDelArm=true;$('#woDel').textContent='לחץ שוב לאישור המחיקה';return}try{await store.removeWorkout(woEditing.id);closeSheets();toast('האימון נמחק')}catch(e){$('#woMsg').textContent='המחיקה נכשלה.';$('#woMsg').className='form-msg err'}};
 $('#woNew').onclick=()=>openWorkout(null);
@@ -1035,7 +1145,82 @@ $('#gBtn').onclick=()=>{$('#gW').value=state.goal??'';openSheet('goalSheet')};
 /* ---------- thermal ---------- */
 const TH=[[0,[10,15,60]],[.2,[26,60,255]],[.42,[35,200,255]],[.62,[255,225,77]],[.8,[255,122,26]],[1,[255,42,42]]];
 function thermal(t,a=1){t=Math.max(0,Math.min(1,t));for(let i=1;i<TH.length;i++)if(t<=TH[i][0]){const [t0,c0]=TH[i-1],[t1,c1]=TH[i],k=(t-t0)/(t1-t0);return `rgba(${c0.map((v,j)=>Math.round(v+(c1[j]-v)*k)).join(',')},${a})`}return `rgba(255,42,42,${a})`}
-function renderAll(){renderGoal();renderWorkouts();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
+
+/* ---------- v2: progression, PRs, plan, ghost ---------- */
+const DAYN=['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];const DAYS=['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'];
+const isoOf=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const todayIso=()=>isoOf(new Date());
+const topOf=e=>{const ss=(e.sets||[]).filter(z=>!z.drop&&z.kg!=null);if(!ss.length)return null;const mk=Math.max(...ss.map(z=>z.kg));return{kg:mk,reps:Math.max(...ss.filter(z=>z.kg===mk).map(z=>z.reps||0))}};
+function lastEx(name,beforeDate,exceptId){if(!name)return null;const n=name.trim();const L=state.workouts.filter(w=>w.id!==exceptId&&w.date<=beforeDate);for(let i=L.length-1;i>=0;i--){const e=(L[i].exercises||[]).find(x=>x.name.trim()===n);if(e)return{e,w:L[i]}}return null}
+function suggestFor(prev){const t=topOf(prev);if(!t)return null;const inc=t.kg>=20?2.5:1;
+  return t.reps>=12?{kg:+(t.kg+inc).toFixed(1),reps:Math.max(6,t.reps-4),why:'הגעת ל-'+t.reps+' חזרות, מעלים משקל'}:{kg:t.kg,reps:t.reps+1,why:'אותו משקל, חזרה אחת יותר'}}
+function exHistory(name){const n=name.trim();return state.workouts.map(w=>{const e=(w.exercises||[]).find(x=>x.name.trim()===n);if(!e)return null;const b=bestSet(e);return b?{date:w.date,id:w.id,b,score:e1rm(b),top:topOf(e),group:exGroup(e)}:null}).filter(Boolean)}
+function isPR(w,e){const h=exHistory(e.name);const i=h.findIndex(x=>x.id===w.id);if(i<1)return false;return h[i].score>Math.max(...h.slice(0,i).map(x=>x.score))+0.01}
+let planState=null;
+function onPlan(p){planState=p&&p.days?p:{days:{},weighDay:2};if(document.getElementById('todayCard'))renderToday()}
+function weekDates(){const t=new Date();t.setHours(0,0,0,0);const s=new Date(t);s.setDate(t.getDate()-t.getDay());return[...Array(7)].map((_,i)=>{const d=new Date(s);d.setDate(s.getDate()+i);return d})}
+function renderToday(){
+  const el=$('#todayCard');if(!el)return;const P=planState||{days:{},weighDay:2};const t=new Date();const dow=t.getDay();const D=P.days[dow];
+  const done=new Set(state.workouts.map(w=>w.date));const ti=todayIso();
+  const strip=weekDates().map((d,i)=>{const iso=isoOf(d),pd=P.days[i],has=done.has(iso),past=iso<ti;
+    const cls=[has?'done':'',pd&&!pd.rest&&pd.ex?.length?'plan':'',pd?.rest?'rest':'',(!has&&past&&pd&&!pd.rest&&pd.ex?.length)?'miss':'',iso===ti?'today':'',P.weighDay===i?'wd':''].join(' ');
+    return `<button type="button" class="${cls}" data-day="${i}" aria-label="יום ${DAYN[i]}"><span>${DAYS[i]}</span><b>${d.getDate()}</b><i></i></button>`}).join('');
+  let main;
+  if(D&&D.rest)main=`<div class="today-row"><div class="tt"><div class="eyebrow">היום · יום ${DAYN[dow]}</div><h3>יום מנוחה</h3><div style="font-size:13px;opacity:.75;margin-top:4px">השרירים גדלים בזמן המנוחה. שינה טובה ומספיק חלבון.</div></div></div>`;
+  else if(D&&D.ex&&D.ex.length){const gs=MG_ORDER.filter(k=>D.ex.some(e=>exGroup(e)===k));const doneToday=done.has(ti);
+    main=`<div class="today-row"><div class="tt"><div class="eyebrow">האימון של היום · יום ${DAYN[dow]}</div><h3>${esc(D.title||'אימון')}</h3><div class="mgrow">${gs.map(k=>`<span class="mgchip">${mgIcon(k)}${MG[k].n}</span>`).join('')}</div></div></div>
+    <button class="btn lime full" id="startToday" style="margin-top:12px">${doneToday?'עוד אימון היום':'התחלת האימון'} · ${D.ex.length} תרגילים</button>`}
+  else main=`<div class="today-row"><div class="tt"><div class="eyebrow">תוכנית שבועית</div><h3>${Object.keys(P.days).length?'אין אימון מתוכנן היום':'בונים תוכנית לשבוע'}</h3><div style="font-size:13px;opacity:.75;margin-top:4px">לוחצים על יום כדי לקבוע מה מתאמנים בו. האימון ייפתח מוכן עם המשקלים מהפעם הקודמת.</div></div></div>`;
+  const weighToday=P.weighDay===dow&&!state.weeks.some(w=>w.date===ti&&w.weight!=null);
+  el.innerHTML=main+(weighToday?`<div class="weighbar"><span>היום יום שקילה</span><button class="btn lime" id="weighNow" type="button">שקילה</button></div>`:'')+`<div class="wkplan">${strip}</div>`;
+  $('#startToday')&&($('#startToday').onclick=()=>openWorkout(null,templateFromPlan(D),'plan'));
+  $('#weighNow')&&($('#weighNow').onclick=()=>openEntry(null));
+  el.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>openPlan(+b.dataset.day));
+}
+function templateFromPlan(D){const ti=todayIso();return{title:D.title||'',exercises:D.ex.map(x=>{const pe=lastEx(x.name,ti);return{name:x.name,group:x.group||null,sets:pe?pe.e.sets.map(s=>({kg:s.kg,reps:s.reps,drop:!!s.drop})):[{kg:null,reps:null}]}})}}
+/* plan editor */
+let plDay=0,plDraft=null;
+function openPlan(day){plDay=day;const P=planState||{days:{},weighDay:2};const D=P.days[day]||{};plDraft={title:D.title||'',rest:!!D.rest,ex:(D.ex||[]).map(e=>({name:e.name,group:e.group||null}))};
+  $('#planDayName').textContent='יום '+DAYN[day];$('#planTitle').textContent=D.title||'תוכנית ליום';
+  $('#plRest').checked=plDraft.rest;$('#plWeigh').checked=P.weighDay===day;$('#plName').value=plDraft.title;
+  $('#plFrom').innerHTML='<option value="">בחירת אימון…</option>'+[...state.workouts].reverse().map(w=>`<option value="${esc(w.id)}">${dm(w.date)} · ${esc(w.title||'אימון')}</option>`).join('');
+  if(!plDraft.ex.length)plDraft.ex=[{name:'',group:null}];renderPlanEx();openSheet('planSheet')}
+function renderPlanEx(){$('#plBody').hidden=$('#plRest').checked;
+  $('#plEx').innerHTML=plDraft.ex.map((e,i)=>`<div class="planex" data-pi="${i}">${mgIcon(e.name||e.group?exGroup(e):'other')}<input list="exNames" data-pf="name" value="${esc(e.name)}" placeholder="שם התרגיל" aria-label="תרגיל ${i+1}"><select data-pf="group" aria-label="קבוצת שריר">${['auto',...MG_ORDER].map(k=>`<option value="${k}" ${(e.group||'auto')===k?'selected':''}>${k==='auto'?'אוטו׳':MG[k].n}</option>`).join('')}</select><button type="button" class="rm" data-prm aria-label="הסרה">✕</button></div>`).join('');
+  $('#exNames').innerHTML=[...new Set(state.workouts.flatMap(o=>(o.exercises||[]).map(e=>e.name)))].map(n=>`<option value="${esc(n)}"></option>`).join('')}
+$('#plRest').onchange=()=>{plDraft.rest=$('#plRest').checked;renderPlanEx()};
+$('#plEx').addEventListener('input',e=>{const r=e.target.closest('.planex');if(!r)return;const E=plDraft.ex[+r.dataset.pi];if(e.target.dataset.pf==='name')E.name=e.target.value;else if(e.target.dataset.pf==='group')E.group=e.target.value==='auto'?null:e.target.value});
+$('#plEx').addEventListener('change',e=>{if(e.target.dataset.pf)renderPlanEx()});
+$('#plEx').addEventListener('click',e=>{const b=e.target.closest('[data-prm]');if(!b)return;plDraft.ex.splice(+b.closest('.planex').dataset.pi,1);renderPlanEx()});
+$('#plAdd').onclick=()=>{plDraft.ex.push({name:'',group:null});renderPlanEx();const n=$('#plEx').querySelectorAll('input');n[n.length-1]?.focus()};
+$('#plFrom').onchange=e=>{const w=state.workouts.find(x=>x.id===e.target.value);if(!w)return;plDraft.ex=(w.exercises||[]).map(x=>({name:x.name,group:x.group||null}));if(!$('#plName').value)$('#plName').value=w.title||'';renderPlanEx()};
+$('#planForm').onsubmit=async e=>{e.preventDefault();const P=JSON.parse(JSON.stringify(planState||{days:{},weighDay:2}));P.days=P.days||{};
+  const rest=$('#plRest').checked,ex=plDraft.ex.map(x=>({name:x.name.trim(),...(x.group?{group:x.group}:{})})).filter(x=>x.name),title=$('#plName').value.trim();
+  if(rest)P.days[plDay]={rest:true};else if(ex.length||title)P.days[plDay]={title:title||null,ex};else delete P.days[plDay];
+  if($('#plWeigh').checked)P.weighDay=plDay;else if(P.weighDay===plDay)P.weighDay=null;
+  try{await store.setPlan(P);closeSheets();toast('התוכנית נשמרה')}catch(err){toast('השמירה נכשלה')}};
+/* PR list */
+function sparkSvg(h){const v=h.map(x=>x.top?.kg??x.b.kg);if(v.length<2)return '';const W=96,H=30,mn=Math.min(...v),mx=Math.max(...v),r=mx-mn||1;
+  const pts=v.map((y,i)=>[3+i*(W-6)/(v.length-1),H-4-(y-mn)/r*(H-8)]);const d=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1)).join('');const L=pts[pts.length-1];
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs><linearGradient id="spg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="${W}" y2="0"><stop offset="0" stop-color="#23c8ff"/><stop offset=".6" stop-color="#ffb14d"/><stop offset="1" stop-color="#ff3a2a"/></linearGradient></defs><path d="${d}" fill="none" stroke="url(#spg)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${L[0]}" cy="${L[1]}" r="3.6" fill="#ff7a1a" stroke="#fff" stroke-width="1.2"/></svg>`}
+function renderPR(){const el=$('#prList');if(!el)return;const names=[...new Set(state.workouts.flatMap(w=>(w.exercises||[]).map(e=>e.name.trim())))];
+  if(!names.length){el.innerHTML=`<div class="card empty"><b>השיאים יופיעו כאן</b>אחרי האימון הראשון רואים את הסט הכי טוב בכל תרגיל.</div>`;return}
+  const rows=names.map(n=>{const h=exHistory(n);if(!h.length)return null;const best=h.reduce((a,b)=>b.score>a.score?b:a);return{n,h,best,g:h[h.length-1].group}}).filter(Boolean).sort((a,b)=>MG_ORDER.indexOf(a.g)-MG_ORDER.indexOf(b.g));
+  el.innerHTML=rows.map(r=>{const fresh=r.h.length>1&&r.best.id===r.h[r.h.length-1].id;return `<div class="card prc">${mgIcon(r.g,'lg')}<div style="min-width:0"><div class="nm">${esc(r.n)}</div><div class="sub">${r.h.length} אימונים · שיא ב-${dm(r.best.date)} ${fresh?'<span class="pr-chip">שיא חדש</span>':''}</div>${sparkSvg(r.h)}</div><div><div class="best num">${fc(r.best.b.kg)}<small> ק״ג</small></div><div class="sub" style="text-align:end">× ${r.best.b.reps} חזרות</div><div class="sub" style="text-align:end">1RM ≈ ${Math.round(r.best.score)}</div></div></div>`}).join('')}
+/* ghost photo */
+function prevPhotoBefore(date){const L=state.weeks.filter(w=>w.date<date&&photoUrl(w));return L.length?L[L.length-1]:null}
+function showGhost(newUrl){const d=$('#fDate').value||todayIso();const pw=prevPhotoBefore(d);if(!newUrl||!pw){$('#ghostWrap').hidden=true;return}
+  $('#ghNew').src=newUrl;$('#ghOld').src=photoUrl(pw);$('#ghLbl').textContent='צל: '+dm(pw.date);$('#ghostWrap').hidden=false}
+$('#ghOp').oninput=e=>$('#ghostBox').style.setProperty('--go',e.target.value/100);
+let camStream=null,camFacing='environment';
+async function camStart(){try{camStream?.getTracks().forEach(t=>t.stop());camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:camFacing,width:{ideal:1440},height:{ideal:1920}},audio:false});$('#camV').srcObject=camStream;$('#camV').style.transform=camFacing==='user'?'scaleX(-1)':''}catch(e){camStop();toast('אין גישה למצלמה. אפשר לבחור תמונה מהגלריה.')}}
+function camStop(){camStream?.getTracks().forEach(t=>t.stop());camStream=null;$('#cam').hidden=true}
+$('#fCam').onclick=()=>{const pw=prevPhotoBefore($('#fDate').value||todayIso());if(pw){$('#camG').src=photoUrl(pw);$('#camG').hidden=false;$('#camHint').textContent='מתאימים את הגוף לצל מ-'+dm(pw.date)}else{$('#camG').hidden=true;$('#camHint').textContent='תמונה ראשונה, בלי צל'}$('#cam').hidden=false;camStart()};
+$('#camOp').oninput=e=>$('#cam').style.setProperty('--go',e.target.value/100);
+$('#camClose').onclick=camStop;$('#camFlip').onclick=()=>{camFacing=camFacing==='user'?'environment':'user';camStart()};
+$('#camShot').onclick=()=>{const v=$('#camV');if(!v.videoWidth)return;const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;const x=c.getContext('2d');if(camFacing==='user'){x.translate(c.width,0);x.scale(-1,1)}x.drawImage(v,0,0);
+  c.toBlob(async b=>{camStop();pendingPhoto=await shrink(b);const u=URL.createObjectURL(pendingPhoto);setThumb(u);showGhost(u)},'image/jpeg',.9)};
+function renderAll(){renderGoal();renderWorkouts();renderToday();renderPR();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
 
 /* ---------- sheets ---------- */
 let openId=null;
@@ -1056,7 +1241,7 @@ function openEntry(id){
   $('#fW').value=w?.weight??'';$('#fWa').value=w?.waist??'';
   $('#fAR').value=w?.armR??'';$('#fAL').value=w?.armL??'';$('#fNote').value=w?.note??'';
   $('#fW').placeholder=last?.weight??'';$('#fWa').placeholder=last?.waist??'';$('#fAR').placeholder=last?.armR??'';$('#fAL').placeholder=last?.armL??'';
-  setThumb(w?photoUrl(w):null);$('#fPhoto').value='';pendingVideo=null;$('#fVideo').value='';setVid(w?videoUrl(w):null);$('#vidWrap').hidden=!state.assets&&store?.kind!=='local'&&!w?.videoId;
+  setThumb(w?photoUrl(w):null);$('#fPhoto').value='';$('#ghostWrap').hidden=true;$('#fCam').hidden=!!window.claude||!navigator.mediaDevices?.getUserMedia;pendingVideo=null;$('#fVideo').value='';setVid(w?videoUrl(w):null);$('#vidWrap').hidden=!state.assets&&store?.kind!=='local'&&!w?.videoId;
   $('#fMsg').textContent='';$('#fMsg').className='form-msg';
   $('#delRow').hidden=!w;$('#fDel').textContent='מחיקת השבוע';
   $('#fPhotoSub').textContent=state.assets||store?.kind==='local'?'מומלץ: אותה תאורה, אותה זווית, בוקר':'העלאת תמונות זמינה לבעלי הרשאת עריכה';
@@ -1068,7 +1253,7 @@ async function shrink(file,max=1400){
   c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(img.src);
   return await new Promise(r=>c.toBlob(r,'image/jpeg',.85));
 }
-$('#fPhoto').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{pendingPhoto=await shrink(f);setThumb(URL.createObjectURL(pendingPhoto))}catch(err){$('#fMsg').textContent='לא הצלחנו לקרוא את התמונה. נסה קובץ JPG או PNG.';$('#fMsg').className='form-msg err'}};
+$('#fPhoto').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{pendingPhoto=await shrink(f);const gu=URL.createObjectURL(pendingPhoto);setThumb(gu);showGhost(gu)}catch(err){$('#fMsg').textContent='לא הצלחנו לקרוא את התמונה. נסה קובץ JPG או PNG.';$('#fMsg').className='form-msg err'}};
 function setVid(u){$('#vidHolder').innerHTML=u?`<video class="vid" src="${esc(u)}" controls playsinline preload="metadata"></video>`:'';$('#fVidLbl').textContent=u?'החלפת סרטון':'הוספת סרטון לשבוע'}
 $('#fVideo').onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>20*1024*1024){$('#fMsg').textContent='הסרטון גדול מ-20MB.';$('#fMsg').className='form-msg err';e.target.value='';return}pendingVideo=f;setVid(URL.createObjectURL(f))};
 $('#entryForm').onsubmit=async e=>{
@@ -1206,7 +1391,7 @@ function openChat(){renderMsgs();openSheet('chatSheet')}
 renderAll();
 if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
   document.querySelectorAll('main section').forEach(sec=>{const r=sec.getBoundingClientRect();if(r.top>innerHeight){sec.classList.add('reveal','pre');io.observe(sec)}})}
-if('IntersectionObserver' in window){const navIo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const id=e.target.id==='secChart'||e.target.id==='secGoal'?'top':e.target.id==='secCompare'?'secWeeks':e.target.id;document.querySelectorAll('.nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===id))}}),{rootMargin:'-45% 0px -50% 0px'});['top','secChart','secWorkouts','secWeeks','secCompare','secTips'].forEach(i=>navIo.observe(document.getElementById(i)))}
+if('IntersectionObserver' in window){const navIo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const id=e.target.id==='secPR'?'secWorkouts':e.target.id==='secChart'||e.target.id==='secGoal'?'top':e.target.id==='secCompare'?'secWeeks':e.target.id;document.querySelectorAll('.nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===id))}}),{rootMargin:'-45% 0px -50% 0px'});['top','secChart','secWorkouts','secPR','secWeeks','secCompare','secTips'].forEach(i=>navIo.observe(document.getElementById(i)))}
 (async()=>{
   const c=window.claude;
   let db=null;
