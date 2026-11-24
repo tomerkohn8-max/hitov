@@ -574,6 +574,14 @@ body{background:var(--paper)}
 .exed.saved{box-shadow:0 0 0 1.5px #a8cc1c,0 0 18px -6px rgba(212,242,74,.9)}
 .exed.saved .saveex{background:radial-gradient(130% 160% at 30% 10%,#f1ffb0,#d4f24a 50%,#a8cc1c);color:#1b2a05}
 .weighbar.draft{background:linear-gradient(90deg,rgba(212,242,74,.28),rgba(35,200,255,.12));border-color:#d4f24a;margin-top:0;margin-bottom:12px}
+
+.phnow{display:flex;align-items:baseline;gap:8px;padding:12px 14px;border-radius:16px;background:color-mix(in srgb,var(--card) 60%,transparent);border:1px solid var(--line)}
+.phnow span{font-size:12.5px;color:var(--muted)}.phnow b{font-size:18px}.phnow small{font-size:12.5px;color:var(--muted)}
+.phundo{margin-top:10px}
+.phcard{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:16px;border:1.5px dashed #a8cc1c;background:color-mix(in srgb,#d4f24a 12%,transparent)}
+.phcard>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}.phcard small{font-size:12px;color:var(--muted);line-height:1.5}
+.phcard .btn{flex:none;padding:8px 14px;font-size:13.5px}
+.phsub{font-size:12.5px;color:var(--muted);font-weight:700;margin-bottom:8px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -776,7 +784,12 @@ body{background:var(--paper)}
   <div class="sheet" id="phaseSheet" role="dialog" aria-modal="true" aria-labelledby="phTitle">
     <div class="grab"></div>
     <div class="hd"><h2 id="phTitle">באיזה שלב אתה?</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <div class="bd" style="padding-bottom:0">
+      <div class="phnow" id="phNow"></div>
+      <div class="phundo" id="phUndo" hidden></div>
+    </div>
     <form class="bd" id="phaseForm" novalidate>
+      <div class="phsub">התחלת שלב חדש</div>
       <div class="phopts" role="radiogroup" aria-label="שלב">
         <button type="button" data-ph="cut" role="radio"><b>חיטוב</b><small>יורדים בשומן, שומרים שריר. ירידה = טוב</small></button>
         <button type="button" data-ph="bulk" role="radio"><b>מסה</b><small>בונים שריר בעודף קטן. עלייה איטית = טוב</small></button>
@@ -786,8 +799,8 @@ body{background:var(--paper)}
         <div class="fld"><label for="phStart">מתחיל מ-</label><input id="phStart" type="date"></div>
         <div class="fld"><label for="phGoal">משקל יעד (לא חובה)</label><input class="n" id="phGoal" inputmode="decimal" placeholder="65"></div>
       </div>
-      <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">הנתונים של השלב הקודם נשמרים והתוצאה שלו מוצגת כהישג. הגרף מסמן איפה התחיל כל שלב.</p>
-      <div class="row-btns"><button type="submit" class="btn lime">שמירה</button></div>
+      <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">השלב הנוכחי נסגר ונשמר כהישג, והספירה מתחילה מחדש מהתאריך שבחרת. הגרף מסמן איפה התחיל כל שלב.</p>
+      <div class="row-btns"><button type="submit" class="btn lime" id="phSave">התחלת שלב חדש</button></div>
     </form>
   </div>
 
@@ -883,7 +896,7 @@ function onData(weeks,goal){
 }
 
 /* ---------- derived ---------- */
-const PH={cut:{n:'חיטוב',dir:-1},bulk:{n:'מסה',dir:1},maint:{n:'תחזוקה',dir:0}};
+const PH={cut:{n:'חיטוב',dir:-1,done:'הושלם'},bulk:{n:'מסה',dir:1,done:'הושלמה'},maint:{n:'תחזוקה',dir:0,done:'הושלמה'}};
 state.phases=[];
 function phaseList(){const L=[...(state.phases||[])].sort((a,b)=>a.start<b.start?-1:1);if(!L.length||L[0].start>(state.weeks[0]?.date||'9')) L.unshift({type:'cut',start:state.weeks[0]?.date||todayIso()});return L}
 function phaseAt(d){const L=phaseList();let c=L[0];for(const p of L)if(p.start<=d)c=p;return c}
@@ -918,7 +931,7 @@ function renderHero(){
   const ph=curPhase(),P=PH[ph.type]||PH.cut,s=stats(ph);
   $('#phaseBtn').innerHTML=`${P.n} <span aria-hidden="true">▾</span>`;
   const L=phaseList(),pi=L.findIndex(x=>x.start===ph.start),prev=pi>0?L[pi-1]:null;
-  let doneHtml='';if(prev){const ps=stats(prev);if(ps&&ps.fw&&ps.lw){const dk=ps.lw.weight-ps.fw.weight,dw=ps.fwa&&ps.lwa?ps.lwa.waist-ps.fwa.waist:null;doneHtml=`${PH[prev.type].n} הושלם · ${dk<0?'−':'+'}${Math.abs(dk).toFixed(1)} ק״ג${dw!=null?` · ${dw<0?'−':'+'}${fc(Math.abs(dw))} ס״מ מותן`:''} · ${ps.weeksN} שבועות`}}
+  let doneHtml='';if(prev){const ps=stats(prev);if(ps&&ps.fw&&ps.lw&&ps.W.filter(w=>w.weight!=null).length>=2&&ps.fw!==ps.lw){const dk=ps.lw.weight-ps.fw.weight,dw=ps.fwa&&ps.lwa?ps.lwa.waist-ps.fwa.waist:null;doneHtml=`${PH[prev.type].n} ${PH[prev.type].done} · ${dk<0?'−':'+'}${Math.abs(dk).toFixed(1)} ק״ג${dw!=null?` · ${dw<0?'−':'+'}${fc(Math.abs(dw))} ס״מ מותן`:''} · ${ps.weeksN} שבועות`}}
   $('#phaseDone').hidden=!doneHtml;$('#phaseDone').textContent=doneHtml;
   if(!s){$('#weekPill').textContent=state.ready?'עדיין אין שקילות':'טוען נתונים…';$('#tW').textContent='—';$('#tWa').textContent='—';return}
   const [y,m,d]=ph.start.split('-');
@@ -1340,14 +1353,22 @@ $('#camClose').onclick=camStop;$('#camFlip').onclick=()=>{camFacing=camFacing===
 $('#camShot').onclick=()=>{const v=$('#camV');if(!v.videoWidth)return;const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;const x=c.getContext('2d');if(camFacing==='user'){x.translate(c.width,0);x.scale(-1,1)}x.drawImage(v,0,0);
   c.toBlob(async b=>{camStop();pendingPhoto=await shrink(b);const u=URL.createObjectURL(pendingPhoto);setThumb(u);showGhost(u)},'image/jpeg',.9)};
 let phSel='cut';
-function openPhase(){const c=curPhase();phSel=c.type;document.querySelectorAll('.phopts button').forEach(b=>b.setAttribute('aria-checked',b.dataset.ph===phSel));
+function renderPhaseInfo(){const L=phaseList(),t=todayIso(),c=curPhase(),stored=(state.phases||[]).length>0;
+  const fut=L.filter(p=>p.start>t),ci=L.findIndex(x=>x.start===c.start),prev=ci>0?L[ci-1]:null;
+  $('#phNow').innerHTML=`<span>השלב הנוכחי</span><b>${PH[c.type].n}</b><small>מאז ${dm(c.start)}</small>`;
+  let h='';
+  if(fut.length){const f=fut[0];h+=`<div class="phcard"><div><b>מתוכנן: ${PH[f.type].n} מ-${dm(f.start)}</b><small>עדיין לא התחיל. אפשר לבטל בלי שום שינוי בנתונים.</small></div><button type="button" class="btn ghost" data-undo="${f.start}">ביטול המעבר</button></div>`}
+  else if(stored&&prev){h+=`<div class="phcard"><div><b>חזרה ל${PH[prev.type].n} הקודם</b><small>מבטל את שלב ה${PH[c.type].n} (מ-${dm(c.start)}) כאילו לא היה. ה${PH[prev.type].n} ממשיך מ-${dm(prev.start)} וכל השקילות נשארות.</small></div><button type="button" class="btn ghost" data-undo="${c.start}">חזרה</button></div>`}
+  $('#phUndo').innerHTML=h;$('#phUndo').hidden=!h;
+  document.querySelectorAll('[data-undo]').forEach(b=>b.onclick=async()=>{const st=b.dataset.undo;let Lx=(state.phases||[]).filter(p=>p.start<st);if(Lx.length===1&&Lx[0].type==='cut'&&state.weeks[0]&&Lx[0].start<=state.weeks[0].date)Lx=[];try{await store.setPhases(Lx);closeSheets();toast(`חזרת ל${PH[curPhase().type].n}`)}catch(e){toast('השמירה נכשלה')}})}
+function openPhase(){const c=curPhase();renderPhaseInfo();phSel=c.type==='cut'?'bulk':'cut';document.querySelectorAll('.phopts button').forEach(b=>b.setAttribute('aria-checked',b.dataset.ph===phSel));
   const t=new Date();t.setDate(t.getDate()+1);$('#phStart').value=isoOf(t);$('#phGoal').value='';openSheet('phaseSheet')}
 $('#phaseBtn').onclick=openPhase;
 document.querySelectorAll('.phopts button').forEach(b=>b.onclick=()=>{phSel=b.dataset.ph;document.querySelectorAll('.phopts button').forEach(x=>x.setAttribute('aria-checked',x===b))});
 $('#phaseForm').onsubmit=async e=>{e.preventDefault();const start=$('#phStart').value||todayIso();const g=num($('#phGoal').value);
   let L=[...(state.phases||[])];if(!L.length&&state.weeks[0])L.push({type:'cut',start:state.weeks[0].date});
-  L=L.filter(p=>p.start<start);if(!L.length||L[L.length-1].type!==phSel)L.push({type:phSel,start});
-  try{await store.setPhases(L);if(g!=null||phSel!==curPhase().type)await store.setGoal(g);closeSheets();toast(`עברת ל${PH[phSel].n} מ-${dm(start)}`)}catch(err){toast('השמירה נכשלה')}};
+  L=L.filter(p=>p.start<start);if(L.length&&L[L.length-1].type===phSel){toast(`כבר בשלב ${PH[phSel].n}. לחזרה לשלב קודם יש כפתור למעלה.`);return}L.push({type:phSel,start});
+  try{await store.setPhases(L);if(g!=null||phSel!==curPhase().type)await store.setGoal(g);closeSheets();toast(start>todayIso()?`${PH[phSel].n} יתחיל ב-${dm(start)}`:`עברת ל${PH[phSel].n} מ-${dm(start)}`)}catch(err){toast('השמירה נכשלה')}};
 function renderAll(){renderGoal();renderWorkouts();renderToday();renderPR();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
 
 /* ---------- sheets ---------- */
