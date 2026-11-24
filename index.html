@@ -458,6 +458,27 @@ body{background:var(--paper)}
 .keybox input{flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:color-mix(in srgb,var(--card) 70%,transparent);color:var(--ink);font:inherit;font-size:16px;direction:ltr}
 .keybox .btn{padding:9px 16px;font-size:14px}
 .keybox .kmsg{font-size:12.5px;color:var(--warn)}
+
+/* form overlap fix */
+.fgrid>.fld{min-width:0}
+.fld input[type=date]{-webkit-appearance:none;appearance:none;display:block;min-width:0;max-width:100%;min-height:50px;text-align:start;line-height:1.4}
+.fld input[type=date]::-webkit-date-and-time-value{text-align:start}
+.exed .top{min-width:0}
+/* muscle groups */
+.mg{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;flex:none;position:relative;overflow:hidden;background:radial-gradient(120% 120% at 35% 25%,#3a7dff,#1b3fe0 48%,#0a1470);box-shadow:inset 0 0 0 1px rgba(35,200,255,.6),inset 0 -5px 8px rgba(255,100,40,.5),0 0 10px -3px rgba(255,122,26,.55)}
+.mg svg{width:19px;height:19px}
+.mg.lg{width:38px;height:38px;border-radius:13px}.mg.lg svg{width:23px;height:23px}
+.mgrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.mgchip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--ink);padding:2px 10px 2px 3px;border-radius:999px;background:color-mix(in srgb,var(--card) 55%,transparent);border:1px solid var(--line)}
+.mgchip .mg{width:22px;height:22px;border-radius:999px}.mgchip .mg svg{width:14px;height:14px}
+.ex .nm>span:first-child{display:inline-flex;align-items:center;gap:8px}
+.exed .gsel{flex:none;width:118px;padding:10px 8px;border-radius:12px;border:1px solid var(--line);background:color-mix(in srgb,var(--paper) 60%,transparent);color:var(--ink);font:inherit;font-size:14px}
+.exed .top{flex-wrap:wrap}
+.exed .top input{flex:1 1 160px}
+/* share */
+.share-pre{white-space:pre-wrap;font-size:14px;line-height:1.65;padding:14px;border-radius:16px;background:color-mix(in srgb,var(--card) 65%,transparent);border:1px solid var(--line);max-height:46vh;overflow:auto;direction:rtl;user-select:text;-webkit-user-select:text}
+.share-act{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.share-act .wa{grid-column:1/-1;background:radial-gradient(130% 150% at 30% 15%,rgba(80,220,140,.9),rgba(20,160,90,.85) 55%,rgba(8,90,50,.9));color:#fff;text-decoration:none}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -541,9 +562,7 @@ body{background:var(--paper)}
     <section id="secTips">
       <div class="sec-head"><div><div class="eyebrow">מבוסס על הנתונים שלך</div><h2>תובנות וטיפים</h2></div></div>
       <div class="ins" id="ins"></div>
-      <div class="ask-row"><button class="btn ink full" id="askWeek">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.8 4.6L18 9.4l-4.2 1.8L12 16l-1.8-4.8L6 9.4l4.2-1.8z"/></svg>
-        ניתוח שבועי מהמאמן</button></div>
+
     </section>
   </main>
 
@@ -553,7 +572,7 @@ body{background:var(--paper)}
       <button data-go="secWorkouts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>אימונים</button>
       <button class="add" id="navAdd" aria-label="הוספה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></button>
       <button data-go="secWeeks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="15" rx="3"/><circle cx="12" cy="12.5" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg>תמונות</button>
-      <button id="navChat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v11H9l-5 4z"/></svg>מאמן</button>
+      <button data-go="secTips"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0012 3z"/></svg>טיפים</button>
     </div>
   </nav>
 
@@ -613,6 +632,15 @@ body{background:var(--paper)}
       <div class="row-btns"><button type="submit" class="btn lime" id="woSave">שמירת אימון</button></div>
       <div class="row-btns" id="woDelRow" hidden><button type="button" class="btn ghost danger" id="woDel">מחיקת האימון</button></div>
     </form>
+  </div>
+
+  <!-- share sheet -->
+  <div class="sheet" id="shareSheet" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+    <div class="grab"></div>
+    <div class="hd"><h2 id="shareTitle">ייצוא אימון</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <div class="bd"><div class="share-pre" id="sharePre"></div>
+      <div class="share-act"><a class="btn wa" id="shareWa" href="#" target="_blank" rel="noopener">שליחה בוואטסאפ</a><button class="btn ghost" id="shareCopy" type="button">העתקה</button><button class="btn ghost" id="shareNative" type="button">שיתוף…</button></div>
+    </div>
   </div>
 
   <!-- goal sheet -->
@@ -885,6 +913,32 @@ function renderInsights(){
 }
 
 /* ---------- workouts ---------- */
+const MG={
+ abs:{n:'בטן',re:/בטן|פלאנק|קראנץ|בטני/,svg:'<rect x="7.5" y="3.5" width="9" height="17" rx="4"/><path d="M12 4v16M8 9h8M8 14h8"/>'},
+ shoulders:{n:'כתפיים',re:/כתפ|הרמה לצדדים|הרמות צד|פייס פול|ארנולד/,svg:'<path d="M3.5 15c0-5 3-8.5 6-8.5h5c3 0 6 3.5 6 8.5"/><circle cx="12" cy="5" r="2"/><path d="M9.5 10.5v8M14.5 10.5v8"/>'},
+ arms:{n:'ידיים',re:/(^|\s)יד(\s|$)|ידיים|בייספס|טרייספס|קדמית|אחורית|פטיש|מרפק/,svg:'<path d="M5 19h6.5c3.2 0 5.2-2.6 4.4-5.6l-.9-3.2 2.8-3.7-3.1-1.2-2.9 3.9"/><path d="M11.5 12.5c1.2-1.8 3.2-2 4.4-.9"/>'},
+ legs:{n:'רגליים',re:/רגל|סקוואט|ירך|ירכיים|תאומ|לאנג|מכרע|ישבן|היפ טראסט|דדליפט רומני/,svg:'<path d="M8 3h8M8.5 3l-.8 8.5L6 21M15.5 3l.8 8.5L18 21M12 3v5"/>'},
+ back:{n:'גב',re:/גב|חתירה|פולי|מתח|דדליפט|לאט/,svg:'<path d="M6 4l-2.5 6.5L7 20h10l3.5-9.5L18 4"/><path d="M12 4v16M9 9l3 2 3-2"/>'},
+ chest:{n:'חזה',re:/חזה|פרפר|מקבילים|שכיבות סמיכה|לחיצת ספה|בנץ/,svg:'<path d="M4 8.5c2.2-2.4 5.6-2.4 8 0 2.4-2.4 5.8-2.4 8 0v3.5c0 3.6-3.6 6-8 6s-8-2.4-8-6z"/><path d="M12 8.5V18"/>'},
+ other:{n:'כללי',re:/$^/,svg:'<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/>'}};
+const MG_ORDER=['chest','back','shoulders','arms','legs','abs','other'];
+const DETECT=['abs','shoulders','arms','legs','back','chest'];
+const exGroup=e=>e.group&&MG[e.group]?e.group:(DETECT.find(k=>MG[k].re.test(e.name||''))||'other');
+const mgIcon=(k,cls='')=>`<span class="mg ${cls}" title="${MG[k].n}"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${MG[k].svg}</svg></span>`;
+const woGroups=w=>MG_ORDER.filter(k=>(w.exercises||[]).some(e=>exGroup(e)===k));
+function workoutText(w){
+  const [y,m,d]=w.date.split('-');const gs=woGroups(w).filter(k=>k!=='other').map(k=>MG[k].n);
+  const lines=[`🏋️ *${w.title||'אימון'}*`,`📅 ${+d}/${+m}/${y}${gs.length?` · ${gs.join(', ')}`:''}`,''];
+  (w.exercises||[]).forEach((e,i)=>{lines.push(`*${i+1}. ${e.name}*${exGroup(e)!=='other'?` (${MG[exGroup(e)].n})`:''}`);
+    (e.sets||[]).forEach((x,j)=>lines.push(`   סט ${j+1}: ${x.kg!=null?fc(x.kg)+' ק״ג':'—'} × ${x.reps??'—'} חזרות${x.drop?' (דרופ)':''}`));lines.push('')});
+  lines.push(`סה״כ: ${(w.exercises||[]).length} תרגילים · ${nsets(w)} סטים · נפח ${Math.round(vol(w)).toLocaleString('he-IL')} ק״ג`);
+  if(w.note)lines.push('',`📝 ${w.note}`);
+  return lines.join('\n');
+}
+let shareTextCur='';
+function openShare(w){shareTextCur=workoutText(w);$('#sharePre').textContent=shareTextCur;$('#shareWa').href='https://wa.me/?text='+encodeURIComponent(shareTextCur);$('#shareNative').hidden=!navigator.share;openSheet('shareSheet')}
+$('#shareCopy').onclick=async()=>{try{await navigator.clipboard.writeText(shareTextCur);toast('הטקסט הועתק')}catch(e){const r=document.createRange();r.selectNodeContents($('#sharePre'));const sel=getSelection();sel.removeAllRanges();sel.addRange(r);toast('הטקסט מסומן, אפשר להעתיק')}};
+$('#shareNative').onclick=async()=>{try{await navigator.share({text:shareTextCur})}catch(e){}};
 const MSHORT=['ינו','פבר','מרץ','אפר','מאי','יונ','יול','אוג','ספט','אוק','נוב','דצמ'];
 const vol=w=>(w.exercises||[]).reduce((a,e)=>a+(e.sets||[]).reduce((b,x)=>b+(x.kg||0)*(x.reps||0),0),0);
 const nsets=w=>(w.exercises||[]).reduce((a,e)=>a+(e.sets||[]).length,0);
@@ -903,23 +957,24 @@ function renderWorkouts(){
     const exHtml=(w.exercises||[]).map(e=>{
       const b=bestSet(e),pe=prevEx(w,e.name),pb=pe&&bestSet(pe);
       let pr='';if(b&&pb){const top=x=>{const mk=Math.max(...(x.sets||[]).filter(z=>!z.drop&&z.kg!=null).map(z=>z.kg));return{kg:mk,reps:Math.max(...(x.sets||[]).filter(z=>z.kg===mk).map(z=>z.reps||0))}};const A=top(e),B=top(pe);const dd=A.kg!==B.kg?A.kg-B.kg:A.reps-B.reps;pr=dd===0||!isFinite(dd)?`<span class="pr chip info">כמו בפעם הקודמת</span>`:dd>0?`<span class="pr chip ok">↑ התקדמות</span>`:`<span class="pr chip mid">↓ ירידה</span>`}
-      return `<div class="ex"><div class="nm"><span>${esc(e.name)}</span>${pr}</div><div class="sets">${(e.sets||[]).map(x=>`<span class="set${x.drop?' drop':''}">${fc(x.kg)}<i>kg</i> × ${x.reps??'—'}${x.drop?' <i>דרופ</i>':''}</span>`).join('')}</div></div>`}).join('');
+      return `<div class="ex"><div class="nm"><span>${mgIcon(exGroup(e))}${esc(e.name)}</span>${pr}</div><div class="sets">${(e.sets||[]).map(x=>`<span class="set${x.drop?' drop':''}">${fc(x.kg)}<i>kg</i> × ${x.reps??'—'}${x.drop?' <i>דרופ</i>':''}</span>`).join('')}</div></div>`}).join('');
     return `<article class="card wo${open?' open':''}" data-wid="${esc(w.id)}" style="animation-delay:${Math.min(i,5)*.06}s">
       <button class="wo-h" data-tog aria-expanded="${open}"><span class="wo-date"><span class="dd">${+d}</span><span class="mm">${MSHORT[+m-1]}</span></span>
-        <span class="tt"><b>${esc(w.title||'אימון')}</b><span>${(w.exercises||[]).map(e=>esc(e.name)).slice(0,3).join(' · ')}${(w.exercises||[]).length>3?' …':''}</span></span>
+        <span class="tt"><b>${esc(w.title||'אימון')}</b><span class="mgrow">${woGroups(w).map(k=>`<span class="mgchip">${mgIcon(k)}${MG[k].n}</span>`).join('')}</span></span>
         <span class="chev" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></span></button>
       <div class="wo-stats"><div><div class="v num">${(w.exercises||[]).length}</div><div class="l">תרגילים</div></div><div><div class="v num">${nsets(w)}</div><div class="l">סטים</div></div><div><div class="v num">${fmtK(vol(w))}</div><div class="l">נפח (ק״ג)</div></div></div>
       <div class="wo-body"><div>${exHtml}${w.note?`<p style="margin:12px 0 0;font-size:13.5px;color:var(--muted)">${esc(w.note)}</p>`:''}
-        <div class="wo-act"><button class="btn ghost" data-edit>עריכה</button><button class="btn ghost" data-again>אימון חוזר</button></div></div></div></article>`}).join('')+(L.length>4?`<button class="btn ghost wo-more" id="woMore">${woShowAll?'הצגת פחות':`הצגת כל ${L.length} האימונים`}</button>`:'');
+        <div class="wo-act"><button class="btn ghost" data-edit>עריכה</button><button class="btn ghost" data-again>אימון חוזר</button><button class="btn lime" data-share>ייצוא</button></div></div></div></article>`}).join('')+(L.length>4?`<button class="btn ghost wo-more" id="woMore">${woShowAll?'הצגת פחות':`הצגת כל ${L.length} האימונים`}</button>`:'');
   $('#woMore')&&($('#woMore').onclick=()=>{woShowAll=!woShowAll;renderWorkouts()});
 }
 $('#woList').addEventListener('click',e=>{const card=e.target.closest('.wo');if(!card)return;const id=card.dataset.wid,w=state.workouts.find(x=>x.id===id);
   if(e.target.closest('[data-tog]')){state.woOpen=state.woOpen===id?null:id;card.classList.toggle('open',state.woOpen===id);card.querySelector('[data-tog]').setAttribute('aria-expanded',state.woOpen===id);document.querySelectorAll('.wo').forEach(c=>{if(c!==card)c.classList.remove('open')});return}
   if(e.target.closest('[data-edit]'))openWorkout(w);
-  if(e.target.closest('[data-again]'))openWorkout(null,w);});
+  if(e.target.closest('[data-again]'))openWorkout(null,w);
+  if(e.target.closest('[data-share]'))openShare(w);});
 
 let woEditing=null,woDraft=null,woDelArm=false;
-function cloneEx(w){return(w.exercises||[]).map(e=>({name:e.name,sets:(e.sets||[]).map(x=>({kg:x.kg,reps:x.reps,drop:!!x.drop}))}))}
+function cloneEx(w){return(w.exercises||[]).map(e=>({name:e.name,group:e.group||null,sets:(e.sets||[]).map(x=>({kg:x.kg,reps:x.reps,drop:!!x.drop}))}))}
 function openWorkout(w,template){
   woEditing=w||null;woDelArm=false;
   woDraft={date:w?w.date:new Date().toISOString().slice(0,10),title:w?.title||template?.title||'',note:w?.note||'',exercises:w?cloneEx(w):template?cloneEx(template):[{name:'',sets:[{kg:null,reps:null}]}]};
@@ -932,12 +987,13 @@ function openWorkout(w,template){
 }
 function renderExEd(){
   $('#woEx').innerHTML=woDraft.exercises.map((e,i)=>`<div class="exed" data-ei="${i}">
-    <div class="top"><input list="exNames" data-f="name" value="${esc(e.name)}" placeholder="שם התרגיל (למשל: חזה מכשיר)" aria-label="שם תרגיל ${i+1}"><button type="button" class="rm" data-rmex aria-label="הסרת תרגיל">✕</button></div>
+    <div class="top"><input list="exNames" data-f="name" value="${esc(e.name)}" placeholder="שם התרגיל (למשל: חזה מכשיר)" aria-label="שם תרגיל ${i+1}"><select class="gsel" data-f="group" aria-label="קבוצת שריר">${['auto',...MG_ORDER].map(k=>`<option value="${k}" ${(e.group||'auto')===k?'selected':''}>${k==='auto'?(e.name?`${MG[exGroup({name:e.name})].n} (אוטו׳)`:'זיהוי אוטו׳'):MG[k].n}</option>`).join('')}</select><button type="button" class="rm" data-rmex aria-label="הסרת תרגיל">✕</button></div>
     <div class="shead"><span>סט</span><span>ק״ג</span><span>חזרות</span><span>דרופ</span><span></span></div>
     ${e.sets.map((x,j)=>`<div class="srow" data-si="${j}"><span class="ix">${j+1}</span><input inputmode="decimal" data-f="kg" value="${x.kg??''}" aria-label="משקל סט ${j+1}"><input inputmode="numeric" data-f="reps" value="${x.reps??''}" aria-label="חזרות סט ${j+1}"><button type="button" class="dp" data-drop aria-pressed="${!!x.drop}" aria-label="דרופ סט">D</button><button type="button" class="rm" data-rmset aria-label="הסרת סט">−</button></div>`).join('')}
     <button type="button" class="addset" data-addset>＋ סט</button></div>`).join('');
 }
 $('#woEx').addEventListener('input',e=>{const t=e.target,ex=t.closest('.exed');if(!ex)return;const E=woDraft.exercises[+ex.dataset.ei];const r=t.closest('.srow');
+  if(t.dataset.f==='group'){E.group=t.value==='auto'?null:t.value;return}
   if(t.dataset.f==='name')E.name=t.value;else if(r){const S=E.sets[+r.dataset.si];S[t.dataset.f]=t.dataset.f==='reps'?(num(t.value)==null?null:Math.round(num(t.value))):num(t.value)}});
 $('#woEx').addEventListener('click',e=>{const ex=e.target.closest('.exed');if(!ex)return;const E=woDraft.exercises[+ex.dataset.ei];const r=e.target.closest('.srow');
   if(e.target.closest('[data-addset]')){const last=E.sets[E.sets.length-1];E.sets.push({kg:last?.kg??null,reps:last?.reps??null});renderExEd();const ins=$('#woEx').querySelectorAll(`.exed[data-ei="${ex.dataset.ei}"] .srow input[data-f="reps"]`);ins[ins.length-1]?.focus()}
@@ -947,7 +1003,7 @@ $('#woEx').addEventListener('click',e=>{const ex=e.target.closest('.exed');if(!e
 $('#woAddEx').onclick=()=>{woDraft.exercises.push({name:'',sets:[{kg:null,reps:null}]});renderExEd();const n=$('#woEx').querySelectorAll('input[data-f="name"]');n[n.length-1]?.focus()};
 $('#woCopy').onclick=()=>{const l=state.workouts[state.workouts.length-1];if(!l)return;woDraft.exercises=cloneEx(l);if(!$('#woName').value)$('#woName').value=l.title||'';renderExEd();$('#woCopy').hidden=true};
 $('#woForm').onsubmit=async e=>{e.preventDefault();const msg=$('#woMsg');
-  const exercises=woDraft.exercises.map(x=>({name:x.name.trim(),sets:x.sets.filter(s=>s.kg!=null||s.reps!=null).map(s=>({kg:s.kg??null,reps:s.reps??null,...(s.drop?{drop:true}:{})}))})).filter(x=>x.name&&x.sets.length);
+  const exercises=woDraft.exercises.map(x=>({name:x.name.trim(),...(x.group?{group:x.group}:{}),sets:x.sets.filter(s=>s.kg!=null||s.reps!=null).map(s=>({kg:s.kg??null,reps:s.reps??null,...(s.drop?{drop:true}:{})}))})).filter(x=>x.name&&x.sets.length);
   const date=$('#woDate').value;
   if(!date){msg.textContent='צריך לבחור תאריך.';msg.className='form-msg err';return}
   if(!exercises.length){msg.textContent='צריך לפחות תרגיל אחד עם שם וסט אחד.';msg.className='form-msg err';return}
@@ -1143,23 +1199,20 @@ $('#chatIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!ma
 $('#chatImg').onchange=async e=>{const f=e.target.files[0];if(!f)return;chatImg=await shrink(f,1100);const p=$('#attPrev');p.innerHTML=`<img src="${URL.createObjectURL(chatImg)}" alt=""> תמונה מצורפת <button type="button" class="act" id="rmImg">הסרה</button>`;p.hidden=false;$('#rmImg').onclick=()=>{chatImg=null;p.hidden=true};e.target.value=''};
 $('#chatClear').onclick=()=>{abortC?.abort();chat=[];saveChat();renderMsgs()};
 function openChat(){renderMsgs();openSheet('chatSheet')}
-$('#navChat').onclick=openChat;
-$('#askWeek').onclick=()=>{openChat();send('תן לי ניתוח של השבוע האחרון מול המגמה הכללית, ו-3 דברים ספציפיים לשבוע הבא.')};
 
 /* ---------- boot ---------- */
 renderAll();
 if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
   document.querySelectorAll('main section').forEach(sec=>{const r=sec.getBoundingClientRect();if(r.top>innerHeight){sec.classList.add('reveal','pre');io.observe(sec)}})}
-if('IntersectionObserver' in window){const navIo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const id=e.target.id==='secChart'||e.target.id==='secTips'||e.target.id==='secGoal'?'top':e.target.id==='secCompare'?'secWeeks':e.target.id;document.querySelectorAll('.nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===id))}}),{rootMargin:'-45% 0px -50% 0px'});['top','secChart','secWorkouts','secWeeks','secCompare','secTips'].forEach(i=>navIo.observe(document.getElementById(i)))}
+if('IntersectionObserver' in window){const navIo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const id=e.target.id==='secChart'||e.target.id==='secGoal'?'top':e.target.id==='secCompare'?'secWeeks':e.target.id;document.querySelectorAll('.nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===id))}}),{rootMargin:'-45% 0px -50% 0px'});['top','secChart','secWorkouts','secWeeks','secCompare','secTips'].forEach(i=>navIo.observe(document.getElementById(i)))}
 (async()=>{
   const c=window.claude;
   let db=null;
   const timer=setTimeout(()=>{if(!store){store=localStore();store._cb=onData;store.start(onData)}},10000);
   if(c?.use){
-    const [d,a,s]=await Promise.all([c.use('db').catch(()=>null),c.use('assets').catch(()=>null),c.use('sample').catch(()=>null)]);
-    db=d;state.assets=a;state.sample=s;
-    if(!s){$('#askWeek').hidden=true}
-  }else{$('#askWeek').hidden=!getKey()}
+    const [d,a]=await Promise.all([c.use('db').catch(()=>null),c.use('assets').catch(()=>null)]);
+    db=d;state.assets=a;
+  }
   if(store)return;clearTimeout(timer);
   store=db?dbStore(db):localStore();store._cb=onData;store.start(onData);
 })();
