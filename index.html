@@ -465,12 +465,12 @@ body{background:var(--paper)}
 .fld input[type=date]::-webkit-date-and-time-value{text-align:start}
 .exed .top{min-width:0}
 /* muscle groups */
-.mg{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;flex:none;position:relative;overflow:hidden;background:radial-gradient(120% 120% at 35% 25%,#3a7dff,#1b3fe0 48%,#0a1470);box-shadow:inset 0 0 0 1px rgba(35,200,255,.6),inset 0 -5px 8px rgba(255,100,40,.5),0 0 10px -3px rgba(255,122,26,.55)}
-.mg svg{width:19px;height:19px}
-.mg.lg{width:38px;height:38px;border-radius:13px}.mg.lg svg{width:23px;height:23px}
+.mg{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;flex:none;position:relative;overflow:hidden;background:radial-gradient(120% 120% at 35% 25%,#3a7dff,#1b3fe0 48%,#0a1470);box-shadow:inset 0 0 0 1px rgba(35,200,255,.6),inset 0 -5px 8px rgba(255,100,40,.5),0 0 10px -3px rgba(255,122,26,.55)}
+.mg svg{width:28px;height:33px;margin-top:3px;filter:drop-shadow(0 0 2px rgba(255,160,60,.55))}
+.mg.lg{width:42px;height:42px;border-radius:14px}.mg.lg svg{width:34px;height:40px;margin-top:5px}
 .mgrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .mgchip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--ink);padding:2px 10px 2px 3px;border-radius:999px;background:color-mix(in srgb,var(--card) 55%,transparent);border:1px solid var(--line)}
-.mgchip .mg{width:22px;height:22px;border-radius:999px}.mgchip .mg svg{width:14px;height:14px}
+.mgchip .mg{width:26px;height:26px;border-radius:999px}.mgchip .mg svg{width:22px;height:26px;margin-top:3px}
 .ex .nm>span:first-child{display:inline-flex;align-items:center;gap:8px}
 .exed .gsel{flex:none;width:118px;padding:10px 8px;border-radius:12px;border:1px solid var(--line);background:color-mix(in srgb,var(--paper) 60%,transparent);color:var(--ink);font:inherit;font-size:14px}
 .exed .top{flex-wrap:wrap}
@@ -913,18 +913,20 @@ function renderInsights(){
 }
 
 /* ---------- workouts ---------- */
+const HOT='#ffb347';
+const BODY_B='<circle cx="16" cy="4.6" r="2.6" fill="rgba(255,255,255,.42)"/><path d="M11 9q5-1.6 10 0l-.8 9.2q-4.2 1.5-8.4 0z" fill="rgba(255,255,255,.3)"/><g stroke="rgba(255,255,255,.4)" stroke-linecap="round" fill="none"><path d="M10.9 9.4L8.5 11.2 7.4 18.4" stroke-width="2.2"/><path d="M21.1 9.4l2.4 1.8 1.1 7.2" stroke-width="2.2"/><path d="M13.5 18.8l-.7 11" stroke-width="2.7"/><path d="M18.5 18.8l.7 11" stroke-width="2.7"/></g>';
 const MG={
- abs:{n:'בטן',re:/בטן|פלאנק|קראנץ|בטני/,svg:'<rect x="7.5" y="3.5" width="9" height="17" rx="4"/><path d="M12 4v16M8 9h8M8 14h8"/>'},
- shoulders:{n:'כתפיים',re:/כתפ|הרמה לצדדים|הרמות צד|פייס פול|ארנולד/,svg:'<path d="M3.5 15c0-5 3-8.5 6-8.5h5c3 0 6 3.5 6 8.5"/><circle cx="12" cy="5" r="2"/><path d="M9.5 10.5v8M14.5 10.5v8"/>'},
- arms:{n:'ידיים',re:/(^|\s)יד(\s|$)|ידיים|בייספס|טרייספס|קדמית|אחורית|פטיש|מרפק/,svg:'<path d="M5 19h6.5c3.2 0 5.2-2.6 4.4-5.6l-.9-3.2 2.8-3.7-3.1-1.2-2.9 3.9"/><path d="M11.5 12.5c1.2-1.8 3.2-2 4.4-.9"/>'},
- legs:{n:'רגליים',re:/רגל|סקוואט|ירך|ירכיים|תאומ|לאנג|מכרע|ישבן|היפ טראסט|דדליפט רומני/,svg:'<path d="M8 3h8M8.5 3l-.8 8.5L6 21M15.5 3l.8 8.5L18 21M12 3v5"/>'},
- back:{n:'גב',re:/גב|חתירה|פולי|מתח|דדליפט|לאט/,svg:'<path d="M6 4l-2.5 6.5L7 20h10l3.5-9.5L18 4"/><path d="M12 4v16M9 9l3 2 3-2"/>'},
- chest:{n:'חזה',re:/חזה|פרפר|מקבילים|שכיבות סמיכה|לחיצת ספה|בנץ/,svg:'<path d="M4 8.5c2.2-2.4 5.6-2.4 8 0 2.4-2.4 5.8-2.4 8 0v3.5c0 3.6-3.6 6-8 6s-8-2.4-8-6z"/><path d="M12 8.5V18"/>'},
- other:{n:'כללי',re:/$^/,svg:'<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/>'}};
+ abs:{n:'בטן',re:/בטן|פלאנק|קראנץ|בטני/,hot:`<rect x="14.1" y="12.6" width="3.8" height="5.2" rx="1.1" fill="${HOT}"/><path d="M16 12.8v4.8M14.3 14.3h3.4M14.3 16h3.4" stroke="#7a2a00" stroke-width=".55"/>`},
+ shoulders:{n:'כתפיים',re:/כתפ|הרמה לצדדים|הרמות צד|פייס פול|ארנולד/,hot:`<circle cx="10.6" cy="10" r="1.9" fill="${HOT}"/><circle cx="21.4" cy="10" r="1.9" fill="${HOT}"/>`},
+ arms:{n:'ידיים',re:/(^|\s)יד(\s|$)|ידיים|בייספס|טרייספס|קדמית|אחורית|פטיש|מרפק/,hot:`<g stroke="${HOT}" stroke-linecap="round" fill="none" stroke-width="2.4"><path d="M10.9 9.4L8.5 11.2 7.4 18.4"/><path d="M21.1 9.4l2.4 1.8 1.1 7.2"/></g>`},
+ legs:{n:'רגליים',re:/רגל|סקוואט|ירך|ירכיים|תאומ|לאנג|מכרע|ישבן|היפ טראסט|דדליפט רומני/,hot:`<g stroke="${HOT}" stroke-linecap="round" fill="none" stroke-width="2.9"><path d="M13.5 18.8l-.7 11"/><path d="M18.5 18.8l.7 11"/></g>`},
+ back:{n:'גב',re:/גב|חתירה|פולי|מתח|דדליפט|לאט/,hot:`<path d="M11.3 9.4h9.4l-2.4 7.4h-4.6z" fill="${HOT}"/><path d="M16 9.8v6" stroke="#7a2a00" stroke-width=".6"/>`},
+ chest:{n:'חזה',re:/חזה|פרפר|מקבילים|שכיבות סמיכה|לחיצת ספה|בנץ/,hot:`<ellipse cx="13.7" cy="11.4" rx="2.6" ry="1.9" fill="${HOT}"/><ellipse cx="18.3" cy="11.4" rx="2.6" ry="1.9" fill="${HOT}"/><path d="M16 9.8v3.4" stroke="#7a2a00" stroke-width=".6"/>`},
+ other:{n:'כללי',re:/$^/,hot:''}};
 const MG_ORDER=['chest','back','shoulders','arms','legs','abs','other'];
 const DETECT=['abs','shoulders','arms','legs','back','chest'];
 const exGroup=e=>e.group&&MG[e.group]?e.group:(DETECT.find(k=>MG[k].re.test(e.name||''))||'other');
-const mgIcon=(k,cls='')=>`<span class="mg ${cls}" title="${MG[k].n}"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${MG[k].svg}</svg></span>`;
+const mgIcon=(k,cls='')=>`<span class="mg ${cls}" title="${MG[k].n}"><svg viewBox="6 1.4 20 29" aria-hidden="true">${k==='other'?'<path d="M10 11v10M22 11v10M7 13.5v5M25 13.5v5M10 16h12" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none"/>':BODY_B+MG[k].hot}</svg></span>`;
 const woGroups=w=>MG_ORDER.filter(k=>(w.exercises||[]).some(e=>exGroup(e)===k));
 function workoutText(w){
   const [y,m,d]=w.date.split('-');const gs=woGroups(w).filter(k=>k!=='other').map(k=>MG[k].n);
