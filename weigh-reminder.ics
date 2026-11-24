@@ -1,0 +1,20 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//hitov//weigh-in//HE
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:hitov-weekly-weigh-in-wed@tomerkohn8-max.github.io
+DTSTAMP:20261124T120000Z
+DTSTART:20261125T080000
+DURATION:PT10M
+RRULE:FREQ=WEEKLY;BYDAY=WE
+SUMMARY:⚖️ שקילה שבועית
+DESCRIPTION:על בטן ריקה אחרי השירותים: משקל\, היקף מותן\, זרועות ותמונה. https://tomerkohn8-max.github.io/hitov/
+URL:https://tomerkohn8-max.github.io/hitov/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:שקילה שבועית
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+END:VCALENDAR

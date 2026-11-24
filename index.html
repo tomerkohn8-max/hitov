@@ -498,7 +498,12 @@ body{background:var(--paper)}
 .wkplan .miss{border-style:dashed;border-color:rgba(35,200,255,.45)}
 .wkplan .rest{opacity:.55}
 .wkplan .today{outline:2px solid rgba(255,255,255,.75);outline-offset:1px}
-.wkplan .wd::after{content:"⚖";font-size:9px;opacity:.8}
+.wkplan .wd{border:1.5px solid #ffb14d;background:radial-gradient(120% 120% at 50% 0%,rgba(255,225,77,.35),rgba(255,122,26,.18) 60%,rgba(255,255,255,.04));box-shadow:0 0 16px -3px rgba(255,140,40,.85)}
+.wkplan .wd em{font-style:normal;font-size:9.5px;font-weight:800;color:#3a1200;background:linear-gradient(90deg,#ffe14d,#ff9a3a);padding:1px 5px;border-radius:999px}
+.weighbar span{display:flex;flex-direction:column;gap:1px}.weighbar small{font-size:11.5px;opacity:.8}
+.weighbar .btn.ghost{color:#fff;text-decoration:none;padding:7px 12px;font-size:13px}
+.weighbar.hot{background:linear-gradient(90deg,rgba(255,225,77,.35),rgba(255,90,40,.25));border-color:#ffb14d;box-shadow:0 0 22px -6px rgba(255,122,26,.9);animation:wpulse 2.4s ease-in-out infinite}
+@keyframes wpulse{50%{box-shadow:0 0 30px -4px rgba(255,140,40,1)}}
 .today-row{display:flex;align-items:center;gap:12px;margin-top:6px}
 .today-row .tt{flex:1;min-width:0}
 .today-row h3{margin:2px 0 0;font-size:22px;font-weight:900;line-height:1.2}
@@ -1158,14 +1163,14 @@ function suggestFor(prev){const t=topOf(prev);if(!t)return null;const inc=t.kg>=
 function exHistory(name){const n=name.trim();return state.workouts.map(w=>{const e=(w.exercises||[]).find(x=>x.name.trim()===n);if(!e)return null;const b=bestSet(e);return b?{date:w.date,id:w.id,b,score:e1rm(b),top:topOf(e),group:exGroup(e)}:null}).filter(Boolean)}
 function isPR(w,e){const h=exHistory(e.name);const i=h.findIndex(x=>x.id===w.id);if(i<1)return false;return h[i].score>Math.max(...h.slice(0,i).map(x=>x.score))+0.01}
 let planState=null;
-function onPlan(p){planState=p&&p.days?p:{days:{},weighDay:2};if(document.getElementById('todayCard'))renderToday()}
+function onPlan(p){planState=p&&p.days?JSON.parse(JSON.stringify(p)):{days:{},weighDay:3,wdv:2};if(planState.wdv!==2){planState.weighDay=3;planState.wdv=2}if(document.getElementById('todayCard'))renderToday()}
 function weekDates(){const t=new Date();t.setHours(0,0,0,0);const s=new Date(t);s.setDate(t.getDate()-t.getDay());return[...Array(7)].map((_,i)=>{const d=new Date(s);d.setDate(s.getDate()+i);return d})}
 function renderToday(){
-  const el=$('#todayCard');if(!el)return;const P=planState||{days:{},weighDay:2};const t=new Date();const dow=t.getDay();const D=P.days[dow];
+  const el=$('#todayCard');if(!el)return;const P=planState||{days:{},weighDay:3,wdv:2};const t=new Date();const dow=t.getDay();const D=P.days[dow];
   const done=new Set(state.workouts.map(w=>w.date));const ti=todayIso();
   const strip=weekDates().map((d,i)=>{const iso=isoOf(d),pd=P.days[i],has=done.has(iso),past=iso<ti;
     const cls=[has?'done':'',pd&&!pd.rest&&pd.ex?.length?'plan':'',pd?.rest?'rest':'',(!has&&past&&pd&&!pd.rest&&pd.ex?.length)?'miss':'',iso===ti?'today':'',P.weighDay===i?'wd':''].join(' ');
-    return `<button type="button" class="${cls}" data-day="${i}" aria-label="יום ${DAYN[i]}"><span>${DAYS[i]}</span><b>${d.getDate()}</b><i></i></button>`}).join('');
+    return `<button type="button" class="${cls}" data-day="${i}" aria-label="יום ${DAYN[i]}${P.weighDay===i?', יום שקילה':''}"><span>${DAYS[i]}</span><b>${d.getDate()}</b>${P.weighDay===i?'<em>שקילה</em>':'<i></i>'}</button>`}).join('');
   let main;
   if(D&&D.rest)main=`<div class="today-row"><div class="tt"><div class="eyebrow">היום · יום ${DAYN[dow]}</div><h3>יום מנוחה</h3><div style="font-size:13px;opacity:.75;margin-top:4px">השרירים גדלים בזמן המנוחה. שינה טובה ומספיק חלבון.</div></div></div>`;
   else if(D&&D.ex&&D.ex.length){const gs=MG_ORDER.filter(k=>D.ex.some(e=>exGroup(e)===k));const doneToday=done.has(ti);
@@ -1173,7 +1178,9 @@ function renderToday(){
     <button class="btn lime full" id="startToday" style="margin-top:12px">${doneToday?'עוד אימון היום':'התחלת האימון'} · ${D.ex.length} תרגילים</button>`}
   else main=`<div class="today-row"><div class="tt"><div class="eyebrow">תוכנית שבועית</div><h3>${Object.keys(P.days).length?'אין אימון מתוכנן היום':'בונים תוכנית לשבוע'}</h3><div style="font-size:13px;opacity:.75;margin-top:4px">לוחצים על יום כדי לקבוע מה מתאמנים בו. האימון ייפתח מוכן עם המשקלים מהפעם הקודמת.</div></div></div>`;
   const weighToday=P.weighDay===dow&&!state.weeks.some(w=>w.date===ti&&w.weight!=null);
-  el.innerHTML=main+(weighToday?`<div class="weighbar"><span>היום יום שקילה</span><button class="btn lime" id="weighNow" type="button">שקילה</button></div>`:'')+`<div class="wkplan">${strip}</div>`;
+  let nextW='';if(P.weighDay!=null&&!weighToday){const n=new Date();n.setHours(0,0,0,0);let k=(P.weighDay-dow+7)%7;if(k===0)k=7;n.setDate(n.getDate()+k);nextW=`השקילה הבאה: יום ${DAYN[P.weighDay]} ${n.getDate()}/${n.getMonth()+1}`}
+  const doneW=P.weighDay===dow&&!weighToday;
+  el.innerHTML=main+(weighToday?`<div class="weighbar hot"><span><b>היום יום שקילה</b><small>על בטן ריקה, אחרי השירותים</small></span><button class="btn lime" id="weighNow" type="button">שקילה</button></div>`:`<div class="weighbar"><span>${doneW?'נשקלת היום. כל הכבוד':nextW}</span><a class="btn ghost" href="https://tomerkohn8-max.github.io/hitov/weigh-reminder.ics" target="_blank" rel="noopener">תזכורת ביומן</a></div>`)+`<div class="wkplan">${strip}</div>`;
   $('#startToday')&&($('#startToday').onclick=()=>openWorkout(null,templateFromPlan(D),'plan'));
   $('#weighNow')&&($('#weighNow').onclick=()=>openEntry(null));
   el.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>openPlan(+b.dataset.day));
@@ -1181,7 +1188,7 @@ function renderToday(){
 function templateFromPlan(D){const ti=todayIso();return{title:D.title||'',exercises:D.ex.map(x=>{const pe=lastEx(x.name,ti);return{name:x.name,group:x.group||null,sets:pe?pe.e.sets.map(s=>({kg:s.kg,reps:s.reps,drop:!!s.drop})):[{kg:null,reps:null}]}})}}
 /* plan editor */
 let plDay=0,plDraft=null;
-function openPlan(day){plDay=day;const P=planState||{days:{},weighDay:2};const D=P.days[day]||{};plDraft={title:D.title||'',rest:!!D.rest,ex:(D.ex||[]).map(e=>({name:e.name,group:e.group||null}))};
+function openPlan(day){plDay=day;const P=planState||{days:{},weighDay:3,wdv:2};const D=P.days[day]||{};plDraft={title:D.title||'',rest:!!D.rest,ex:(D.ex||[]).map(e=>({name:e.name,group:e.group||null}))};
   $('#planDayName').textContent='יום '+DAYN[day];$('#planTitle').textContent=D.title||'תוכנית ליום';
   $('#plRest').checked=plDraft.rest;$('#plWeigh').checked=P.weighDay===day;$('#plName').value=plDraft.title;
   $('#plFrom').innerHTML='<option value="">בחירת אימון…</option>'+[...state.workouts].reverse().map(w=>`<option value="${esc(w.id)}">${dm(w.date)} · ${esc(w.title||'אימון')}</option>`).join('');
@@ -1195,7 +1202,7 @@ $('#plEx').addEventListener('change',e=>{if(e.target.dataset.pf)renderPlanEx()})
 $('#plEx').addEventListener('click',e=>{const b=e.target.closest('[data-prm]');if(!b)return;plDraft.ex.splice(+b.closest('.planex').dataset.pi,1);renderPlanEx()});
 $('#plAdd').onclick=()=>{plDraft.ex.push({name:'',group:null});renderPlanEx();const n=$('#plEx').querySelectorAll('input');n[n.length-1]?.focus()};
 $('#plFrom').onchange=e=>{const w=state.workouts.find(x=>x.id===e.target.value);if(!w)return;plDraft.ex=(w.exercises||[]).map(x=>({name:x.name,group:x.group||null}));if(!$('#plName').value)$('#plName').value=w.title||'';renderPlanEx()};
-$('#planForm').onsubmit=async e=>{e.preventDefault();const P=JSON.parse(JSON.stringify(planState||{days:{},weighDay:2}));P.days=P.days||{};
+$('#planForm').onsubmit=async e=>{e.preventDefault();const P=JSON.parse(JSON.stringify(planState||{days:{},weighDay:3}));P.days=P.days||{};P.wdv=2;
   const rest=$('#plRest').checked,ex=plDraft.ex.map(x=>({name:x.name.trim(),...(x.group?{group:x.group}:{})})).filter(x=>x.name),title=$('#plName').value.trim();
   if(rest)P.days[plDay]={rest:true};else if(ex.length||title)P.days[plDay]={title:title||null,ex};else delete P.days[plDay];
   if($('#plWeigh').checked)P.weighDay=plDay;else if(P.weighDay===plDay)P.weighDay=null;
