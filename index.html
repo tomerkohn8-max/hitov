@@ -559,6 +559,21 @@ body{background:var(--paper)}
 .btn.lime::after,.sug::after,.seg button[aria-pressed="true"]::after{background:conic-gradient(from var(--ang),rgba(255,255,255,.95),rgba(212,242,74,.6) 25%,rgba(255,255,255,.2) 50%,rgba(230,255,122,.9) 75%,rgba(255,255,255,.95))}
 .sug small{color:#2c4200}
 .tgl input{accent-color:#a8cc1c}
+
+/* v3 */
+.phasebtn{cursor:pointer;color:#fff;font-weight:700}
+.phasedone{display:inline-block;margin-top:10px;font-size:12.5px;font-weight:700;color:#1b2a05;background:linear-gradient(90deg,#e6ff7a,#d4f24a);padding:4px 12px;border-radius:999px;box-shadow:0 0 16px -4px rgba(212,242,74,.9)}
+.phopts{display:grid;gap:8px}
+.phopts button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px 16px;border-radius:18px;text-align:start;background:color-mix(in srgb,var(--card) 60%,transparent);border:1.5px solid var(--line);transition:transform .15s}
+.phopts button b{font-size:17px}.phopts button small{font-size:12.5px;color:var(--muted)}
+.phopts button[aria-checked="true"]{border-color:#a8cc1c;background:radial-gradient(130% 160% at 30% 10%,rgba(241,255,176,.75),rgba(212,242,74,.45));box-shadow:0 0 20px -6px rgba(212,242,74,.95)}
+.phopts button[aria-checked="true"] small{color:#2c4200}
+.srow.nw,.shead.nw{grid-template-columns:26px 1fr 44px 30px}
+.exfoot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:6px}
+.saveex{margin-inline-start:auto;font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;border:1.5px solid #a8cc1c;color:#4a6400;background:color-mix(in srgb,#d4f24a 18%,transparent)}
+.exed.saved{box-shadow:0 0 0 1.5px #a8cc1c,0 0 18px -6px rgba(212,242,74,.9)}
+.exed.saved .saveex{background:radial-gradient(130% 160% at 30% 10%,#f1ffb0,#d4f24a 50%,#a8cc1c);color:#1b2a05}
+.weighbar.draft{background:linear-gradient(90deg,rgba(212,242,74,.28),rgba(35,200,255,.12));border-color:#d4f24a;margin-top:0;margin-bottom:12px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -569,14 +584,15 @@ body{background:var(--paper)}
     <div class="wrap">
       <div class="topbar">
         <div class="brand"><img class="logo" src="data:image/webp;base64,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" alt="" width="40" height="40"><span>חיטוב<b>.</b></span></div>
-        <span class="pill" id="weekPill">טוען נתונים…</span>
+        <span style="display:flex;gap:6px;align-items:center"><button class="pill phasebtn" id="phaseBtn" type="button" aria-label="שינוי שלב">חיטוב ▾</button><span class="pill" id="weekPill">טוען נתונים…</span></span>
       </div>
       <div class="hero-main hero-anim">
         <div class="since" id="since">— ההתקדמות שלך</div>
         <div class="giant" aria-live="polite">
-          <div class="unit"><span class="tag">ק״ג</span><span class="arrow">↓</span></div>
+          <div class="unit"><span class="tag">ק״ג</span><span class="arrow" id="heroArrow">↓</span></div>
           <div class="big num" id="bigNum">0.0</div>
         </div>
+        <div class="phasedone" id="phaseDone" hidden></div>
         <div class="glassbox"><div class="lead" id="lead">מוסיפים שקילה ראשונה ומתחילים לראות התקדמות.</div></div>
         <div class="tiles">
           <div class="tile dark"><div class="v num" id="tW">—</div><div class="l">משקל נוכחי</div></div>
@@ -756,6 +772,25 @@ body{background:var(--paper)}
     </div>
   </div>
 
+  <!-- phase sheet -->
+  <div class="sheet" id="phaseSheet" role="dialog" aria-modal="true" aria-labelledby="phTitle">
+    <div class="grab"></div>
+    <div class="hd"><h2 id="phTitle">באיזה שלב אתה?</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <form class="bd" id="phaseForm" novalidate>
+      <div class="phopts" role="radiogroup" aria-label="שלב">
+        <button type="button" data-ph="cut" role="radio"><b>חיטוב</b><small>יורדים בשומן, שומרים שריר. ירידה = טוב</small></button>
+        <button type="button" data-ph="bulk" role="radio"><b>מסה</b><small>בונים שריר בעודף קטן. עלייה איטית = טוב</small></button>
+        <button type="button" data-ph="maint" role="radio"><b>תחזוקה</b><small>שומרים על המשקל. יציבות = טוב</small></button>
+      </div>
+      <div class="fgrid" style="margin-top:12px">
+        <div class="fld"><label for="phStart">מתחיל מ-</label><input id="phStart" type="date"></div>
+        <div class="fld"><label for="phGoal">משקל יעד (לא חובה)</label><input class="n" id="phGoal" inputmode="decimal" placeholder="65"></div>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">הנתונים של השלב הקודם נשמרים והתוצאה שלו מוצגת כהישג. הגרף מסמן איפה התחיל כל שלב.</p>
+      <div class="row-btns"><button type="submit" class="btn lime">שמירה</button></div>
+    </form>
+  </div>
+
   <!-- goal sheet -->
   <div class="sheet" id="goalSheet" role="dialog" aria-modal="true" aria-labelledby="goalTitle">
     <div class="grab"></div>
@@ -814,13 +849,14 @@ function localStore(){
 const read=()=>{const fresh=()=>JSON.parse(JSON.stringify(SEED));try{const v=localStorage.getItem(K);let d=v?JSON.parse(v):null;if(!d||typeof d!=='object')d={weeks:{},workouts:{},goal:null};if(d.seeded!==4){d.weeks=d.weeks||{};d.workouts=d.workouts||{};for(const[k,w]of Object.entries(SEED.weeks)){if(!d.weeks[k])d.weeks[k]=w;else{const e=d.weeks[k];if(w.photoLocal&&!e.photoLocal&&!e.photoKey)e.photoLocal=w.photoLocal;if(w.videoSrc&&!e.videoSrc&&!e.videoKey)e.videoSrc=w.videoSrc}}for(const[k,w]of Object.entries(SEED.workouts))if(!d.workouts[k])d.workouts[k]=w;d.seeded=4;localStorage.setItem(K,JSON.stringify(d))}return d}catch(e){return fresh()}};
   const write=d=>{try{localStorage.setItem(K,JSON.stringify(d))}catch(e){}};
   return{kind:'local',
-    start(cb){const d=read();onPlan(d.plan||null);cb(Object.entries(d.weeks).map(([id,v])=>({id,...v})),d.goal);onWorkouts(Object.entries(d.workouts||{}).map(([id,v])=>({id,...v})))},
+    start(cb){const d=read();onPlan(d.plan||null);state.phases=d.phases||[];cb(Object.entries(d.weeks).map(([id,v])=>({id,...v})),d.goal);onWorkouts(Object.entries(d.workouts||{}).map(([id,v])=>({id,...v})))},
     async saveWorkout(id,data){const d=read();d.workouts=d.workouts||{};d.workouts[id]=data;write(d);this.start(store._cb)},
     async removeWorkout(id){const d=read();delete (d.workouts||{})[id];write(d);this.start(store._cb)},
     async save(id,data){const d=read();d.weeks[id]=data;write(d);this.start(store._cb)},
     async remove(id){const d=read();delete d.weeks[id];write(d);this.start(store._cb)},
     async setGoal(g){const d=read();d.goal=g;write(d);this.start(store._cb)},
-    async setPlan(pl){const d=read();d.plan=pl;write(d);onPlan(pl)}};
+    async setPlan(pl){const d=read();d.plan=pl;write(d);onPlan(pl)},
+    async setPhases(L){const d=read();d.phases=L;write(d);onPhase(L)}};
 }
 function dbStore(db){
   let weeks=[],goal=null;
@@ -828,6 +864,7 @@ function dbStore(db){
     start(cb){
       db.collection('weeks').onSnapshot(s=>{weeks=s.docs.map(d=>({id:d.id,...d.data()}));cb(weeks,goal)},e=>{console.warn(e);toast('לא הצלחנו לטעון את הנתונים. נסה לרענן.')});
       db.collection('workouts').onSnapshot(s=>onWorkouts(s.docs.map(d=>({id:d.id,...d.data()}))),e=>console.warn(e));
+      db.doc('settings/phase').onSnapshot(s=>onPhase(s.exists?s.data().list:[]),()=>{});
       db.doc('settings/plan').onSnapshot(s=>onPlan(s.exists?s.data():null),()=>{});
       db.doc('settings/main').onSnapshot(s=>{goal=s.exists?(s.data().goal??null):null;cb(weeks,goal)},()=>{});
     },
@@ -836,7 +873,8 @@ function dbStore(db){
     setGoal(g){return db.doc('settings/main').set({goal:g})},
     saveWorkout(id,data){return db.doc('workouts/'+id).set(data)},
     removeWorkout(id){return db.doc('workouts/'+id).delete()},
-    setPlan(pl){return db.doc('settings/plan').set(pl)}};
+    setPlan(pl){return db.doc('settings/plan').set(pl)},
+    setPhases(L){return db.doc('settings/phase').set({list:L})}};
 }
 function onData(weeks,goal){
   state.weeks=weeks.filter(w=>w.date).sort((a,b)=>a.date<b.date?-1:1);
@@ -845,8 +883,16 @@ function onData(weeks,goal){
 }
 
 /* ---------- derived ---------- */
-function stats(){
-  const W=state.weeks;if(!W.length)return null;
+const PH={cut:{n:'חיטוב',dir:-1},bulk:{n:'מסה',dir:1},maint:{n:'תחזוקה',dir:0}};
+state.phases=[];
+function phaseList(){const L=[...(state.phases||[])].sort((a,b)=>a.start<b.start?-1:1);if(!L.length||L[0].start>(state.weeks[0]?.date||'9')) L.unshift({type:'cut',start:state.weeks[0]?.date||todayIso()});return L}
+function phaseAt(d){const L=phaseList();let c=L[0];for(const p of L)if(p.start<=d)c=p;return c}
+function curPhase(){const L=phaseList();const t=todayIso();let c=L[0];for(const p of L)if(p.start<=t)c=p;return c}
+function phaseRange(ph){const L=phaseList();const i=L.indexOf(ph);return{start:ph.start,end:L[i+1]?.start||null}}
+function weeksIn(ph){const {start,end}=phaseRange(ph);const base=[...state.weeks].filter(w=>w.date<=start&&w.weight!=null).pop();const W=state.weeks.filter(w=>w.date>=start&&(!end||w.date<end));if(base&&!W.includes(base))W.unshift(base);return W}
+function onPhase(list){state.phases=Array.isArray(list)?list:[];if(state.ready)renderAll()}
+function stats(ph){
+  const W=weeksIn(ph||curPhase());if(!W.length)return null;
   const first=W[0],last=W[W.length-1];
   const fw=W.find(w=>w.weight!=null),lw=[...W].reverse().find(w=>w.weight!=null);
   const fwa=W.find(w=>w.waist!=null),lwa=[...W].reverse().find(w=>w.waist!=null);
@@ -858,7 +904,7 @@ function stats(){
   const rRate=recent.length>1?(recent[0].weight-recent[recent.length-1].weight)/(days(recent[0].date,recent[recent.length-1].date)/7):null;
   const allRate=ws.length>1?(ws[0].weight-ws[ws.length-1].weight)/(days(ws[0].date,ws[ws.length-1].date)/7):null;
   const arms=W.filter(w=>w.armR!=null||w.armL!=null);
-  return{first,last,fw,lw,fwa,lwa,span,lostKg,lostWaist,rRate,allRate,arms,weeksN:Math.round(span/7)};
+  return{first,last,fw,lw,fwa,lwa,span,lostKg,lostWaist,rRate,allRate,arms,weeksN:Math.round(span/7),W};
 }
 
 /* ---------- hero ---------- */
@@ -869,16 +915,27 @@ function countTo(el,to,dec=1){
   requestAnimationFrame(step);
 }
 function renderHero(){
-  const s=stats();
+  const ph=curPhase(),P=PH[ph.type]||PH.cut,s=stats(ph);
+  $('#phaseBtn').innerHTML=`${P.n} <span aria-hidden="true">▾</span>`;
+  const L=phaseList(),pi=L.indexOf(ph),prev=pi>0?L[pi-1]:null;
+  let doneHtml='';if(prev){const ps=stats(prev);if(ps&&ps.fw&&ps.lw){const dk=ps.lw.weight-ps.fw.weight,dw=ps.fwa&&ps.lwa?ps.lwa.waist-ps.fwa.waist:null;doneHtml=`${PH[prev.type].n} הושלם · ${dk<0?'−':'+'}${Math.abs(dk).toFixed(1)} ק״ג${dw!=null?` · ${dw<0?'−':'+'}${fc(Math.abs(dw))} ס״מ מותן`:''} · ${ps.weeksN} שבועות`}}
+  $('#phaseDone').hidden=!doneHtml;$('#phaseDone').textContent=doneHtml;
   if(!s){$('#weekPill').textContent=state.ready?'עדיין אין שקילות':'טוען נתונים…';$('#tW').textContent='—';$('#tWa').textContent='—';return}
-  const [y,m,d]=s.first.date.split('-');
-  $('#since').textContent=`— מאז ${+d} ב${MONTHS[+m-1]}`;
-  $('#weekPill').textContent=`שבוע ${s.weeksN+1} · ${state.weeks.length} שקילות`;
-  countTo($('#bigNum'),Math.max(0,s.lostKg));
-  const pct=s.fw?(s.lostKg/s.fw.weight*100):0;
-  $('#lead').innerHTML=`ירדו <b>${f1(s.lostKg)} ק״ג</b> (${pct.toFixed(1)}%) ו-<b>${fc(s.lostWaist)} ס״מ</b> מהמותן ב-${s.weeksN} שבועות.`;
+  const [y,m,d]=ph.start.split('-');
+  $('#since').textContent=`— ${P.n} מאז ${+d} ב${MONTHS[+m-1]}`;
+  {const n=s.W.filter(w=>w.date>=ph.start&&w.weight!=null).length;$('#weekPill').textContent=`שבוע ${Math.floor(days(ph.start,todayIso())/7)+1} · ${n} שקילות`}
+  const delta=s.fw&&s.lw?s.lw.weight-s.fw.weight:0,dWaist=s.fwa&&s.lwa?s.lwa.waist-s.fwa.waist:0;
+  const shown=P.dir<0?Math.max(0,-delta):P.dir>0?Math.max(0,delta):Math.abs(delta);
+  countTo($('#bigNum'),shown);$('#heroArrow').textContent=P.dir<0?'↓':P.dir>0?'↑':'±';
+  const inPh=s.W.filter(w=>w.date>=ph.start&&w.weight!=null).length;const pct=s.fw?(Math.abs(delta)/s.fw.weight*100):0,wk=inPh?Math.max(1,s.weeksN):0;
+  const wTxt=dWaist===0?'המותן לא השתנה':`${dWaist<0?'ירדו':'נוספו'} <b>${fc(Math.abs(dWaist))} ס״מ</b> ${dWaist<0?'מהמותן':'למותן'}`;
+  const wkT=wk===1?'שבוע אחד':`-${wk} שבועות`;
+  $('#lead').innerHTML=wk<1?`שלב ה${P.n} מתחיל עכשיו. נקודת פתיחה: <b>${f1(s.fw?.weight)} ק״ג</b>${s.fwa?`, מותן ${fc(s.fwa.waist)} ס״מ`:''}.`
+    :P.dir<0?`ירדו <b>${f1(-delta)} ק״ג</b> (${pct.toFixed(1)}%) ו${wTxt} ב${wkT}.`
+    :P.dir>0?`${delta>=0?'עלו':'ירדו'} <b>${f1(Math.abs(delta))} ק״ג</b> (${pct.toFixed(1)}%) ב${wkT} של מסה. ${wTxt}.`
+    :`המשקל ${Math.abs(delta)<0.6?'יציב':'זז'}: <b>${delta>=0?'+':'−'}${f1(Math.abs(delta))} ק״ג</b> ב${wkT}. ${wTxt}.`;
   $('#tW').innerHTML=`${f1(s.lw?.weight)}<small>ק״ג</small>`;
-  $('#tWa').innerHTML=`${fc(s.lwa?.waist)}<small style="font-size:13px;opacity:.85"> ↓${fc(s.lostWaist)}</small>`;
+  $('#tWa').innerHTML=`${fc(s.lwa?.waist)}<small style="font-size:13px;opacity:.85"> ${dWaist<=0?'↓':'↑'}${fc(Math.abs(dWaist))}</small>`;
 }
 
 /* ---------- chart ---------- */
@@ -901,6 +958,7 @@ function renderChart(animate=true){
   for(let v=lo;v<=hi+1e-9;v+=step){const y=Y(v);g+=`<line x1="${pl}" x2="${Wd-pr}" y1="${y}" y2="${y}" stroke="${C.line}" stroke-dasharray="2 4"/><text class="ax" x="${pl-6}" y="${y+3.5}" text-anchor="end">${+v.toFixed(1)}</text>`}
   const uniq=[...new Set(W.map(w=>w.date))];const every=Math.ceil(uniq.length/(Wd<380?5:7));
   uniq.forEach((d,i)=>{if(i%every===0||i===uniq.length-1){if(i!==uniq.length-1&&uniq.length-1-i<every*.6)return;g+=`<text class="ax" x="${X(+new Date(d))}" y="${H-6}" text-anchor="${i===0?'start':i===uniq.length-1?'end':'middle'}">${dm(d)}</text>`}});
+  phaseList().slice(1).forEach(ph=>{const t=+new Date(ph.start);if(t<t0||t>t1+864e5*3)return;const x=Math.min(X(t),Wd-pr);g+=`<rect x="${x}" y="${pt}" width="${Math.max(0,Wd-pr-x)}" height="${H-pb-pt}" fill="#d4f24a" opacity=".1"/><line x1="${x}" x2="${x}" y1="${pt-4}" y2="${H-pb}" stroke="#a8cc1c" stroke-width="1.5" stroke-dasharray="3 3"/><text x="${x-4}" y="${pt+8}" text-anchor="end" class="ax" style="fill:#7fa000;font-weight:700">${PH[ph.type].n}</text>`});
   let paths='';
   pts.forEach((p,si)=>{
     if(!p.length)return;const c=series[si].c;
@@ -933,7 +991,7 @@ function setReadout(date){
   const idx=list.indexOf(cur),prev=idx>0?list[idx-1]:null;
   if(key){el.innerHTML=`${key==='weight'?f1(cur[key]):fc(cur[key])}<small>${key==='weight'?'ק״ג':'ס״מ'}</small>`;
     const d=prev?cur[key]-prev[key]:null;
-    if(d==null){dl.hidden=true}else{dl.hidden=false;dl.className='delta'+(d>0?' up':'');dl.textContent=(d>0?'+':d<0?'−':'±')+Math.abs(d).toFixed(1)+' משבוע קודם'}}
+    if(d==null){dl.hidden=true}else{dl.hidden=false;const pdir=(PH[phaseAt(cur.date).type]||PH.cut).dir;const bad=key==='waist'?d>0:(pdir<0?d>0:pdir>0?d<0:Math.abs(d)>0.5);dl.className='delta'+(bad?' up':'');dl.textContent=(d>0?'+':d<0?'−':'±')+Math.abs(d).toFixed(1)+' משבוע קודם'}}
   else{el.innerHTML=`${fc(cur.armR)} / ${fc(cur.armL)}<small>ימין / שמאל</small>`;dl.hidden=true}
   when.textContent=(date?'':'אחרון · ')+dm(cur.date);
 }
@@ -947,7 +1005,7 @@ function renderStrip(){
     const u=photoUrl(w);
     return `<button class="card wk" data-id="${esc(w.id)}" style="animation:rise .6s ${Math.min(ri,6)*.05}s both">
       <div class="ph">${u?`<img src="${esc(u)}" alt="תמונת ${dm(w.date)}" loading="lazy">`:videoUrl(w)?`<video src="${esc(videoUrl(w))}#t=0.5" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block"></video>`:`<span class="bigw"><b class="num">${w.weight!=null?f1(w.weight):'—'}</b><small>${w.weight!=null?'ק״ג':'אין משקל'}</small><em>＋ תמונה</em></span>`}${ri===0?'<span class="lab">השבוע</span>':''}${(w.videoId||w.videoKey||w.videoSrc)?'<span class="vb" aria-label="יש סרטון">▶</span>':''}</div>
-      <div class="meta"><div class="w num">${u||videoUrl(w)?f1(w.weight):(w.waist!=null?fc(w.waist)+'<small style="font-size:12px;color:var(--muted);font-family:var(--f-body)"> ס״מ מותן</small>':'—')}</div><div class="d"><span>${dm(w.date)}</span>${d==null?'':`<b class="${d<=0?'g':'u'}">${d>0?'+':d<0?'−':'±'}${Math.abs(d).toFixed(1)}</b>`}</div></div></button>`}).join('');
+      <div class="meta"><div class="w num">${u||videoUrl(w)?f1(w.weight):(w.waist!=null?fc(w.waist)+'<small style="font-size:12px;color:var(--muted);font-family:var(--f-body)"> ס״מ מותן</small>':'—')}</div><div class="d"><span>${dm(w.date)}</span>${d==null?'':`<b class="${((PH[phaseAt(w.date).type]||PH.cut).dir>0?d>=0:(PH[phaseAt(w.date).type]||PH.cut).dir<0?d<=0:Math.abs(d)<=.5)?'g':'u'}">${d>0?'+':d<0?'−':'±'}${Math.abs(d).toFixed(1)}</b>`}</div></div></button>`}).join('');
 }
 
 /* ---------- compare ---------- */
@@ -998,9 +1056,26 @@ const ICONS={
  goal:`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="13" r="7.5"/><circle cx="11" cy="13" r="3"/><path d="M11 13l9-9M16 4h4v4"/></svg>`,
 };
 const ICV={pace:'',waist:'v2',arm:'v3',food:'v4',goal:'v2'};
+function phaseInsights(s,cw,type){const out=[];const ws=s.W.filter(w=>w.weight!=null);
+  if(ws.length<2){out.push(type==='bulk'?{ic:'pace',h:'מסה נקייה: יעד 0.1–0.25 ק״ג בשבוע',p:`ב-${f1(cw)} ק״ג זה בערך 0.15–0.4% ממשקל הגוף בשבוע. <em>עודף של 200–300 קלוריות</em> מעל תחזוקה מספיק. עלייה מהירה יותר היא בעיקר שומן.`,chip:'התחלה',cls:'info'}:{ic:'pace',h:'תחזוקה: לשמור על המשקל',p:'אוכלים בערך כמו שהגוף שורף. <em>תנודה של חצי ק״ג לכל כיוון</em> היא רגילה. ממשיכים להתאמן חזק.',chip:'התחלה',cls:'info'});return out}
+  const g=s.rRate!=null?-s.rRate:0,pct=g/cw*100;
+  if(type==='bulk'){let chip,cls,txt;
+    if(pct>.4){chip='מהר מדי';cls='mid';txt='רוב העלייה הזו כנראה שומן. <em>הורד 150–200 קלוריות ביום.</em>'}
+    else if(pct>=.12){chip='קצב אידיאלי';cls='ok';txt='עלייה איטית ומבוקרת, רובה שריר. <em>ממשיכים כך.</em>'}
+    else if(pct>=.03){chip='איטי';cls='mid';txt='<em>הוסף 150–200 קלוריות ביום</em>, למשל כף חמאת בוטנים או בננה עם יוגורט.'}
+    else{chip='לא עולה';cls='mid';txt='<em>הוסף 200–300 קלוריות ביום</em> ובדוק שוב בעוד שבועיים.'}
+    out.push({ic:'pace',h:`${g>=0?'עולים':'יורדים'} ${f1(Math.abs(g))} ק״ג בשבוע`,p:`${pct.toFixed(2)}% ממשקל הגוף בשבוע. ${txt}`,chip,cls});
+    const dk=s.lw.weight-s.fw.weight,dw=s.fwa&&s.lwa?s.lwa.waist-s.fwa.waist:null;
+    if(dk>0.4&&dw!=null){const r=dw/dk;out.push({ic:'waist',h:`${r<=0?'המותן לא גדל':`${r.toFixed(1)} ס״מ מותן לכל ק״ג`}`,p:`עלו ${f1(dk)} ק״ג והמותן ${dw>=0?'+':'−'}${fc(Math.abs(dw))} ס״מ. ${r<=.6?'<em>רוב העלייה היא שריר.</em>':r<=1?'סביר, <em>שווה לעקוב.</em>':'<em>המותן גדל מהר. כדאי להאט את הקצב.</em>'}`,chip:r<=.6?'מסה נקייה':r<=1?'למעקב':'יותר מדי שומן',cls:r<=.6?'ok':'mid'})}}
+  else{const ok=Math.abs(pct)<.15;out.push({ic:'pace',h:ok?'המשקל יציב':`${g>=0?'עולים':'יורדים'} ${f1(Math.abs(g))} ק״ג בשבוע`,p:ok?'<em>בדיוק מה שרוצים בתחזוקה.</em>':`${g>=0?'<em>הורד 100–150 קלוריות ביום</em>':'<em>הוסף 100–150 קלוריות ביום</em>'} כדי להתייצב.`,chip:ok?'יציב':'לכוונן',cls:ok?'ok':'mid'})}
+  if(s.arms.length>=2){const a0=s.arms[0],a1=s.arms[s.arms.length-1];const d=((a1.armR||0)+(a1.armL||0))-((a0.armR||0)+(a0.armL||0));out.push({ic:'arm',h:d>0?'הזרועות גדלות':'הזרועות עוד לא זזו',p:`ימין ${fc(a0.armR)}→${fc(a1.armR)}, שמאל ${fc(a0.armL)}→${fc(a1.armL)} ס״מ. ${d>0?'<em>סימן טוב לבניית שריר.</em>':'במסה זה לוקח 4–6 שבועות לראות שינוי.'}`,chip:d>0?'שריר':'סבלנות',cls:d>0?'ok':'info'})}
+  return out}
 function insights(){
   const s=stats();if(!s||state.weeks.length<2)return[];
   const out=[],cw=s.lw?.weight??s.fw?.weight;
+  const ptype=curPhase().type;
+  if(ptype!=='cut'){out.push(...phaseInsights(s,cw,ptype));}
+  else{
   if(s.rRate!=null){const pct=s.rRate/cw*100;
     let chip,cls,txt;
     if(pct>1.1){chip='קצב מהיר';cls='mid';txt=`<em>שווה להוסיף 150–200 קלוריות ביום</em> כדי לשמור על שריר ואנרגיה באימונים.`}
@@ -1012,9 +1087,12 @@ function insights(){
     out.push({ic:'waist',h:`${r.toFixed(1)} ס״מ מותן לכל ק״ג`,p:`המותן ירד ${fc(s.lostWaist)} ס״מ מול ${f1(s.lostKg)} ק״ג. ${r>=1.2?'<em>זה סימן חזק שהירידה היא בעיקר שומן</em> ולא שריר או נוזלים.':'<em>מדידה באותה שעה ובאותו מקום (בגובה הטבור)</em> תיתן תמונה מדויקת יותר.'}`,chip:r>=1.2?'ירידת שומן':'למעקב',cls:r>=1.2?'ok':'info'});}
   if(s.arms.length>=2){const a0=s.arms[0],a1=s.arms[s.arms.length-1];const sum0=(a0.armR||0)+(a0.armL||0),sum1=(a1.armR||0)+(a1.armL||0);const gap0=Math.abs((a0.armR||0)-(a0.armL||0)),gap1=Math.abs((a1.armR||0)-(a1.armL||0));
     out.push({ic:'arm',h:sum1>=sum0?'הזרועות נשמרות בזמן החיטוב':'ירידה קלה בהיקף הזרועות',p:`ימין ${fc(a0.armR)}→${fc(a1.armR)}, שמאל ${fc(a0.armL)}→${fc(a1.armL)} ס״מ. ${sum1>=sum0?'<em>המשקל יורד והזרועות לא, כלומר השריר נשמר.</em>':'<em>שווה להעלות נפח אימון לזרועות</em> ולוודא חלבון מספיק.'}${gap1<gap0?' הפער בין הצדדים נסגר.':''}`,chip:gap1<gap0?'סימטריה השתפרה':'כוח נשמר',cls:'ok'});}
+  }
   const pLo=Math.round(cw*1.8),pHi=Math.round(cw*2.2);
-  out.push({ic:'food',h:`${pLo}–${pHi} גרם חלבון ביום`,p:`לפי ${f1(cw)} ק״ג: 1.8–2.2 ג׳ לק״ג. <em>3–4 ארוחות של 30–40 ג׳</em> (ביצים, עוף, יוגורט, טונה, קוטג׳) שומרות על השריר בגירעון.`,chip:'תזונה',cls:'info'});
-  if(state.goal){const left=cw-state.goal;const rate=s.rRate>0?s.rRate:s.allRate;
+  out.push({ic:'food',h:`${pLo}–${pHi} גרם חלבון ביום`,p:`לפי ${f1(cw)} ק״ג: 1.8–2.2 ג׳ לק״ג. <em>3–4 ארוחות של 30–40 ג׳</em> (ביצים, עוף, יוגורט, טונה, קוטג׳) ${ptype==='bulk'?'בונות שריר בעודף הקלורי.':'שומרות על השריר בגירעון.'}`,chip:'תזונה',cls:'info'});
+  if(state.goal&&ptype==='bulk'){const left=state.goal-cw;const rate=s.rRate!=null?-s.rRate:null;
+    out.push(left<=0?{ic:'goal',h:'הגעת ליעד המסה',p:`<em>${f1(state.goal)} ק״ג הושג.</em> זה זמן טוב לשבועיים של תחזוקה לפני שלב הבא.`,chip:'יעד',cls:'ok',act:'שינוי יעד'}:{ic:'goal',h:`נשארו ${f1(left)} ק״ג ליעד`,p:`יעד ${f1(state.goal)} ק״ג.${rate>0?` צפי: <em>בעוד כ-${Math.ceil(left/rate)} שבועות</em> בקצב הנוכחי.`:''}`,chip:'יעד',cls:'info',act:'שינוי יעד'})}
+  else if(state.goal){const left=cw-state.goal;const rate=s.rRate>0?s.rRate:s.allRate;
     if(left<=0)out.push({ic:'goal',h:'הגעת ליעד',p:`<em>${f1(state.goal)} ק״ג הושג.</em> אפשר לעבור לתחזוקה: להעלות 150–250 קלוריות בשבוע עד שהמשקל מתייצב.`,chip:'יעד',cls:'ok',act:'שינוי יעד'});
     else{const wk=rate>0?Math.ceil(left/rate):null;let when='';if(wk){const dt=new Date(s.last.date);dt.setDate(dt.getDate()+wk*7);when=` צפי: <em>${dt.getDate()}/${dt.getMonth()+1}, בעוד כ-${wk} שבועות</em> בקצב הנוכחי.`}
       out.push({ic:'goal',h:`נשארו ${f1(left)} ק״ג ליעד`,p:`יעד ${f1(state.goal)} ק״ג.${when}`,chip:'יעד',cls:'info',act:'שינוי יעד'});}}
@@ -1048,7 +1126,7 @@ function workoutText(w){
   const [y,m,d]=w.date.split('-');const gs=woGroups(w).filter(k=>k!=='other').map(k=>MG[k].n);
   const lines=[`🏋️ *${w.title||'אימון'}*`,`📅 ${+d}/${+m}/${y}${gs.length?` · ${gs.join(', ')}`:''}`,''];
   (w.exercises||[]).forEach((e,i)=>{lines.push(`*${i+1}. ${e.name}*${exGroup(e)!=='other'?` (${MG[exGroup(e)].n})`:''}`);
-    (e.sets||[]).forEach((x,j)=>lines.push(x.time?`   סט ${j+1}: ${x.time}`:`   סט ${j+1}: ${x.kg!=null?fc(x.kg)+' ק״ג':'—'} × ${x.reps??'—'} חזרות${x.drop?' (דרופ)':''}`));lines.push('')});
+    (e.sets||[]).forEach((x,j)=>lines.push(x.time?`   סט ${j+1}: ${x.time}`:x.kg==null&&x.reps!=null?`   סט ${j+1}: ${x.reps} חזרות`:`   סט ${j+1}: ${x.kg!=null?fc(x.kg)+' ק״ג':'—'} × ${x.reps??'—'} חזרות${x.drop?' (דרופ)':''}`));lines.push('')});
   lines.push(`סה״כ: ${(w.exercises||[]).length} תרגילים · ${nsets(w)} סטים · נפח ${Math.round(vol(w)).toLocaleString('he-IL')} ק״ג`);
   if(w.note)lines.push('',`📝 ${w.note}`);
   return lines.join('\n');
@@ -1057,6 +1135,7 @@ let shareTextCur='';
 function openShare(w){shareTextCur=workoutText(w);$('#sharePre').textContent=shareTextCur;$('#shareWa').href='https://wa.me/?text='+encodeURIComponent(shareTextCur);$('#shareNative').hidden=!navigator.share;openSheet('shareSheet')}
 $('#shareCopy').onclick=async()=>{try{await navigator.clipboard.writeText(shareTextCur);toast('הטקסט הועתק')}catch(e){const r=document.createRange();r.selectNodeContents($('#sharePre'));const sel=getSelection();sel.removeAllRanges();sel.addRange(r);toast('הטקסט מסומן, אפשר להעתיק')}};
 $('#shareNative').onclick=async()=>{try{await navigator.share({text:shareTextCur})}catch(e){}};
+const setTxt=x=>x.time?esc(x.time):x.kg==null&&x.reps!=null?`${x.reps} חז׳`:`${fc(x.kg)}×${x.reps??'—'}`;
 const MSHORT=['ינו','פבר','מרץ','אפר','מאי','יונ','יול','אוג','ספט','אוק','נוב','דצמ'];
 const vol=w=>(w.exercises||[]).reduce((a,e)=>a+(e.sets||[]).reduce((b,x)=>b+(x.kg||0)*(x.reps||0),0),0);
 const nsets=w=>(w.exercises||[]).reduce((a,e)=>a+(e.sets||[]).length,0);
@@ -1076,7 +1155,7 @@ function renderWorkouts(){
       const b=bestSet(e),pe=prevEx(w,e.name),pb=pe&&bestSet(pe);
       let pr='';if(b&&pb){const top=x=>{const mk=Math.max(...(x.sets||[]).filter(z=>!z.drop&&z.kg!=null).map(z=>z.kg));return{kg:mk,reps:Math.max(...(x.sets||[]).filter(z=>z.kg===mk).map(z=>z.reps||0))}};const A=top(e),B=top(pe);const dd=A.kg!==B.kg?A.kg-B.kg:A.reps-B.reps;pr=dd===0||!isFinite(dd)?`<span class="pr chip info">כמו בפעם הקודמת</span>`:dd>0?`<span class="pr chip ok">↑ התקדמות</span>`:`<span class="pr chip mid">↓ ירידה</span>`}
       if(isPR(w,e))pr=`<span class="pr-chip">שיא חדש</span>`;
-      return `<div class="ex"><div class="nm"><span>${mgIcon(exGroup(e))}${esc(e.name)}</span>${pr}</div><div class="sets">${(e.sets||[]).map(x=>`<span class="set${x.drop?' drop':''}">${x.time?esc(x.time):`${fc(x.kg)}<i>kg</i> × ${x.reps??'—'}`}${x.drop?' <i>דרופ</i>':''}</span>`).join('')}</div></div>`}).join('');
+      return `<div class="ex"><div class="nm"><span>${mgIcon(exGroup(e))}${esc(e.name)}</span>${pr}</div><div class="sets">${(e.sets||[]).map(x=>`<span class="set${x.drop?' drop':''}">${x.time?esc(x.time):x.kg==null&&x.reps!=null?`${x.reps} <i>חזרות</i>`:`${fc(x.kg)}<i>kg</i> × ${x.reps??'—'}`}${x.drop?' <i>דרופ</i>':''}</span>`).join('')}</div></div>`}).join('');
     return `<article class="card wo${open?' open':''}" data-wid="${esc(w.id)}" style="animation-delay:${Math.min(i,5)*.06}s">
       <button class="wo-h" data-tog aria-expanded="${open}"><span class="wo-date"><span class="dd">${+d}</span><span class="mm">${MSHORT[+m-1]}</span></span>
         <span class="tt"><b>${esc(w.title||'אימון')}</b><span class="mgrow">${woGroups(w).map(k=>`<span class="mgchip">${mgIcon(k)}${MG[k].n}</span>`).join('')}</span></span>
@@ -1093,8 +1172,9 @@ $('#woList').addEventListener('click',e=>{const card=e.target.closest('.wo');if(
   if(e.target.closest('[data-share]'))openShare(w);});
 
 let woEditing=null,woDraft=null,woDelArm=false;
-function cloneEx(w){return(w.exercises||[]).map(e=>({name:e.name,group:e.group||null,sets:(e.sets||[]).map(x=>({kg:x.kg,reps:x.reps,drop:!!x.drop,...(x.time?{time:x.time}:{})}))}))}
+function cloneEx(w){return(w.exercises||[]).map(e=>({name:e.name,group:e.group||null,weighted:!!e.weighted,sets:(e.sets||[]).map(x=>({kg:x.kg,reps:x.reps,drop:!!x.drop,...(x.time?{time:x.time}:{})}))}))}
 function openWorkout(w,template,src){
+  if(!w&&!template&&draftGet()){resumeDraft();return}
   woEditing=w||null;woDelArm=false;
   woDraft={date:w?w.date:new Date().toISOString().slice(0,10),title:w?.title||template?.title||'',note:w?.note||'',exercises:w?cloneEx(w):template?cloneEx(template):[{name:'',sets:[{kg:null,reps:null}]}]};
   $('#woTitle').textContent=w?'עריכת אימון':src==='plan'?'האימון של היום':template?'אימון חוזר':'אימון חדש';
@@ -1104,51 +1184,74 @@ function openWorkout(w,template,src){
   $('#exNames').innerHTML=[...new Set(state.workouts.flatMap(o=>(o.exercises||[]).map(e=>e.name)))].map(n=>`<option value="${esc(n)}"></option>`).join('');
   renderExEd();openSheet('woSheet');
 }
+const noWt=e=>exGroup(e)==='abs'&&!e.weighted&&!(e.sets||[]).some(z=>z.kg!=null);
 function renderExEd(){
-  $('#woEx').innerHTML=woDraft.exercises.map((e,i)=>`<div class="exed" data-ei="${i}">
+  $('#woEx').innerHTML=woDraft.exercises.map((e,i)=>{const nw=noWt(e);
+    const pv=lastEx(e.name,woDraft.date,woEditing?.id);e._prev=pv?pv.e:null;const sg=pv?suggestFor(pv.e):null;
+    const prevHtml=pv?`<div class="prevrow"><span class="prev"><em>פעם קודמת · ${dm(pv.w.date)}</em><span class="pvsets">${(pv.e.sets||[]).map(z=>`<span class="pvs${z.drop?' d':''}">${setTxt(z)}</span>`).join('')}</span></span>${sg?`<button type="button" class="sug therm-rim" data-sug>הצעה: ${sg.kg!=null?fc(sg.kg)+' ק״ג × ':''}${sg.reps} חזרות<small>${sg.why}</small></button>`:''}</div>`:'';
+    return `<div class="exed${e._saved?' saved':''}" data-ei="${i}">
     <div class="top"><input list="exNames" data-f="name" value="${esc(e.name)}" placeholder="שם התרגיל (למשל: חזה מכשיר)" aria-label="שם תרגיל ${i+1}"><select class="gsel" data-f="group" aria-label="קבוצת שריר">${['auto',...MG_ORDER].map(k=>`<option value="${k}" ${(e.group||'auto')===k?'selected':''}>${k==='auto'?(e.name?`${MG[exGroup({name:e.name})].n} (אוטו׳)`:'זיהוי אוטו׳'):MG[k].n}</option>`).join('')}</select><button type="button" class="rm" data-rmex aria-label="הסרת תרגיל">✕</button></div>
-    ${(()=>{const pv=lastEx(e.name,woDraft.date,woEditing?.id);if(!pv)return '';const sg=suggestFor(pv.e);e._prev=pv.e;
-      return `<div class="prevrow"><span class="prev"><em>פעם קודמת · ${dm(pv.w.date)}</em><span class="pvsets">${(pv.e.sets||[]).map(z=>`<span class="pvs${z.drop?' d':''}">${z.time?esc(z.time):`${fc(z.kg)}×${z.reps??'—'}`}</span>`).join('')}</span></span>${sg?`<button type="button" class="sug therm-rim" data-sug>הצעה: ${fc(sg.kg)} ק״ג × ${sg.reps}<small>${sg.why}</small></button>`:''}</div>`})()}
-    <div class="shead"><span>סט</span><span>ק״ג</span><span>חזרות</span><span>דרופ</span><span></span></div>
-    ${e.sets.map((x,j)=>`<div class="srow" data-si="${j}"><span class="ix">${j+1}</span><input inputmode="decimal" data-f="kg" value="${x.kg??''}" placeholder="${e._prev?.sets?.[j]?.kg??''}" aria-label="משקל סט ${j+1}"><input inputmode="numeric" data-f="reps" value="${x.reps??''}" placeholder="${e._prev?.sets?.[j]?.reps??''}" aria-label="חזרות סט ${j+1}"><button type="button" class="dp" data-drop aria-pressed="${!!x.drop}" aria-label="דרופ סט">D</button><button type="button" class="rm" data-rmset aria-label="הסרת סט">−</button></div>`).join('')}
-    <button type="button" class="addset" data-addset>＋ סט</button></div>`).join('');
+    ${prevHtml}
+    <div class="shead${nw?' nw':''}"><span>סט</span>${nw?'<span>חזרות</span>':'<span>ק״ג</span><span>חזרות</span>'}<span>דרופ</span><span></span></div>
+    ${e.sets.map((x,j)=>`<div class="srow${nw?' nw':''}" data-si="${j}"><span class="ix">${j+1}</span>${nw?'':`<input inputmode="decimal" data-f="kg" value="${x.kg??''}" placeholder="${e._prev?.sets?.[j]?.kg??''}" aria-label="משקל סט ${j+1}">`}<input inputmode="numeric" data-f="reps" value="${x.reps??''}" placeholder="${e._prev?.sets?.[j]?.reps??(x.time||'')}" aria-label="חזרות סט ${j+1}"><button type="button" class="dp" data-drop aria-pressed="${!!x.drop}" aria-label="דרופ סט">D</button><button type="button" class="rm" data-rmset aria-label="הסרת סט">−</button></div>`).join('')}
+    <div class="exfoot"><button type="button" class="addset" data-addset>＋ סט</button>${exGroup(e)==='abs'?`<button type="button" class="addset" data-wt>${nw?'＋ משקל':'ללא משקל'}</button>`:''}<button type="button" class="saveex" data-saveex>${e._saved?'✓ נשמר':'שמירת תרגיל'}</button></div></div>`}).join('');
 }
 $('#woEx').addEventListener('input',e=>{const t=e.target,ex=t.closest('.exed');if(!ex)return;const E=woDraft.exercises[+ex.dataset.ei];const r=t.closest('.srow');
   if(t.dataset.f==='group'){E.group=t.value==='auto'?null:t.value;return}
+  E._saved=false;
   if(t.dataset.f==='name')E.name=t.value;else if(r){const S=E.sets[+r.dataset.si];S[t.dataset.f]=t.dataset.f==='reps'?(num(t.value)==null?null:Math.round(num(t.value))):num(t.value)}});
 $('#woEx').addEventListener('change',e=>{if(e.target.dataset.f==='name')renderExEd()});
 $('#woEx').addEventListener('click',e=>{const ex=e.target.closest('.exed');if(!ex)return;const E=woDraft.exercises[+ex.dataset.ei];
-  if(e.target.closest('[data-sug]')){const sg=suggestFor(E._prev);if(sg){E.sets.forEach((s,j)=>{if(!s.drop){s.kg=sg.kg;if(j===0||s.reps==null)s.reps=sg.reps}});renderExEd();toast('ההצעה הוחלה')}return}const r=e.target.closest('.srow');
+  if(e.target.closest('[data-saveex]')){saveProgress(+ex.dataset.ei);return}
+  if(e.target.closest('[data-wt]')){E.weighted=noWt(E);if(!E.weighted)E.sets.forEach(z=>z.kg=null);renderExEd();draftSave();return}
+  E._saved=false;
+  if(e.target.closest('[data-sug]')){const sg=suggestFor(E._prev);if(sg){E.sets.forEach((s,j)=>{if(!s.drop){if(sg.kg!=null)s.kg=sg.kg;if(j===0||s.reps==null)s.reps=sg.reps}});renderExEd();toast('ההצעה הוחלה')}return}const r=e.target.closest('.srow');
   if(e.target.closest('[data-addset]')){const last=E.sets[E.sets.length-1];E.sets.push({kg:last?.kg??null,reps:last?.reps??null});renderExEd();const ins=$('#woEx').querySelectorAll(`.exed[data-ei="${ex.dataset.ei}"] .srow input[data-f="reps"]`);ins[ins.length-1]?.focus()}
   else if(e.target.closest('[data-rmset]')){E.sets.splice(+r.dataset.si,1);renderExEd()}
   else if(e.target.closest('[data-drop]')){const S=E.sets[+r.dataset.si];S.drop=!S.drop;e.target.closest('[data-drop]').setAttribute('aria-pressed',S.drop)}
   else if(e.target.closest('[data-rmex]')){woDraft.exercises.splice(+ex.dataset.ei,1);renderExEd()}});
 $('#woAddEx').onclick=()=>{woDraft.exercises.push({name:'',sets:[{kg:null,reps:null}]});renderExEd();const n=$('#woEx').querySelectorAll('input[data-f="name"]');n[n.length-1]?.focus()};
 $('#woCopy').onclick=()=>{const l=state.workouts[state.workouts.length-1];if(!l)return;woDraft.exercises=cloneEx(l);if(!$('#woName').value)$('#woName').value=l.title||'';renderExEd();$('#woCopy').hidden=true};
+function buildExercises(){return woDraft.exercises.map(x=>({name:x.name.trim(),...(x.group?{group:x.group}:{}),...(x.weighted?{weighted:true}:{}),sets:x.sets.filter(s=>s.kg!=null||s.reps!=null||s.time).map(s=>({kg:s.kg??null,reps:s.reps??null,...(s.drop?{drop:true}:{}),...(s.time&&s.kg==null&&s.reps==null?{time:s.time}:{})}))})).filter(x=>x.name&&x.sets.length)}
+const DRAFT_K='hitov.wodraft.v1';let draftT=null;
+function draftSave(){clearTimeout(draftT);draftT=setTimeout(()=>{try{if(!woDraft)return;localStorage.setItem(DRAFT_K,JSON.stringify({ts:Date.now(),savedId:woDraft._id||woEditing?.id||null,date:$('#woDate').value,title:$('#woName').value,note:$('#woNote').value,exercises:woDraft.exercises.map(x=>({name:x.name,group:x.group||null,weighted:!!x.weighted,_saved:!!x._saved,sets:x.sets}))}))}catch(e){}},300)}
+function draftGet(){try{const d=JSON.parse(localStorage.getItem(DRAFT_K));if(d&&Date.now()-d.ts<36*3600e3&&d.exercises?.some(x=>x.name||x.sets?.some(z=>z.kg!=null||z.reps!=null)))return d}catch(e){}return null}
+function draftClear(){try{localStorage.removeItem(DRAFT_K)}catch(e){}}
+async function saveProgress(ei){const exercises=buildExercises();const date=$('#woDate').value;
+  if(!date||!exercises.length){toast('צריך שם לתרגיל וסט אחד לפחות');return}
+  const id=woEditing?.id||woDraft._id||(woDraft._id=date+'-'+Math.random().toString(36).slice(2,7));
+  const data={date,title:$('#woName').value.trim()||null,note:$('#woNote').value.trim()||null,exercises};
+  try{await store.saveWorkout(id,data);woEditing={id,...data};woDraft.exercises.forEach((x,i)=>{if(i<=ei||x._saved)x._saved=true});renderExEd();draftSave();toast('התרגיל נשמר');$('#woDelRow').hidden=false}
+  catch(err){toast('השמירה נכשלה. הנתונים שמורים בטלפון, נסה שוב.')}}
+$('#woSheet').addEventListener('input',draftSave);$('#woSheet').addEventListener('click',()=>setTimeout(draftSave,0));
+function resumeDraft(){const d=draftGet();if(!d)return;woEditing=d.savedId?(state.workouts.find(w=>w.id===d.savedId)||{id:d.savedId}):null;woDelArm=false;
+  woDraft={date:d.date,title:d.title,note:d.note,exercises:d.exercises,_id:d.savedId||null};
+  $('#woTitle').textContent='המשך אימון';$('#woDate').value=d.date;$('#woName').value=d.title||'';$('#woNote').value=d.note||'';$('#woMsg').textContent='';$('#woDelRow').hidden=!woEditing;$('#woCopy').hidden=true;
+  $('#exNames').innerHTML=[...new Set(state.workouts.flatMap(o=>(o.exercises||[]).map(e=>e.name)))].map(n=>`<option value="${esc(n)}"></option>`).join('');renderExEd();openSheet('woSheet')}
 $('#woForm').onsubmit=async e=>{e.preventDefault();const msg=$('#woMsg');
-  const exercises=woDraft.exercises.map(x=>({name:x.name.trim(),...(x.group?{group:x.group}:{}),sets:x.sets.filter(s=>s.kg!=null||s.reps!=null||s.time).map(s=>({kg:s.kg??null,reps:s.reps??null,...(s.drop?{drop:true}:{}),...(s.time&&s.kg==null&&s.reps==null?{time:s.time}:{})}))})).filter(x=>x.name&&x.sets.length);
+  const exercises=buildExercises();const _unused=woDraft.exercises.map(x=>({name:x.name.trim(),...(x.group?{group:x.group}:{}),sets:x.sets.filter(s=>s.kg!=null||s.reps!=null||s.time).map(s=>({kg:s.kg??null,reps:s.reps??null,...(s.drop?{drop:true}:{}),...(s.time&&s.kg==null&&s.reps==null?{time:s.time}:{})}))})).filter(x=>x.name&&x.sets.length);
   const date=$('#woDate').value;
   if(!date){msg.textContent='צריך לבחור תאריך.';msg.className='form-msg err';return}
   if(!exercises.length){msg.textContent='צריך לפחות תרגיל אחד עם שם וסט אחד.';msg.className='form-msg err';return}
   const data={date,title:$('#woName').value.trim()||null,note:$('#woNote').value.trim()||null,exercises};
-  const id=woEditing?.id||(date+'-'+Math.random().toString(36).slice(2,7));
+  const id=woEditing?.id||woDraft._id||(date+'-'+Math.random().toString(36).slice(2,7));
   $('#woSave').disabled=true;msg.className='form-msg';msg.textContent='שומר…';
   const newPRs=data.exercises.filter(x=>{const b=bestSet(x);if(!b)return false;const h=exHistory(x.name).filter(z=>z.id!==id&&z.date<=data.date);return h.length&&e1rm(b)>Math.max(...h.map(z=>z.score))+0.01}).map(x=>x.name);
-  try{await store.saveWorkout(id,data);if(newPRs.length)setTimeout(()=>toast('שיא חדש: '+newPRs.join(', ')),400);state.woOpen=id;closeSheets();toast(woEditing?'האימון עודכן':'האימון נשמר');setTimeout(()=>$('#secWorkouts').scrollIntoView({behavior:reduce?'auto':'smooth'}),250)}
+  try{await store.saveWorkout(id,data);draftClear();if(newPRs.length)setTimeout(()=>toast('שיא חדש: '+newPRs.join(', ')),400);state.woOpen=id;closeSheets();toast(woEditing?'האימון עודכן':'האימון נשמר');setTimeout(()=>$('#secWorkouts').scrollIntoView({behavior:reduce?'auto':'smooth'}),250)}
   catch(err){msg.className='form-msg err';msg.textContent='השמירה נכשלה. בדוק חיבור ונסה שוב.'}finally{$('#woSave').disabled=false}};
-$('#woDel').onclick=async()=>{if(!woDelArm){woDelArm=true;$('#woDel').textContent='לחץ שוב לאישור המחיקה';return}try{await store.removeWorkout(woEditing.id);closeSheets();toast('האימון נמחק')}catch(e){$('#woMsg').textContent='המחיקה נכשלה.';$('#woMsg').className='form-msg err'}};
+$('#woDel').onclick=async()=>{if(!woDelArm){woDelArm=true;$('#woDel').textContent='לחץ שוב לאישור המחיקה';return}try{await store.removeWorkout(woEditing.id);draftClear();closeSheets();toast('האימון נמחק')}catch(e){$('#woMsg').textContent='המחיקה נכשלה.';$('#woMsg').className='form-msg err'}};
 $('#woNew').onclick=()=>openWorkout(null);
 $('#mWeigh').onclick=()=>openEntry(null);
 $('#mWork').onclick=()=>openWorkout(null);
 
 function renderGoal(){
   const s=stats(),liq=$('#liq'),cap=$('#cap');
-  if(!s||!state.goal){cap.classList.add('empty');liq.style.height='0';$('#gPct').textContent='—';$('#gSub').textContent='קובעים משקל יעד והקפסולה מתמלאת עם כל ק״ג שיורד.';$('#gBtn').textContent='הגדרת יעד';return}
+  if(!s||!state.goal){cap.classList.add('empty');liq.style.height='0';$('#gPct').textContent='—';$('#gSub').textContent=(curPhase().type==='bulk'?'קובעים משקל יעד למסה והקפסולה מתמלאת עם כל ק״ג שעולה.':'קובעים משקל יעד והקפסולה מתמלאת עם כל ק״ג שיורד.');$('#gBtn').textContent='הגדרת יעד';return}
   cap.classList.remove('empty');
-  const start=s.fw.weight,cur=s.lw.weight,g=state.goal,tot=start-g;
-  const p=tot>0?Math.max(0,Math.min(100,(start-cur)/tot*100)):100;
+  const start=s.fw.weight,cur=s.lw.weight,g=state.goal,tot=g-start;
+  const p=Math.abs(tot)<0.05?100:Math.max(0,Math.min(100,(cur-start)/tot*100));
   $('#gPct').textContent='~'+Math.round(p)+'%';
-  $('#gSub').textContent=p>=100?`הגעת ליעד של ${f1(g)} ק״ג`:`ירדו ${f1(start-cur)} מתוך ${f1(tot)} ק״ג · נשארו ${f1(cur-g)}`;
+  $('#gSub').textContent=p>=100?`הגעת ליעד של ${f1(g)} ק״ג`:`${tot>0?'עלו':'ירדו'} ${f1(Math.max(0,Math.abs(cur-start)))} מתוך ${f1(Math.abs(tot))} ק״ג · נשארו ${f1(Math.abs(g-cur))}`;
   $('#gBtn').textContent='שינוי יעד';
   requestAnimationFrame(()=>requestAnimationFrame(()=>{liq.style.height=p+'%'}));
 }
@@ -1164,7 +1267,7 @@ const isoOf=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${S
 const todayIso=()=>isoOf(new Date());
 const topOf=e=>{const ss=(e.sets||[]).filter(z=>!z.drop&&z.kg!=null);if(!ss.length)return null;const mk=Math.max(...ss.map(z=>z.kg));return{kg:mk,reps:Math.max(...ss.filter(z=>z.kg===mk).map(z=>z.reps||0))}};
 function lastEx(name,beforeDate,exceptId){if(!name)return null;const n=name.trim();const L=state.workouts.filter(w=>w.id!==exceptId&&w.date<=beforeDate);for(let i=L.length-1;i>=0;i--){const e=(L[i].exercises||[]).find(x=>x.name.trim()===n);if(e)return{e,w:L[i]}}return null}
-function suggestFor(prev){const t=topOf(prev);if(!t)return null;const inc=t.kg>=20?2.5:1;
+function suggestFor(prev){const t=topOf(prev);if(!t){const rs=(prev?.sets||[]).map(z=>z.reps).filter(x=>x!=null);if(!rs.length)return null;return{kg:null,reps:Math.max(...rs)+1,why:'חזרה אחת יותר מהשיא הקודם'}}const inc=t.kg>=20?2.5:1;
   return t.reps>=12?{kg:+(t.kg+inc).toFixed(1),reps:Math.max(6,t.reps-4),why:'הגעת ל-'+t.reps+' חזרות, מעלים משקל'}:{kg:t.kg,reps:t.reps+1,why:'אותו משקל, חזרה אחת יותר'}}
 function exHistory(name){const n=name.trim();return state.workouts.map(w=>{const e=(w.exercises||[]).find(x=>x.name.trim()===n);if(!e)return null;const b=bestSet(e);return b?{date:w.date,id:w.id,b,score:e1rm(b),top:topOf(e),group:exGroup(e)}:null}).filter(Boolean)}
 function isPR(w,e){const h=exHistory(e.name);const i=h.findIndex(x=>x.id===w.id);if(i<1)return false;return h[i].score>Math.max(...h.slice(0,i).map(x=>x.score))+0.01}
@@ -1186,9 +1289,11 @@ function renderToday(){
   const weighToday=P.weighDay===dow&&!state.weeks.some(w=>w.date===ti&&w.weight!=null);
   let nextW='';if(P.weighDay!=null&&!weighToday){const n=new Date();n.setHours(0,0,0,0);let k=(P.weighDay-dow+7)%7;if(k===0)k=7;n.setDate(n.getDate()+k);nextW=`השקילה הבאה: יום ${DAYN[P.weighDay]} ${n.getDate()}/${n.getMonth()+1}`}
   const doneW=P.weighDay===dow&&!weighToday;
-  el.innerHTML=main+(weighToday?`<div class="weighbar hot"><span><b>היום יום שקילה</b><small>על בטן ריקה, אחרי השירותים</small></span><button class="btn lime" id="weighNow" type="button">שקילה</button></div>`:`<div class="weighbar"><span>${doneW?'נשקלת היום. כל הכבוד':nextW}</span><a class="btn ghost" href="https://tomerkohn8-max.github.io/hitov/weigh-reminder.ics" target="_blank" rel="noopener">תזכורת ביומן</a></div>`)+`<div class="wkplan">${strip}</div>`;
+  const dr=draftGet();const drHtml=dr?`<div class="weighbar draft"><span><b>אימון בתהליך</b><small>${dr.exercises.filter(x=>x.name).length} תרגילים · נשמר אוטומטית ${new Date(dr.ts).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})}</small></span><span style="flex-direction:row;gap:6px"><button class="btn lime" id="drGo" type="button">המשך</button><button class="btn ghost" id="drDel" type="button">מחיקה</button></span></div>`:'';
+  el.innerHTML=drHtml+main+(weighToday?`<div class="weighbar hot"><span><b>היום יום שקילה</b><small>על בטן ריקה, אחרי השירותים</small></span><button class="btn lime" id="weighNow" type="button">שקילה</button></div>`:`<div class="weighbar"><span>${doneW?'נשקלת היום. כל הכבוד':nextW}</span><a class="btn ghost" href="https://tomerkohn8-max.github.io/hitov/weigh-reminder.ics" target="_blank" rel="noopener">תזכורת ביומן</a></div>`)+`<div class="wkplan">${strip}</div>`;
   $('#startToday')&&($('#startToday').onclick=()=>openWorkout(null,templateFromPlan(D),'plan'));
   $('#weighNow')&&($('#weighNow').onclick=()=>openEntry(null));
+  $('#drGo')&&($('#drGo').onclick=resumeDraft);$('#drDel')&&($('#drDel').onclick=()=>{draftClear();renderToday();toast('הטיוטה נמחקה')});
   el.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>openPlan(+b.dataset.day));
 }
 function templateFromPlan(D){const ti=todayIso();return{title:D.title||'',exercises:D.ex.map(x=>{const pe=lastEx(x.name,ti);return{name:x.name,group:x.group||null,sets:pe?pe.e.sets.map(s=>({kg:s.kg,reps:s.reps,drop:!!s.drop})):[{kg:null,reps:null}]}})}}
@@ -1234,12 +1339,21 @@ $('#camOp').oninput=e=>$('#cam').style.setProperty('--go',e.target.value/100);
 $('#camClose').onclick=camStop;$('#camFlip').onclick=()=>{camFacing=camFacing==='user'?'environment':'user';camStart()};
 $('#camShot').onclick=()=>{const v=$('#camV');if(!v.videoWidth)return;const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;const x=c.getContext('2d');if(camFacing==='user'){x.translate(c.width,0);x.scale(-1,1)}x.drawImage(v,0,0);
   c.toBlob(async b=>{camStop();pendingPhoto=await shrink(b);const u=URL.createObjectURL(pendingPhoto);setThumb(u);showGhost(u)},'image/jpeg',.9)};
+let phSel='cut';
+function openPhase(){const c=curPhase();phSel=c.type;document.querySelectorAll('.phopts button').forEach(b=>b.setAttribute('aria-checked',b.dataset.ph===phSel));
+  const t=new Date();t.setDate(t.getDate()+1);$('#phStart').value=isoOf(t);$('#phGoal').value='';openSheet('phaseSheet')}
+$('#phaseBtn').onclick=openPhase;
+document.querySelectorAll('.phopts button').forEach(b=>b.onclick=()=>{phSel=b.dataset.ph;document.querySelectorAll('.phopts button').forEach(x=>x.setAttribute('aria-checked',x===b))});
+$('#phaseForm').onsubmit=async e=>{e.preventDefault();const start=$('#phStart').value||todayIso();const g=num($('#phGoal').value);
+  let L=[...(state.phases||[])];if(!L.length&&state.weeks[0])L.push({type:'cut',start:state.weeks[0].date});
+  L=L.filter(p=>p.start<start);if(!L.length||L[L.length-1].type!==phSel)L.push({type:phSel,start});
+  try{await store.setPhases(L);if(g!=null||phSel!==curPhase().type)await store.setGoal(g);closeSheets();toast(`עברת ל${PH[phSel].n} מ-${dm(start)}`)}catch(err){toast('השמירה נכשלה')}};
 function renderAll(){renderGoal();renderWorkouts();renderToday();renderPR();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
 
 /* ---------- sheets ---------- */
 let openId=null;
 function openSheet(id){closeSheets(true);$('#scrim').classList.add('open');$('#'+id).classList.add('open');openId=id}
-function closeSheets(silent){document.querySelectorAll('.sheet.open').forEach(s=>s.classList.remove('open'));if(!silent)$('#scrim').classList.remove('open');openId=null}
+function closeSheets(silent){setTimeout(()=>{try{renderToday()}catch(e){}},50);document.querySelectorAll('.sheet.open').forEach(s=>s.classList.remove('open'));if(!silent)$('#scrim').classList.remove('open');openId=null}
 $('#scrim').onclick=()=>closeSheets();
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeSheets());
 addEventListener('keydown',e=>{if(e.key==='Escape')closeSheets()});
