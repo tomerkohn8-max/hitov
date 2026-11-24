@@ -489,21 +489,6 @@ body{background:var(--paper)}
       </div>
     </section>
 
-    <section id="secHeat">
-      <div class="sec-head"><div><div class="eyebrow">מפת חום</div><h2>כמה חם הגוף שורף</h2></div></div>
-      <div class="heat-card">
-        <div class="heat-top">
-          <canvas id="orb" width="300" height="300" aria-label="כדור חום לפי קצב הירידה" role="img"></canvas>
-          <div class="t"><div class="eyebrow">קצב שריפה · 4 שקילות אחרונות</div><div class="big" id="hBig">—</div><div class="lbl" id="hLbl">ממשקל הגוף בשבוע</div><span class="state" id="hState">—</span></div>
-        </div>
-        <div class="heat-sub"><span>ירידה בכל שבוע</span><span id="hStripNote"></span></div>
-        <div class="hstrip" id="hStrip"></div>
-        <div class="heat-sub" style="margin-top:16px"><span>אימונים · 12 שבועות אחרונים</span><span id="hCalNote"></span></div>
-        <div class="hcal" id="hCal"></div>
-        <div class="hlegend" style="direction:ltr"><span>קר</span><b></b><span>חם</span></div>
-      </div>
-    </section>
-
     <section id="secWorkouts">
       <div class="sec-head">
         <div><div class="eyebrow">יומן כוח</div><h2>אימונים</h2><p>כל אימון, כל סט, וההתקדמות מול הפעם הקודמת</p></div>
@@ -879,7 +864,7 @@ const e1rm=x=>(x.kg||0)*(1+(x.reps||0)/30);
 const bestSet=ex=>(ex.sets||[]).filter(x=>x.kg!=null&&x.reps).reduce((b,x)=>!b||e1rm(x)>e1rm(b)?x:b,null);
 const fmtK=n=>n>=1000?(n/1000).toFixed(1)+'K':String(Math.round(n));
 function prevEx(w,name){const before=state.workouts.filter(o=>o.date<w.date||(o.date===w.date&&o.id<w.id));for(let i=before.length-1;i>=0;i--){const e=(before[i].exercises||[]).find(x=>x.name.trim()===name.trim());if(e)return e}return null}
-function onWorkouts(list){state.workouts=list.filter(w=>w.date).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:(a.id<b.id?-1:1));if(state.woOpen==null&&state.workouts.length)state.woOpen=state.workouts[state.workouts.length-1].id;renderWorkouts();if(document.getElementById('hCal'))renderHeat()}
+function onWorkouts(list){state.workouts=list.filter(w=>w.date).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:(a.id<b.id?-1:1));if(state.woOpen==null&&state.workouts.length)state.woOpen=state.workouts[state.workouts.length-1].id;renderWorkouts()}
 let woShowAll=false;
 function renderWorkouts(){
   const el=$('#woList'),L=[...state.workouts].reverse();
@@ -964,51 +949,7 @@ $('#gBtn').onclick=()=>{$('#gW').value=state.goal??'';openSheet('goalSheet')};
 /* ---------- thermal ---------- */
 const TH=[[0,[10,15,60]],[.2,[26,60,255]],[.42,[35,200,255]],[.62,[255,225,77]],[.8,[255,122,26]],[1,[255,42,42]]];
 function thermal(t,a=1){t=Math.max(0,Math.min(1,t));for(let i=1;i<TH.length;i++)if(t<=TH[i][0]){const [t0,c0]=TH[i-1],[t1,c1]=TH[i],k=(t-t0)/(t1-t0);return `rgba(${c0.map((v,j)=>Math.round(v+(c1[j]-v)*k)).join(',')},${a})`}return `rgba(255,42,42,${a})`}
-let orbHeat=.5,orbRaf=null,orbVisible=true;
-function drawOrb(time){
-  const cv=$('#orb');if(!cv)return;const ctx=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=W*.34,t=(time||0)/1000;
-  ctx.clearRect(0,0,W,H);
-  const N=120,pts=[];
-  for(let i=0;i<=N;i++){const a=i/N*Math.PI*2;const r=R*(1+.07*Math.sin(5*a+t*.9)+.05*Math.sin(3*a-t*1.3+1)+.035*Math.sin(7*a+t*1.7+2)+.02*Math.sin(2*a+t*.6));pts.push([cx+r*Math.cos(a),cy+r*Math.sin(a)])}
-  const path=new Path2D();pts.forEach(([x,y],i)=>i?path.lineTo(x,y):path.moveTo(x,y));path.closePath();
-  // outer glow
-  ctx.save();ctx.filter='blur(18px)';ctx.fillStyle=thermal(.35+orbHeat*.4,.55);ctx.fill(path);ctx.restore();
-  // body
-  const g=ctx.createRadialGradient(cx-R*.25+Math.sin(t*.7)*R*.1,cy-R*.15,R*.05,cx,cy,R*1.15);
-  g.addColorStop(0,'#3a7dff');g.addColorStop(.45,'#1b3fe0');g.addColorStop(.8,'#0a1470');g.addColorStop(1,'#050a3a');
-  ctx.fillStyle=g;ctx.fill(path);
-  // thermal rim (conic)
-  ctx.save();ctx.clip(path);
-  const cg=ctx.createConicGradient?ctx.createConicGradient(t*.25,cx,cy):null;
-  if(cg){const h=orbHeat;cg.addColorStop(0,thermal(.42));cg.addColorStop(.12,thermal(.55+h*.45));cg.addColorStop(.2,thermal(.42));cg.addColorStop(.45,thermal(.3));cg.addColorStop(.58,thermal(.5+h*.5));cg.addColorStop(.68,thermal(.42));cg.addColorStop(.85,thermal(.35+h*.3));cg.addColorStop(1,thermal(.42));
-    ctx.strokeStyle=cg;ctx.lineWidth=W*.09;ctx.filter='blur(6px)';ctx.stroke(path);ctx.filter='none';ctx.lineWidth=W*.022;ctx.stroke(path)}
-  // inner dark lobes
-  const lg=ctx.createRadialGradient(cx+R*.2*Math.cos(t*.5),cy-R*.55,0,cx+R*.2*Math.cos(t*.5),cy-R*.55,R*.55);lg.addColorStop(0,'rgba(5,8,50,.85)');lg.addColorStop(1,'rgba(5,8,50,0)');ctx.fillStyle=lg;ctx.fillRect(0,0,W,H);
-  const sh=ctx.createRadialGradient(cx-R*.35,cy-R*.1,0,cx-R*.35,cy-R*.1,R*.5);sh.addColorStop(0,'rgba(120,190,255,.45)');sh.addColorStop(1,'rgba(120,190,255,0)');ctx.fillStyle=sh;ctx.fillRect(0,0,W,H);
-  ctx.restore();
-  if(!reduce&&orbVisible)orbRaf=requestAnimationFrame(drawOrb);
-}
-function renderHeat(){
-  const s=stats(),W=state.weeks.filter(w=>w.weight!=null);
-  if(s&&s.rRate!=null&&s.lw){const pct=s.rRate/s.lw.weight*100;orbHeat=Math.max(0,Math.min(1,pct/1.1));
-    $('#hBig').innerHTML=`${pct.toFixed(2)}<small>%</small>`;
-    $('#hState').textContent=pct>1.1?'חם מדי · שווה להאט':pct>=.4?'אזור שריפה אידיאלי':pct>=.15?'פושר · אפשר להגביר':'קר · מישור';
-    $('#hState').style.borderColor=thermal(orbHeat,.7);$('#hState').style.color=thermal(Math.max(.45,orbHeat));
-  }else{orbHeat=.3;$('#hBig').textContent='—';$('#hState').textContent='צריך עוד שקילות'}
-  // weekly strip
-  const cells=[];for(let i=1;i<W.length;i++){const dd=days(W[i-1].date,W[i].date)||1;const loss=(W[i-1].weight-W[i].weight)/dd*7;cells.push({d:W[i].date,loss})}
-  $('#hStrip').innerHTML=cells.map((c,i)=>{const t=Math.max(0,Math.min(1,.2+c.loss/1.0*.8));return `<div class="c" title="${dm(c.d)}: ${c.loss>=0?'−':'+'}${Math.abs(c.loss).toFixed(1)} ק״ג לשבוע"><i style="background:linear-gradient(180deg,${thermal(t)},${thermal(Math.max(0,t-.25))});--glow:${thermal(t,.8)};animation-delay:${i*.04}s"></i><span>${dm(c.d)}</span></div>`}).join('');
-  if(cells.length){const best=cells.reduce((a,b)=>b.loss>a.loss?b:a);$('#hStripNote').textContent=`השבוע הכי חם: ${dm(best.d)}`}
-  // calendar
-  const today=new Date();today.setHours(0,0,0,0);const start=new Date(today);start.setDate(start.getDate()-start.getDay()-7*11);
-  const byDay={};state.workouts.forEach(w=>{byDay[w.date]=(byDay[w.date]||0)+vol(w)});const mx=Math.max(1,...Object.values(byDay));
-  let html='',count=0;for(let i=0;i<84;i++){const d=new Date(start);d.setDate(d.getDate()+i);const iso=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;const v=byDay[iso];if(v)count++;
-    html+=v?`<i class="on${+d===+today?' today':''}" title="${dm(iso)} · נפח ${Math.round(v)} ק״ג" style="background:${thermal(.45+.55*v/mx)};--glow:${thermal(.45+.55*v/mx,.8)}"></i>`:`<i class="${+d===+today?'today':''}"${d>today?' style="opacity:.35"':''}></i>`}
-  $('#hCal').innerHTML=html;$('#hCalNote').textContent=`${count} ימי אימון`;
-  cancelAnimationFrame(orbRaf);drawOrb(performance.now());
-}
-if('IntersectionObserver' in window){new IntersectionObserver(es=>{orbVisible=es[0].isIntersecting;cancelAnimationFrame(orbRaf);if(orbVisible)drawOrb(performance.now())}).observe(document.getElementById('orb'))}
-function renderAll(){renderGoal();renderWorkouts();renderHeat();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
+function renderAll(){renderGoal();renderWorkouts();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
 
 /* ---------- sheets ---------- */
 let openId=null;
@@ -1154,7 +1095,7 @@ $('#askWeek').onclick=()=>{openChat();send('תן לי ניתוח של השבוע
 renderAll();
 if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
   document.querySelectorAll('main section').forEach(sec=>{const r=sec.getBoundingClientRect();if(r.top>innerHeight){sec.classList.add('reveal','pre');io.observe(sec)}})}
-if('IntersectionObserver' in window){const navIo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const id=e.target.id==='secChart'||e.target.id==='secTips'||e.target.id==='secGoal'||e.target.id==='secHeat'?'top':e.target.id==='secCompare'?'secWeeks':e.target.id;document.querySelectorAll('.nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===id))}}),{rootMargin:'-45% 0px -50% 0px'});['top','secChart','secWorkouts','secWeeks','secCompare','secTips'].forEach(i=>navIo.observe(document.getElementById(i)))}
+if('IntersectionObserver' in window){const navIo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const id=e.target.id==='secChart'||e.target.id==='secTips'||e.target.id==='secGoal'?'top':e.target.id==='secCompare'?'secWeeks':e.target.id;document.querySelectorAll('.nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===id))}}),{rootMargin:'-45% 0px -50% 0px'});['top','secChart','secWorkouts','secWeeks','secCompare','secTips'].forEach(i=>navIo.observe(document.getElementById(i)))}
 (async()=>{
   const c=window.claude;
   let db=null;
