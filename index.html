@@ -888,7 +888,7 @@ state.phases=[];
 function phaseList(){const L=[...(state.phases||[])].sort((a,b)=>a.start<b.start?-1:1);if(!L.length||L[0].start>(state.weeks[0]?.date||'9')) L.unshift({type:'cut',start:state.weeks[0]?.date||todayIso()});return L}
 function phaseAt(d){const L=phaseList();let c=L[0];for(const p of L)if(p.start<=d)c=p;return c}
 function curPhase(){const L=phaseList();const t=todayIso();let c=L[0];for(const p of L)if(p.start<=t)c=p;return c}
-function phaseRange(ph){const L=phaseList();const i=L.indexOf(ph);return{start:ph.start,end:L[i+1]?.start||null}}
+function phaseRange(ph){const L=phaseList();const i=L.findIndex(x=>x.start===ph.start);return{start:ph.start,end:L[i+1]?.start||null}}
 function weeksIn(ph){const {start,end}=phaseRange(ph);const base=[...state.weeks].filter(w=>w.date<=start&&w.weight!=null).pop();const W=state.weeks.filter(w=>w.date>=start&&(!end||w.date<end));if(base&&!W.includes(base))W.unshift(base);return W}
 function onPhase(list){state.phases=Array.isArray(list)?list:[];if(state.ready)renderAll()}
 function stats(ph){
@@ -917,7 +917,7 @@ function countTo(el,to,dec=1){
 function renderHero(){
   const ph=curPhase(),P=PH[ph.type]||PH.cut,s=stats(ph);
   $('#phaseBtn').innerHTML=`${P.n} <span aria-hidden="true">▾</span>`;
-  const L=phaseList(),pi=L.indexOf(ph),prev=pi>0?L[pi-1]:null;
+  const L=phaseList(),pi=L.findIndex(x=>x.start===ph.start),prev=pi>0?L[pi-1]:null;
   let doneHtml='';if(prev){const ps=stats(prev);if(ps&&ps.fw&&ps.lw){const dk=ps.lw.weight-ps.fw.weight,dw=ps.fwa&&ps.lwa?ps.lwa.waist-ps.fwa.waist:null;doneHtml=`${PH[prev.type].n} הושלם · ${dk<0?'−':'+'}${Math.abs(dk).toFixed(1)} ק״ג${dw!=null?` · ${dw<0?'−':'+'}${fc(Math.abs(dw))} ס״מ מותן`:''} · ${ps.weeksN} שבועות`}}
   $('#phaseDone').hidden=!doneHtml;$('#phaseDone').textContent=doneHtml;
   if(!s){$('#weekPill').textContent=state.ready?'עדיין אין שקילות':'טוען נתונים…';$('#tW').textContent='—';$('#tWa').textContent='—';return}
@@ -931,7 +931,7 @@ function renderHero(){
   const wTxt=dWaist===0?'המותן לא השתנה':`${dWaist<0?'ירדו':'נוספו'} <b>${fc(Math.abs(dWaist))} ס״מ</b> ${dWaist<0?'מהמותן':'למותן'}`;
   const wkT=wk===1?'שבוע אחד':`-${wk} שבועות`;
   $('#lead').innerHTML=wk<1?`שלב ה${P.n} מתחיל עכשיו. נקודת פתיחה: <b>${f1(s.fw?.weight)} ק״ג</b>${s.fwa?`, מותן ${fc(s.fwa.waist)} ס״מ`:''}.`
-    :P.dir<0?`ירדו <b>${f1(-delta)} ק״ג</b> (${pct.toFixed(1)}%) ו${wTxt} ב${wkT}.`
+    :P.dir<0?`ירדו <b>${f1(-delta)} ק״ג</b> (${pct.toFixed(1)}%)${dWaist<0?` ו-<b>${fc(-dWaist)} ס״מ</b> מהמותן`:''} ב${wkT}.`
     :P.dir>0?`${delta>=0?'עלו':'ירדו'} <b>${f1(Math.abs(delta))} ק״ג</b> (${pct.toFixed(1)}%) ב${wkT} של מסה. ${wTxt}.`
     :`המשקל ${Math.abs(delta)<0.6?'יציב':'זז'}: <b>${delta>=0?'+':'−'}${f1(Math.abs(delta))} ק״ג</b> ב${wkT}. ${wTxt}.`;
   $('#tW').innerHTML=`${f1(s.lw?.weight)}<small>ק״ג</small>`;
