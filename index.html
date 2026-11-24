@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 <script>
-(function(){var V='1795546020';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v)}}}).catch(function(){})}catch(e){}})();
+(function(){var V='1795547687';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
 </script>
 </head>
 <body>
@@ -655,6 +655,36 @@ body{background:var(--paper)}
 .sharetop::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:2px;pointer-events:none;background:conic-gradient(from var(--ang),#23c8ff,#1a3cff 18%,#23c8ff 30%,#ffe14d 38%,#ff7a1a 44%,#ff2a2a 48%,#23c8ff 58%,#1a3cff 74%,#ffb14d 86%,#23c8ff);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:spin 7s linear infinite}
 .sharetop:active{transform:scale(.92)}
 .sharetop svg{width:20px;height:20px;filter:drop-shadow(0 1px 2px rgba(0,40,20,.4))}
+
+/* steps */
+.stcard{padding:16px 14px 12px}
+.sttop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:0 4px}
+.stavg{font-size:34px;font-weight:600;line-height:1}
+.stl{font-size:12.5px;color:var(--muted);margin-top:3px}
+.stchart{position:relative;display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:150px;margin-top:14px;padding-top:16px;direction:rtl}
+.stb{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;min-width:0}
+.stb i{display:block;width:100%;max-width:30px;border-radius:9px 9px 5px 5px;box-shadow:0 0 14px -4px var(--glow);animation:grow .9s cubic-bezier(.2,.8,.2,1) both;transform-origin:bottom}
+@keyframes grow{from{transform:scaleY(.1)}}
+.stb .stv{font-size:10.5px;font-family:var(--f-num);color:var(--muted)}
+.stb .std{font-size:11px;color:var(--muted)}
+.stb.today .std{color:var(--ink);font-weight:800}
+.stb.today i{outline:2px solid color-mix(in srgb,var(--ink) 50%,transparent);outline-offset:2px}
+.stgoal{position:absolute;left:0;right:0;border-top:1.5px dashed #ff5cd6;pointer-events:none}
+.stgoal span{position:absolute;top:2px;inset-inline-end:0;background:color-mix(in srgb,var(--card) 80%,transparent);padding:0 4px;border-radius:4px;font-size:10.5px;font-weight:700;color:#e040b8}
+.stempty{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:14px 8px;color:var(--muted)}
+.stempty b{color:var(--ink);font-size:17px}
+.cd .stp{font-size:9px;font-family:var(--f-num);color:#7cc8ff;line-height:1}
+.dck.st{background:radial-gradient(130% 160% at 30% 10%,#bfe6ff,#4aa8ff 50%,#1d5fd6);color:#fff}
+.stguide .stlead{margin:0 0 12px;font-size:14.5px}
+.ststeps{margin:0;padding-inline-start:22px;display:grid;gap:12px;font-size:14px;line-height:1.55}
+.ststeps .en{display:inline-block;margin-inline-start:6px;direction:ltr;font-size:11.5px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+.ststeps small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.ststeps em{font-style:normal;color:var(--violet);font-weight:600}
+.stcopy{display:flex;gap:8px;align-items:center;margin-top:6px}
+.stcopy code{flex:1;min-width:0;direction:ltr;text-align:left;font-size:12px;padding:9px 10px;border-radius:10px;background:color-mix(in srgb,var(--card) 70%,transparent);border:1px solid var(--line);overflow-wrap:anywhere;user-select:all;-webkit-user-select:all}
+.stcopy .btn{flex:none;padding:8px 12px;font-size:13px}
+.stnote{font-size:12.5px;color:var(--muted);margin:14px 0 0;padding:10px 12px;border-radius:12px;border:1px dashed var(--line)}
+.stmanual{margin-top:16px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -706,6 +736,12 @@ body{background:var(--paper)}
         <div id="chart"></div>
         <div class="legend" id="legend"></div>
       </div>
+    </section>
+
+    <section id="secSteps">
+      <div class="sec-head"><div><div class="eyebrow">Apple Watch · בריאות</div><h2>צעדים</h2><p id="stSub">ממוצע יומי ב-7 הימים האחרונים</p></div>
+        <button class="btn ghost" id="stConnect" style="padding:9px 14px;font-size:14px;white-space:nowrap;flex:none">חיבור לשעון</button></div>
+      <div class="card stcard" id="stCard"></div>
     </section>
 
     <section id="secWorkouts">
@@ -845,6 +881,29 @@ body{background:var(--paper)}
     <div class="bar"><button class="x" id="camClose" type="button" aria-label="סגירה">✕</button><button class="shot" id="camShot" type="button" aria-label="צילום"></button><button class="x" id="camFlip" type="button" aria-label="החלפת מצלמה">⟲</button></div>
   </div>
 
+  <!-- steps sheet -->
+  <div class="sheet chat" id="stepsSheet" role="dialog" aria-modal="true" aria-labelledby="stTitle">
+    <div class="grab"></div>
+    <div class="hd"><h2 id="stTitle">חיבור צעדים מהשעון</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <div class="bd stguide">
+      <p class="stlead">קיצור דרך באייפון קורא כל ערב את הצעדים מאפליקציית <b>בריאות</b> ושולח אותם לכאן. בונים אותו פעם אחת, בערך 2 דקות.</p>
+      <ol class="ststeps">
+        <li><b>פותחים את אפליקציית "קיצורים"</b> ← ＋ (קיצור חדש) ← נותנים לו שם: <em>צעדים לחיטוב</em></li>
+        <li><b>מוסיפים פעולה "מצא דגימות בריאות"</b><span class="en">Find Health Samples</span><small>סוג: <b>צעדים</b> · תאריך התחלה: <b>היום</b></small></li>
+        <li><b>מוסיפים פעולה "חשב סטטיסטיקה"</b><span class="en">Calculate Statistics</span><small>בוחרים <b>סכום</b> של דגימות הבריאות</small></li>
+        <li><b>מוסיפים פעולה "עגל מספר"</b><span class="en">Round Number</span><small>לשלם הקרוב</small></li>
+        <li><b>מוסיפים פעולה "כתובת URL"</b> ומדביקים את הכתובת הזו, ואז בסוף שלה מוסיפים את המשתנה <b>"מספר מעוגל"</b>:
+          <span class="stcopy"><code id="stUrl">https://tomerkohn8-max.github.io/hitov/?steps=</code><button type="button" class="btn ghost" id="stCopy">העתקה</button></span></li>
+        <li><b>מוסיפים פעולה "פתח כתובות URL"</b><span class="en">Open URLs</span></li>
+        <li><b>אוטומציה יומית:</b> בלשונית "אוטומציה" ← ＋ ← <b>שעה ביום</b> ← 23:30 · כל יום ← <b>הפעל מיד</b> ← בוחרים את הקיצור <em>צעדים לחיטוב</em></li>
+      </ol>
+      <p class="stnote">בדיקה: מריצים את הקיצור פעם אחת ידנית. האפליקציה תיפתח עם ההודעה "נשמרו X צעדים". הצעדים נשמרים בגרסה שנפתחת בספארי, אז כדאי לפתוח את האפליקציה מספארי (ולא מאייקון במסך הבית, שהוא אחסון נפרד באייפון).</p>
+      <div class="stmanual"><div class="eyebrow" style="margin-bottom:6px">או הזנה ידנית</div>
+        <div class="fgrid"><div class="fld"><label for="stDate">תאריך</label><input id="stDate" type="date"></div><div class="fld"><label for="stVal">צעדים</label><input class="n" id="stVal" inputmode="numeric" placeholder="8500"></div></div>
+        <div class="row-btns"><button type="button" class="btn lime" id="stSave">שמירה</button></div></div>
+    </div>
+  </div>
+
   <!-- day sheet -->
   <div class="sheet" id="daySheet" role="dialog" aria-modal="true" aria-labelledby="dayTitle">
     <div class="grab"></div>
@@ -948,14 +1007,15 @@ function localStore(){
 const read=()=>{const fresh=()=>JSON.parse(JSON.stringify(SEED));try{const v=localStorage.getItem(K);let d=v?JSON.parse(v):null;if(!d&&/[?&]join=1/.test(location.search)){d={weeks:{},workouts:{},goal:null,seeded:SEEDV};localStorage.setItem(K,JSON.stringify(d));return d}if(!d||typeof d!=='object')d={weeks:{},workouts:{},goal:null};if(d.seeded!==4){d.weeks=d.weeks||{};d.workouts=d.workouts||{};for(const[k,w]of Object.entries(SEED.weeks)){if(!d.weeks[k])d.weeks[k]=w;else{const e=d.weeks[k];if(w.photoLocal&&!e.photoLocal&&!e.photoKey)e.photoLocal=w.photoLocal;if(w.videoSrc&&!e.videoSrc&&!e.videoKey)e.videoSrc=w.videoSrc}}for(const[k,w]of Object.entries(SEED.workouts))if(!d.workouts[k])d.workouts[k]=w;d.seeded=4;localStorage.setItem(K,JSON.stringify(d))}return d}catch(e){return fresh()}};
   const write=d=>{try{localStorage.setItem(K,JSON.stringify(d))}catch(e){}};
   return{kind:'local',
-    start(cb){const d=read();onPlan(d.plan||null);state.phases=d.phases||[];cb(Object.entries(d.weeks).map(([id,v])=>({id,...v})),d.goal);onWorkouts(Object.entries(d.workouts||{}).map(([id,v])=>({id,...v})))},
+    start(cb){const d=read();onPlan(d.plan||null);state.phases=d.phases||[];state.steps=d.steps||{};cb(Object.entries(d.weeks).map(([id,v])=>({id,...v})),d.goal);onWorkouts(Object.entries(d.workouts||{}).map(([id,v])=>({id,...v})))},
     async saveWorkout(id,data){const d=read();d.workouts=d.workouts||{};d.workouts[id]=data;write(d);this.start(store._cb)},
     async removeWorkout(id){const d=read();delete (d.workouts||{})[id];write(d);this.start(store._cb)},
     async save(id,data){const d=read();d.weeks[id]=data;write(d);this.start(store._cb)},
     async remove(id){const d=read();delete d.weeks[id];write(d);this.start(store._cb)},
     async setGoal(g){const d=read();d.goal=g;write(d);this.start(store._cb)},
     async setPlan(pl){const d=read();d.plan=pl;write(d);onPlan(pl)},
-    async setPhases(L){const d=read();d.phases=L;write(d);onPhase(L)}};
+    async setPhases(L){const d=read();d.phases=L;write(d);onPhase(L)},
+    async setSteps(date,n){const d=read();d.steps=d.steps||{};if(n==null)delete d.steps[date];else d.steps[date]=n;write(d);onSteps(d.steps)}};
 }
 function dbStore(db){
   let weeks=[],goal=null;
@@ -963,6 +1023,7 @@ function dbStore(db){
     start(cb){
       db.collection('weeks').onSnapshot(s=>{weeks=s.docs.map(d=>({id:d.id,...d.data()}));cb(weeks,goal)},e=>{console.warn(e);toast('לא הצלחנו לטעון את הנתונים. נסה לרענן.')});
       db.collection('workouts').onSnapshot(s=>onWorkouts(s.docs.map(d=>({id:d.id,...d.data()}))),e=>console.warn(e));
+      db.collection('steps').onSnapshot(s=>{const m={};s.docs.forEach(d=>{const v=d.data();if(v&&v.steps!=null)m[d.id]=v.steps});onSteps(m)},()=>{});
       db.doc('settings/phase').onSnapshot(s=>onPhase(s.exists?s.data().list:[]),()=>{});
       db.doc('settings/plan').onSnapshot(s=>onPlan(s.exists?s.data():null),()=>{});
       db.doc('settings/main').onSnapshot(s=>{goal=s.exists?(s.data().goal??null):null;cb(weeks,goal)},()=>{});
@@ -973,7 +1034,8 @@ function dbStore(db){
     saveWorkout(id,data){return db.doc('workouts/'+id).set(data)},
     removeWorkout(id){return db.doc('workouts/'+id).delete()},
     setPlan(pl){return db.doc('settings/plan').set(pl)},
-    setPhases(L){return db.doc('settings/phase').set({list:L})}};
+    setPhases(L){return db.doc('settings/phase').set({list:L})},
+    setSteps(date,n){return n==null?db.doc('steps/'+date).delete():db.doc('steps/'+date).set({date,steps:n})}};
 }
 function onData(weeks,goal){
   state.weeks=weeks.filter(w=>w.date).sort((a,b)=>a.date<b.date?-1:1);
@@ -1184,6 +1246,7 @@ function insights(){
     out.push({ic:'pace',h:`יורדים ${f1(s.rRate)} ק״ג בשבוע`,p:`ב-4 השקילות האחרונות: ${pct.toFixed(2)}% ממשקל הגוף בשבוע. ${txt}`,chip,cls});}
   if(s.lostWaist>0&&s.lostKg>0){const r=s.lostWaist/s.lostKg;
     out.push({ic:'waist',h:`${r.toFixed(1)} ס״מ מותן לכל ק״ג`,p:`המותן ירד ${fc(s.lostWaist)} ס״מ מול ${f1(s.lostKg)} ק״ג. ${r>=1.2?'<em>זה סימן חזק שהירידה היא בעיקר שומן</em> ולא שריר או נוזלים.':'<em>מדידה באותה שעה ובאותו מקום (בגובה הטבור)</em> תיתן תמונה מדויקת יותר.'}`,chip:r>=1.2?'ירידת שומן':'למעקב',cls:r>=1.2?'ok':'info'});}
+  {const ti=todayIso(),A=avgOf(stepsRange(ti,7)),B=avgOf(stepsRange(isoOf(new Date(new Date(ti+'T12:00:00').getTime()-7*864e5)),7));if(A!=null){const d=B!=null?A-B:null;out.push({ic:'pace',h:`${A.toLocaleString('he-IL')} צעדים ביום`,p:`ממוצע 7 הימים האחרונים${d!=null?`, ${d>=0?'עלייה':'ירידה'} של ${Math.abs(d).toLocaleString('he-IL')} משבוע קודם`:''}. ${A>=8000?'<em>טווח מצוין לחיטוב.</em> צעדים הם הדרך הכי קלה לשרוף בלי לפגוע באימונים.':'<em>להגיע ל-8,000 ביום</em> שורף בערך 150–250 קלוריות נוספות בלי עייפות לאימון.'}`,chip:A>=8000?'פעיל':'אפשר יותר',cls:A>=8000?'ok':'mid'})}}
   if(s.arms.length>=2){const a0=s.arms[0],a1=s.arms[s.arms.length-1];const sum0=(a0.armR||0)+(a0.armL||0),sum1=(a1.armR||0)+(a1.armL||0);const gap0=Math.abs((a0.armR||0)-(a0.armL||0)),gap1=Math.abs((a1.armR||0)-(a1.armL||0));
     out.push({ic:'arm',h:sum1>=sum0?'הזרועות נשמרות בזמן החיטוב':'ירידה קלה בהיקף הזרועות',p:`ימין ${fc(a0.armR)}→${fc(a1.armR)}, שמאל ${fc(a0.armL)}→${fc(a1.armL)} ס״מ. ${sum1>=sum0?'<em>המשקל יורד והזרועות לא, כלומר השריר נשמר.</em>':'<em>שווה להעלות נפח אימון לזרועות</em> ולוודא חלבון מספיק.'}${gap1<gap0?' הפער בין הצדדים נסגר.':''}`,chip:gap1<gap0?'סימטריה השתפרה':'כוח נשמר',cls:'ok'});}
   }
@@ -1470,8 +1533,9 @@ function calHtml(P){const ti=todayIso();let days=[],label='';
   else{const m=new Date();m.setHours(12,0,0,0);m.setDate(1);m.setMonth(m.getMonth()+cal.off);label=`${MON[m.getMonth()]} ${m.getFullYear()}`;const b=new Date(m);b.setDate(1-m.getDay());days=[...Array(42)].map((_,i)=>{const x=new Date(b);x.setDate(b.getDate()+i);return x});days._m=m.getMonth()}
   const cells=days.map(x=>{const iso=isoOf(x),I=dayInfo(iso,P),past=iso<ti,has=I.wos.length>0;
     const cls=['cd',has?'done':'',I.plan?'plan':'',I.rest?'rest':'',(!has&&past&&I.plan)?'miss':'',iso===ti?'today':'',I.wd?'wd':'',I.wi?'wi':'',days._m!=null&&x.getMonth()!==days._m?'out':''].join(' ');
+    const stp=state.steps[iso];const stH=stp!=null&&cal.mode==='week'?`<small class="stp">${fmtSteps(stp)}</small>`:'';
     const mark=has?`<em class="okm">✓ אימון</em>`:I.wd&&!I.wi?`<em class="wdm">שקילה</em>`:I.wi?`<em class="wim">${f1(I.wi.weight)}</em>`:'<i></i>';
-    return `<button type="button" class="${cls}" data-date="${iso}" aria-label="${x.getDate()}/${x.getMonth()+1}${has?', אימון הושלם':''}${I.wd?', יום שקילה':''}">${cal.mode==='week'?`<span>${DAYS[I.dw]}</span>`:''}<b>${x.getDate()}</b>${mark}</button>`}).join('');
+    return `<button type="button" class="${cls}" data-date="${iso}" aria-label="${x.getDate()}/${x.getMonth()+1}${has?', אימון הושלם':''}${I.wd?', יום שקילה':''}">${cal.mode==='week'?`<span>${DAYS[I.dw]}</span>`:''}<b>${x.getDate()}</b>${mark}${stH}</button>`}).join('');
   return `<div class="calhd"><button type="button" class="calnav" data-cal="prev" aria-label="הקודם">›</button><button type="button" class="callbl" data-cal="today">${label}</button><button type="button" class="calnav" data-cal="next" aria-label="הבא">‹</button><button type="button" class="calmode" data-cal="mode">${cal.mode==='week'?'חודש':'שבוע'}</button></div>
     ${cal.mode==='month'?`<div class="calwd">${DAYS.map(d=>`<span>${d}</span>`).join('')}</div>`:''}<div class="${cal.mode==='week'?'wkplan':'mgrid'}">${cells}</div>`}
 function bindCal(el){el.querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>openDay(b.dataset.date));
@@ -1482,6 +1546,7 @@ function openDay(iso){dayIso=iso;const P=planState||{days:{}};const I=dayInfo(is
   $('#dayTitle').textContent=`יום ${DAYN[I.dw]} · ${I.d.getDate()}/${I.d.getMonth()+1}`;
   let h='';
   if(I.wos.length)h+=I.wos.map(w=>`<div class="dayitem done"><span class="dck">✓</span><div><b>${esc(w.title||'אימון')}</b><small>${(w.exercises||[]).length} תרגילים · ${nsets(w)} סטים · ${fmtK(vol(w))} ק״ג</small><span class="mgrow">${woGroups(w).map(k=>`<span class="mgchip">${mgIcon(k)}${MG[k].n}</span>`).join('')}</span></div><button type="button" class="btn ghost" data-dwo="${esc(w.id)}">פתיחה</button></div>`).join('');
+  if(state.steps[iso]!=null)h+=`<div class="dayitem"><span class="dck st">⚑</span><div><b>${state.steps[iso].toLocaleString('he-IL')} צעדים</b><small>${state.steps[iso]>=8000?'מעל היעד היומי':'מתחת ל-8,000'}</small></div></div>`;
   if(I.wi)h+=`<div class="dayitem wi"><span class="dck">⚖</span><div><b>${f1(I.wi.weight)} ק״ג</b><small>${I.wi.waist!=null?`מותן ${fc(I.wi.waist)} ס״מ`:''}</small></div><button type="button" class="btn ghost" data-dwe="${esc(I.wi.id)}">עריכה</button></div>`;
   if(!I.wos.length&&I.plan)h+=`<div class="dayitem"><span class="dck pl">●</span><div><b>מתוכנן: ${esc(I.pd.title||'אימון')}</b><small>${I.pd.ex.length} תרגילים</small></div>${iso>=ti?`<button type="button" class="btn lime" data-dstart>התחלה</button>`:''}</div>`;
   if(I.rest&&!I.wos.length)h+=`<div class="dayitem"><span class="dck pl">☾</span><div><b>יום מנוחה</b></div></div>`;
@@ -1516,7 +1581,32 @@ function fireworks(){if(reduce)return;const c=document.createElement('canvas');c
 function celebrate({title,sub,line,fx}){if(fx)fireworks();const o=$('#cele');$('#celeT').textContent=title;$('#celeS').textContent=sub||'';$('#celeS').hidden=!sub;$('#celeL').textContent=line;o.classList.toggle('fxon',!!fx);o.hidden=false;requestAnimationFrame(()=>o.classList.add('show'));clearTimeout(celebrate.t);celebrate.t=setTimeout(closeCele,6500)}
 function closeCele(){const o=$('#cele');o.classList.remove('show');setTimeout(()=>o.hidden=true,300)}
 $('#celeOk').onclick=closeCele;$('#cele').addEventListener('click',e=>{if(e.target.id==='cele')closeCele()});
-function renderAll(){renderGoal();renderWorkouts();renderToday();renderPR();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
+
+/* ---------- steps ---------- */
+state.steps={};
+function onSteps(m){state.steps=m||{};if(state.ready){renderSteps();try{renderToday()}catch(e){}}}
+const fmtSteps=n=>n>=1000?(n/1000).toFixed(n>=10000?0:1)+'K':String(n);
+function stepsRange(endIso,n){const out=[];const e=new Date(endIso+'T12:00:00');for(let i=n-1;i>=0;i--){const d=new Date(e);d.setDate(e.getDate()-i);const iso=isoOf(d);out.push({iso,d,v:state.steps[iso]??null})}return out}
+function avgOf(a){const v=a.map(x=>x.v).filter(x=>x!=null);return v.length?Math.round(v.reduce((s,x)=>s+x,0)/v.length):null}
+function renderSteps(){const el=$('#stCard');if(!el)return;const ti=todayIso();const L=stepsRange(ti,7),P=stepsRange(isoOf(new Date(new Date(ti+'T12:00:00').getTime()-7*864e5)),7);
+  const any=Object.keys(state.steps).length;
+  if(!any){el.innerHTML=`<div class="stempty"><b>עוד אין צעדים</b><span>מחברים את השעון דרך קיצור דרך באייפון, והצעדים יופיעו כאן כל ערב.</span><button type="button" class="btn lime" id="stGo">איך מחברים</button></div>`;$('#stGo').onclick=openSteps;$('#stSub').textContent='ממוצע יומי ב-7 הימים האחרונים';return}
+  const avg=avgOf(L),pavg=avgOf(P),GOAL=8000,mx=Math.max(GOAL*1.15,...L.map(x=>x.v||0));
+  const bars=L.map(x=>{const h=x.v!=null?Math.max(4,x.v/mx*100):0,t=x.v!=null?Math.min(1,x.v/12000):0;return `<div class="stb${x.iso===ti?' today':''}" title="${x.d.getDate()}/${x.d.getMonth()+1}: ${x.v??'—'}"><span class="stv">${x.v!=null?fmtSteps(x.v):''}</span><i style="height:${h}%;background:linear-gradient(180deg,${thermal(.35+.6*t)},${thermal(.25+.3*t)});--glow:${thermal(.35+.6*t,.7)}"></i><span class="std">${DAYS[x.d.getDay()]}</span></div>`}).join('');
+  const goalY=(1-GOAL/mx)*100;
+  const diff=avg!=null&&pavg!=null?avg-pavg:null;
+  el.innerHTML=`<div class="sttop"><div><div class="stavg num">${avg!=null?avg.toLocaleString('he-IL'):'—'}</div><div class="stl">צעדים ביום בממוצע</div></div>${diff!=null?`<span class="delta${diff<0?' up':''}">${diff>=0?'+':'−'}${Math.abs(diff).toLocaleString('he-IL')} משבוע קודם</span>`:''}</div>
+    <div class="stchart"><div class="stgoal" style="top:${goalY}%"><span>יעד 8,000</span></div>${bars}</div>`;
+  $('#stSub').textContent=`היום: ${state.steps[ti]!=null?state.steps[ti].toLocaleString('he-IL')+' צעדים':'עוד לא עודכן'}`}
+function openSteps(){$('#stDate').value=todayIso();$('#stVal').value=state.steps[todayIso()]??'';openSheet('stepsSheet')}
+$('#stConnect').onclick=openSteps;
+$('#stCopy').onclick=async()=>{const t=$('#stUrl').textContent;try{await navigator.clipboard.writeText(t);toast('הכתובת הועתקה')}catch(e){const r=document.createRange();r.selectNodeContents($('#stUrl'));const g=getSelection();g.removeAllRanges();g.addRange(r);toast('הכתובת מסומנת, אפשר להעתיק')}};
+$('#stSave').onclick=async()=>{const d=$('#stDate').value,v=num($('#stVal').value);if(!d||v==null||v<0){toast('צריך תאריך ומספר צעדים');return}try{await store.setSteps(d,Math.round(v));closeSheets();toast(`נשמרו ${Math.round(v).toLocaleString('he-IL')} צעדים`)}catch(e){toast('השמירה נכשלה')}};
+async function handleStepsParam(){try{const q=new URLSearchParams(location.search);if(!q.has('steps'))return;const v=num(q.get('steps'));let d=q.get('date');if(!d||!/^\d{4}-\d{2}-\d{2}$/.test(d))d=todayIso();
+  q.delete('steps');q.delete('date');history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:'')+location.hash);
+  if(v==null||v<0||v>200000){toast('מספר הצעדים לא תקין');return}await store.setSteps(d,Math.round(v));
+  setTimeout(()=>{toast(`נשמרו ${Math.round(v).toLocaleString('he-IL')} צעדים ל-${dm(d)}`);$('#secSteps')?.scrollIntoView({behavior:reduce?'auto':'smooth'})},600)}catch(e){}}
+function renderAll(){renderSteps();renderGoal();renderWorkouts();renderToday();renderPR();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
 
 /* ---------- sheets ---------- */
 let openId=null;
@@ -1694,7 +1784,7 @@ try{navigator.storage?.persist?.().catch(()=>{})}catch(e){}
 renderAll();
 if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
   document.querySelectorAll('main section').forEach(sec=>{const r=sec.getBoundingClientRect();if(r.top>innerHeight){sec.classList.add('reveal','pre');io.observe(sec)}})}
-if('IntersectionObserver' in window){const navIo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const id=e.target.id==='secPR'?'secWorkouts':e.target.id==='secChart'||e.target.id==='secGoal'?'top':e.target.id==='secCompare'?'secWeeks':e.target.id;document.querySelectorAll('.nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===id))}}),{rootMargin:'-45% 0px -50% 0px'});['top','secChart','secWorkouts','secPR','secWeeks','secCompare','secTips'].forEach(i=>navIo.observe(document.getElementById(i)))}
+if('IntersectionObserver' in window){const navIo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const id=e.target.id==='secPR'?'secWorkouts':e.target.id==='secChart'||e.target.id==='secGoal'||e.target.id==='secSteps'?'top':e.target.id==='secCompare'?'secWeeks':e.target.id;document.querySelectorAll('.nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===id))}}),{rootMargin:'-45% 0px -50% 0px'});['top','secChart','secSteps','secWorkouts','secPR','secWeeks','secCompare','secTips'].forEach(i=>navIo.observe(document.getElementById(i)))}
 (async()=>{
   const c=window.claude;
   let db=null;
@@ -1705,6 +1795,7 @@ if('IntersectionObserver' in window){const navIo=new IntersectionObserver(es=>es
   }
   if(store)return;clearTimeout(timer);
   store=db?dbStore(db):localStore();store._cb=onData;store.start(onData);
+  handleStepsParam();
 })();
 </script>
 </body>
