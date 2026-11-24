@@ -437,6 +437,21 @@ body{background:var(--paper)}
 .liq{background:linear-gradient(180deg,#3a7dff 0%,#1b3fe0 30%,#0a1470 100%)}
 .capsule{box-shadow:inset 0 0 22px rgba(120,170,255,.25),0 0 30px -10px rgba(255,122,26,.45),0 20px 40px -18px rgba(40,120,255,.6)}
 .tile .v{background:linear-gradient(90deg,#d4f24a,#ffe14d);-webkit-background-clip:text;background-clip:text}
+
+/* compare slider v2 */
+.compare{touch-action:pan-y;cursor:ew-resize;-webkit-user-select:none;user-select:none}
+.compare img,.compare video{pointer-events:none;-webkit-user-drag:none}
+.compare .handle{width:3px;transform:translateX(-1.5px);box-shadow:0 0 12px rgba(212,242,74,.8)}
+.compare .handle::after{width:58px;height:58px;font-size:22px;box-shadow:0 6px 20px rgba(0,0,0,.35),0 0 0 6px rgba(212,242,74,.25);transition:transform .2s}
+.compare.drag .handle::after{transform:translate(-50%,-50%) scale(1.12)}
+.compare input[type=range]{pointer-events:none}
+.compare input[type=range]:focus-visible{opacity:1;pointer-events:none;outline:none}
+.compare:has(input:focus-visible){outline:2px solid var(--lime);outline-offset:3px}
+.compare .cap{display:flex;flex-direction:column;align-items:flex-start;gap:0;padding:8px 12px 10px;border-radius:16px;background:rgba(8,14,30,.55);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);line-height:1}
+.compare .cap em{font-style:normal;font-size:12px;opacity:.85;margin-bottom:4px}
+.compare .cap b{font-size:38px;font-weight:600}
+.compare .cap small{font-size:12px;opacity:.8;margin-top:2px}
+.compare .cap.diff{top:12px;bottom:auto;left:50%;transform:translateX(-50%);flex-direction:row;align-items:center;font-size:18px;font-weight:600;background:var(--lime);color:var(--lime-ink);border:0;padding:6px 14px;border-radius:999px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -648,8 +663,8 @@ async function hydrate(){let changed=false;for(const w of state.weeks)for(const 
 /* ---------- storage ---------- */
 function localStore(){
   const K='hitov.local.v1';
-  const SEED={"weeks": {"2026-08-31": {"date": "2026-08-31", "weight": 67.7, "waist": 89, "armR": null, "armL": null, "note": null, "videoSrc": "media/start.mp4"}, "2026-09-02": {"date": "2026-09-02", "weight": 66.9, "waist": 89, "armR": null, "armL": null, "note": null}, "2026-09-09": {"date": "2026-09-09", "weight": 66.6, "waist": 87, "armR": null, "armL": null, "note": null}, "2026-09-16": {"date": "2026-09-16", "weight": 66.1, "waist": 85, "armR": null, "armL": null, "note": null}, "2026-09-23": {"date": "2026-09-23", "weight": 65.7, "waist": 84, "armR": 35, "armL": 37, "note": null}, "2026-09-30": {"date": "2026-09-30", "weight": 65.1, "waist": 83, "armR": 35, "armL": 37, "note": null}, "2026-10-07": {"date": "2026-10-07", "weight": 64.5, "waist": 82, "armR": 35, "armL": 37, "note": null}, "2026-10-14": {"date": "2026-10-14", "weight": 64.1, "waist": 82, "armR": 35, "armL": 37, "note": null}, "2026-10-21": {"date": "2026-10-21", "weight": 63.6, "waist": 81, "armR": 35, "armL": 37, "note": null}, "2026-10-28": {"date": "2026-10-28", "weight": 63.3, "waist": 80.5, "armR": 35, "armL": 37, "note": null}, "2026-11-04": {"date": "2026-11-04", "weight": 63.1, "waist": 80.5, "armR": 35, "armL": 37, "note": null}, "2026-11-11": {"date": "2026-11-11", "weight": 62.5, "waist": 80, "armR": 36, "armL": 36, "note": null}, "2026-11-18": {"date": "2026-11-18", "weight": 61.8, "waist": 79, "armR": 36, "armL": 36, "note": null}, "2026-11-24": {"date": "2026-11-24", "weight": null, "waist": null, "armR": null, "armL": null, "note": "תמונת אחרי – המצב היום", "photoLocal": "media/2026-11-24.jpg"}}, "workouts": {"2026-11-11-a1": {"date": "2026-11-11", "title": "פלג גוף עליון", "note": "תרגיל בטן לא תועד במלואו בפתק", "exercises": [{"name": "חזה מכשיר", "sets": [{"kg": 57, "reps": 12}, {"kg": 57, "reps": 8}, {"kg": 57, "reps": 6}, {"kg": 50, "reps": 1, "drop": true}]}, {"name": "יד קדמית חופשי", "sets": [{"kg": 12, "reps": 11}, {"kg": 12, "reps": 9}, {"kg": 10, "reps": 10}]}, {"name": "יד אחורית (נשען עם הגב)", "sets": [{"kg": 23, "reps": 14}, {"kg": 23, "reps": 10}, {"kg": 23, "reps": 10}]}, {"name": "גב", "sets": [{"kg": 45, "reps": 9}, {"kg": 45, "reps": 4}, {"kg": 39, "reps": 4, "drop": true}, {"kg": 39, "reps": 10}]}, {"name": "כתפיים הרמה לצדדים", "sets": [{"kg": 8, "reps": 14}, {"kg": 8, "reps": 12}, {"kg": 8, "reps": 8}]}]}}, "goal": null};
-const read=()=>{const fresh=()=>JSON.parse(JSON.stringify(SEED));try{const v=localStorage.getItem(K);let d=v?JSON.parse(v):null;if(!d||typeof d!=='object')d={weeks:{},workouts:{},goal:null};if(d.seeded!==2){d.weeks=d.weeks||{};d.workouts=d.workouts||{};for(const[k,w]of Object.entries(SEED.weeks)){if(!d.weeks[k])d.weeks[k]=w;else{const e=d.weeks[k];if(w.photoLocal&&!e.photoLocal&&!e.photoKey)e.photoLocal=w.photoLocal;if(w.videoSrc&&!e.videoSrc&&!e.videoKey)e.videoSrc=w.videoSrc}}for(const[k,w]of Object.entries(SEED.workouts))if(!d.workouts[k])d.workouts[k]=w;d.seeded=2;localStorage.setItem(K,JSON.stringify(d))}return d}catch(e){return fresh()}};
+  const SEED={"weeks": {"2026-08-31": {"date": "2026-08-31", "weight": 67.7, "waist": 89, "armR": null, "armL": null, "note": null, "videoSrc": "media/start.mp4", "photoLocal": "media/2026-08-31.jpg"}, "2026-09-02": {"date": "2026-09-02", "weight": 66.9, "waist": 89, "armR": null, "armL": null, "note": null}, "2026-09-09": {"date": "2026-09-09", "weight": 66.6, "waist": 87, "armR": null, "armL": null, "note": null}, "2026-09-16": {"date": "2026-09-16", "weight": 66.1, "waist": 85, "armR": null, "armL": null, "note": null}, "2026-09-23": {"date": "2026-09-23", "weight": 65.7, "waist": 84, "armR": 35, "armL": 37, "note": null}, "2026-09-30": {"date": "2026-09-30", "weight": 65.1, "waist": 83, "armR": 35, "armL": 37, "note": null}, "2026-10-07": {"date": "2026-10-07", "weight": 64.5, "waist": 82, "armR": 35, "armL": 37, "note": null}, "2026-10-14": {"date": "2026-10-14", "weight": 64.1, "waist": 82, "armR": 35, "armL": 37, "note": null}, "2026-10-21": {"date": "2026-10-21", "weight": 63.6, "waist": 81, "armR": 35, "armL": 37, "note": null}, "2026-10-28": {"date": "2026-10-28", "weight": 63.3, "waist": 80.5, "armR": 35, "armL": 37, "note": null}, "2026-11-04": {"date": "2026-11-04", "weight": 63.1, "waist": 80.5, "armR": 35, "armL": 37, "note": null}, "2026-11-11": {"date": "2026-11-11", "weight": 62.5, "waist": 80, "armR": 36, "armL": 36, "note": null}, "2026-11-18": {"date": "2026-11-18", "weight": 61.8, "waist": 79, "armR": 36, "armL": 36, "note": null}, "2026-11-24": {"date": "2026-11-24", "weight": null, "waist": null, "armR": null, "armL": null, "note": "תמונת אחרי – המצב היום", "photoLocal": "media/2026-11-24.jpg"}}, "workouts": {"2026-11-11-a1": {"date": "2026-11-11", "title": "פלג גוף עליון", "note": "תרגיל בטן לא תועד במלואו בפתק", "exercises": [{"name": "חזה מכשיר", "sets": [{"kg": 57, "reps": 12}, {"kg": 57, "reps": 8}, {"kg": 57, "reps": 6}, {"kg": 50, "reps": 1, "drop": true}]}, {"name": "יד קדמית חופשי", "sets": [{"kg": 12, "reps": 11}, {"kg": 12, "reps": 9}, {"kg": 10, "reps": 10}]}, {"name": "יד אחורית (נשען עם הגב)", "sets": [{"kg": 23, "reps": 14}, {"kg": 23, "reps": 10}, {"kg": 23, "reps": 10}]}, {"name": "גב", "sets": [{"kg": 45, "reps": 9}, {"kg": 45, "reps": 4}, {"kg": 39, "reps": 4, "drop": true}, {"kg": 39, "reps": 10}]}, {"name": "כתפיים הרמה לצדדים", "sets": [{"kg": 8, "reps": 14}, {"kg": 8, "reps": 12}, {"kg": 8, "reps": 8}]}]}}, "goal": null};
+const read=()=>{const fresh=()=>JSON.parse(JSON.stringify(SEED));try{const v=localStorage.getItem(K);let d=v?JSON.parse(v):null;if(!d||typeof d!=='object')d={weeks:{},workouts:{},goal:null};if(d.seeded!==3){d.weeks=d.weeks||{};d.workouts=d.workouts||{};for(const[k,w]of Object.entries(SEED.weeks)){if(!d.weeks[k])d.weeks[k]=w;else{const e=d.weeks[k];if(w.photoLocal&&!e.photoLocal&&!e.photoKey)e.photoLocal=w.photoLocal;if(w.videoSrc&&!e.videoSrc&&!e.videoKey)e.videoSrc=w.videoSrc}}for(const[k,w]of Object.entries(SEED.workouts))if(!d.workouts[k])d.workouts[k]=w;d.seeded=3;localStorage.setItem(K,JSON.stringify(d))}return d}catch(e){return fresh()}};
   const write=d=>{try{localStorage.setItem(K,JSON.stringify(d))}catch(e){}};
   return{kind:'local',
     start(cb){const d=read();cb(Object.entries(d.weeks).map(([id,v])=>({id,...v})),d.goal);onWorkouts(Object.entries(d.workouts||{}).map(([id,v])=>({id,...v})))},
@@ -804,14 +819,21 @@ function renderCompare(){
   if(!withP.find(w=>w.id===cmpSel.b))cmpSel.b=withP[withP.length-1].id;
   const A=withP.find(w=>w.id===cmpSel.a),B=withP.find(w=>w.id===cmpSel.b);
   const opt=sel=>withP.map(w=>`<option value="${esc(w.id)}" ${w.id===sel?'selected':''}>${dm(w.date)}${w.weight!=null?' · '+f1(w.weight)+' ק״ג':''}${photoUrl(w)?'':' · סרטון'}</option>`).join('');
+  const wOf=w=>w.weight??([...state.weeks].reverse().find(x=>x.date<=w.date&&x.weight!=null)?.weight??null);const wA=wOf(A),wB=wOf(B);
   el.innerHTML=`<div class="compare" id="cmpBox" style="--cut:50%">
       ${media(A,'לפני')}
       <div class="after-clip">${media(B,'אחרי')}</div>
       <div class="handle"></div>
-      <span class="cap l">לפני · ${dm(A.date)}${A.weight!=null?' · '+f1(A.weight):''}</span><span class="cap r">אחרי · ${dm(B.date)}${B.weight!=null?' · '+f1(B.weight):''}</span>
+      <span class="cap l"><em>לפני · ${dm(A.date)}</em>${wA!=null?`<b class="num">${f1(wA)}</b><small>ק״ג${A.weight==null?' · שקילה אחרונה':''}</small>`:''}</span><span class="cap r"><em>אחרי · ${dm(B.date)}</em>${wB!=null?`<b class="num">${f1(wB)}</b><small>ק״ג${B.weight==null?' · שקילה אחרונה':''}</small>`:''}</span>
+      ${wA!=null&&wB!=null&&wA!==wB?`<span class="cap diff num">${wA>wB?'↓':'↑'} ${Math.abs(wA-wB).toFixed(1)} ק״ג</span>`:''}
       <input type="range" id="cmpRange" min="0" max="100" value="50" aria-label="פס השוואה"></div>
     <div class="pickers"><select id="selA" aria-label="תמונת לפני">${opt(cmpSel.a)}</select><select id="selB" aria-label="תמונת אחרי">${opt(cmpSel.b)}</select></div>`;
-  $('#cmpRange').oninput=e=>$('#cmpBox').style.setProperty('--cut',e.target.value+'%');
+  {const box=$('#cmpBox'),rng=$('#cmpRange');let drag=false;
+   const setX=cx=>{const r=box.getBoundingClientRect();const v=Math.max(0,Math.min(100,(cx-r.left)/r.width*100));box.style.setProperty('--cut',v+'%');rng.value=v};
+   box.addEventListener('pointerdown',e=>{drag=true;renderCompare.done=1;box.setPointerCapture(e.pointerId);box.classList.add('drag');setX(e.clientX)});
+   box.addEventListener('pointermove',e=>{if(drag)setX(e.clientX)});
+   const end=()=>{drag=false;box.classList.remove('drag')};box.addEventListener('pointerup',end);box.addEventListener('pointercancel',end);
+   rng.oninput=e=>box.style.setProperty('--cut',e.target.value+'%');}
   $('#selA').onchange=e=>{cmpSel.a=e.target.value;renderCompare()};
   $('#selB').onchange=e=>{cmpSel.b=e.target.value;renderCompare()};
   if(!reduce&&!renderCompare.done){renderCompare.done=1;let t=0;const box=$('#cmpBox');const anim=()=>{t+=.025;const v=50+Math.sin(t*2.2)*22*(1-t/1.6);box.style.setProperty('--cut',v+'%');if(t<1.6)requestAnimationFrame(anim);else box.style.setProperty('--cut','50%')};requestAnimationFrame(anim)}
