@@ -554,6 +554,11 @@ body{background:var(--paper)}
 .cam .x{color:#fff}
 .cam .ghostctl{position:absolute;bottom:14px;left:16px;right:16px;color:#fff;background:rgba(8,14,30,.55);padding:8px 12px;border-radius:999px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .cam .hint{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);color:#fff;font-size:13px;background:rgba(8,14,30,.55);padding:5px 12px;border-radius:999px;white-space:nowrap}
+/* ===== green primary actions ===== */
+.btn.lime,.sug,.seg button[aria-pressed="true"]{background:radial-gradient(130% 160% at 30% 10%,#f1ffb0 0%,#d4f24a 45%,#a8cc1c 100%);color:#1b2a05;text-shadow:none;box-shadow:inset 0 1px 1.5px rgba(255,255,255,.9),inset 0 -6px 12px rgba(80,110,0,.28),0 0 22px -6px rgba(212,242,74,.95),0 10px 22px -12px rgba(80,110,0,.6)}
+.btn.lime::after,.sug::after,.seg button[aria-pressed="true"]::after{background:conic-gradient(from var(--ang),rgba(255,255,255,.95),rgba(212,242,74,.6) 25%,rgba(255,255,255,.2) 50%,rgba(230,255,122,.9) 75%,rgba(255,255,255,.95))}
+.sug small{color:#2c4200}
+.tgl input{accent-color:#a8cc1c}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
