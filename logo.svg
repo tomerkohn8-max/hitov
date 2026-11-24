@@ -12,8 +12,8 @@
       <path d="M48 246 L196 164 L304 150"/>
       <path d="M186 210 L226 222 L176 258"/>
     </g>
-  <radialGradient id="lgBg" cx="30%" cy="22%" r="95%"><stop offset="0" stop-color="#d9a8ff"/><stop offset=".32" stop-color="#9b4dff"/><stop offset=".68" stop-color="#5a1fc9"/><stop offset="1" stop-color="#22074f"/></radialGradient><radialGradient id="lgHl" cx="50%" cy="0%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
-  <rect width="360" height="360" rx="78" fill="url(#lgBg)"/><rect width="360" height="360" rx="78" fill="url(#lgHl)"/><rect x="1.5" y="1.5" width="357" height="357" rx="77" fill="none" stroke="#f0d9ff" stroke-opacity=".55" stroke-width="3"/>
+  </defs>
+  <rect width="360" height="360" rx="78" fill="#050507"/>
   <g filter="url(#glow)">
     <use href="#shape" stroke="#4a1d8f" stroke-width="40"/>
     <circle cx="218" cy="110" r="26" fill="#4a1d8f"/>
