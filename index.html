@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 <script>
-(function(){var V='1795547687';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
+(function(){var V='1795549218';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
 </script>
 </head>
 <body>
@@ -670,7 +670,7 @@ body{background:var(--paper)}
 .stb.today .std{color:var(--ink);font-weight:800}
 .stb.today i{outline:2px solid color-mix(in srgb,var(--ink) 50%,transparent);outline-offset:2px}
 .stgoal{position:absolute;left:0;right:0;border-top:1.5px dashed #ff5cd6;pointer-events:none}
-.stgoal span{position:absolute;top:2px;inset-inline-end:0;background:color-mix(in srgb,var(--card) 80%,transparent);padding:0 4px;border-radius:4px;font-size:10.5px;font-weight:700;color:#e040b8}
+.stgoal span{position:absolute;top:2px;inset-inline-start:0;background:color-mix(in srgb,var(--card) 80%,transparent);padding:0 4px;border-radius:4px;font-size:10.5px;font-weight:700;color:#e040b8}
 .stempty{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:14px 8px;color:var(--muted)}
 .stempty b{color:var(--ink);font-size:17px}
 .cd .stp{font-size:9px;font-family:var(--f-num);color:#7cc8ff;line-height:1}
@@ -909,7 +909,7 @@ body{background:var(--paper)}
     <div class="grab"></div>
     <div class="hd"><h2 id="dayTitle">יום</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
     <div class="bd"><div id="dayBody" class="daylist"></div>
-      <div class="dayacts"><button type="button" class="btn lime" id="dayAddWo">＋ אימון</button><button type="button" class="btn ghost" id="dayAddW">＋ שקילה</button><button type="button" class="btn ghost" id="dayPlan" style="grid-column:1/-1">תוכנית</button></div></div>
+      <div class="dayacts"><button type="button" class="btn lime" id="dayAddWo">＋ אימון</button><button type="button" class="btn ghost" id="dayAddW">＋ שקילה</button><button type="button" class="btn ghost" id="dayAddSt" style="grid-column:1/-1">＋ צעדים</button><button type="button" class="btn ghost" id="dayPlan" style="grid-column:1/-1">תוכנית</button></div></div>
   </div>
 
   <div class="cele" id="cele" hidden role="dialog" aria-modal="true" aria-labelledby="celeT">
@@ -1561,6 +1561,7 @@ $('#dayBody').addEventListener('click',e=>{const a=e.target.closest('[data-dwo]'
   if(c){const P=planState;const I=dayInfo(dayIso,P);openWorkout(null,templateFromPlan(I.pd),'plan');$('#woDate').value=dayIso;woDraft.date=dayIso}});
 $('#dayAddWo').onclick=()=>{const d=dayIso;openWorkout(null,null,'fresh');if(!draftGet()||woDraft.date!==d){$('#woDate').value=d;woDraft.date=d}};
 $('#dayAddW').onclick=()=>{const d=dayIso;const ex=state.weeks.find(w=>w.date===d);openEntry(ex?ex.id:null);if(!ex)$('#fDate').value=d};
+$('#dayAddSt').onclick=()=>{const d=dayIso;openSteps();$('#stDate').value=d;$('#stVal').value=state.steps[d]??'';setTimeout(()=>{$('#stVal').scrollIntoView({block:'center'});$('#stVal').focus()},350)};
 $('#dayPlan').onclick=()=>openPlan(new Date(dayIso+'T12:00:00').getDay());
 /* ---------- celebration ---------- */
 const MOT={
