@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 <script>
-(function(){var V='1795620809';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
+(function(){var V='1795634284';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
 </script>
 </head>
 <body>
@@ -730,6 +730,24 @@ body{background:var(--paper)}
 .wotimer i{width:8px;height:8px;border-radius:50%;background:#e0245e;animation:blink 1.2s ease-in-out infinite}
 @keyframes blink{50%{opacity:.25}}
 .wodur{display:inline-block;margin-inline-start:8px;font-size:12px;font-weight:700;color:#4a6400;background:color-mix(in srgb,#d4f24a 30%,transparent);padding:1px 8px;border-radius:999px;vertical-align:middle}
+
+.celecard{max-height:calc(100dvh - 60px);overflow-y:auto}
+.celesum{margin-top:14px;text-align:start;padding:12px 12px 4px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12)}
+.cmpv{font-weight:900;font-size:16px;line-height:1.35}
+.cmpv.up{color:#d4f24a}.cmpv.down{color:#ffb14d}.cmpv.same,.cmpv.new{color:#bfe6ff}
+.cmpsub{font-size:12px;color:rgba(220,232,255,.75);margin-top:3px;display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.cmpk{display:inline-block;padding:1px 8px;border-radius:999px;font-weight:700;font-size:11.5px;background:rgba(255,255,255,.12);color:#fff}
+.cmpk.up{background:rgba(212,242,74,.25);color:#e6ff7a}.cmpk.down{background:rgba(255,140,40,.25);color:#ffcf8a}
+.cmpl{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
+.cmpl li{display:grid;grid-template-columns:24px 1fr;column-gap:8px;align-items:center;font-size:13.5px}
+.cmpl li b{font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cmpl li small{grid-column:2;font-size:12px;color:rgba(220,232,255,.75);margin-top:-2px}
+.cmpi{grid-row:span 2;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:13px;background:rgba(255,255,255,.14)}
+.cmpl li.up .cmpi{background:#d4f24a;color:#1b2a05}.cmpl li.down .cmpi{background:#ff9a3a;color:#3a1200}.cmpl li.new .cmpi{background:#4aa8ff;color:#fff}
+.cmpline{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px;margin-top:12px;padding:9px 12px;border-radius:14px;font-size:13px;background:color-mix(in srgb,var(--paper) 55%,transparent);border:1px solid var(--line)}
+.cmpline span{color:var(--muted);font-family:var(--f-num)}
+.cmpline.up{border-color:#a8cc1c;background:color-mix(in srgb,#d4f24a 14%,transparent)}
+.cmpline.down{border-color:#ffb14d;background:color-mix(in srgb,#ff9a3a 12%,transparent)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -949,7 +967,7 @@ body{background:var(--paper)}
   </div>
 
   <div class="cele" id="cele" hidden role="dialog" aria-modal="true" aria-labelledby="celeT">
-    <div class="celecard"><div class="celeic" aria-hidden="true">✓</div><h3 id="celeT"></h3><div class="celes" id="celeS"></div><p id="celeL"></p><button type="button" class="btn lime" id="celeOk">יאללה, ממשיכים</button></div>
+    <div class="celecard"><div class="celeic" aria-hidden="true">✓</div><h3 id="celeT"></h3><div class="celes" id="celeS"></div><div class="celesum" id="celeSum" hidden></div><p id="celeL"></p><button type="button" class="btn lime" id="celeOk">יאללה, ממשיכים</button></div>
   </div>
 
   <!-- share sheet -->
@@ -1359,7 +1377,7 @@ function renderWorkouts(){
         <span class="tt"><b>${esc(w.title||'אימון')}${w.duration?`<span class="wodur">⏱ ${fmtDur(w.duration)}</span>`:''}</b><span class="mgrow">${woGroups(w).map(k=>`<span class="mgchip">${mgIcon(k)}${MG[k].n}</span>`).join('')}</span></span>
         <span class="chev" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></span></button>
       <div class="wo-stats"><div><div class="v num">${(w.exercises||[]).length}</div><div class="l">תרגילים</div></div><div><div class="v num">${nsets(w)}</div><div class="l">סטים</div></div><div><div class="v num">${fmtK(vol(w))}</div><div class="l">נפח (ק״ג)</div></div></div>
-      <div class="wo-body"><div>${exHtml}${w.note?`<p style="margin:12px 0 0;font-size:13.5px;color:var(--muted)">${esc(w.note)}</p>`:''}
+      <div class="wo-body"><div>${(()=>{const r=compareWorkout(w,w.id);if(!r.comparable)return"";const v=verdictOf(r);return `<div class="cmpline ${v.k}"><b>${esc(v.t)}</b><span>${r.c.up?`${r.c.up}↑ `:""}${r.c.same?`${r.c.same}= `:""}${r.c.down?`${r.c.down}↓`:""}${r.volPct!=null?` · נפח ${r.volPct>0?"+":""}${r.volPct}%`:""}</span></div>`})()}${exHtml}${w.note?`<p style="margin:12px 0 0;font-size:13.5px;color:var(--muted)">${esc(w.note)}</p>`:''}
         <div class="wo-act"><button class="btn ghost" data-edit>עריכה</button><button class="btn ghost" data-again>אימון חוזר</button><button class="btn lime" data-share>ייצוא</button></div></div></div></article>`}).join('')+(L.length>4?`<button class="btn ghost wo-more" id="woMore">${woShowAll?'הצגת פחות':`הצגת כל ${L.length} האימונים`}</button>`:'');
   $('#woMore')&&($('#woMore').onclick=()=>{woShowAll=!woShowAll;renderWorkouts()});
 }
@@ -1438,7 +1456,7 @@ $('#woForm').onsubmit=async e=>{e.preventDefault();const msg=$('#woMsg');
   const id=woEditing?.id||woDraft._id||(date+'-'+Math.random().toString(36).slice(2,7));
   $('#woSave').disabled=true;msg.className='form-msg';msg.textContent='שומר…';
   const newPRs=data.exercises.filter(x=>{const b=bestSet(x);if(!b)return false;const h=exHistory(x.name).filter(z=>z.id!==id&&z.date<=data.date);return h.length&&e1rm(b)>Math.max(...h.map(z=>z.score))+0.01}).map(x=>x.name);
-  try{await store.saveWorkout(id,data);draftClear();if(newPRs.length)0;state.woOpen=id;closeSheets();const wasEdit=woEditing&&!woDraft._id&&state.workouts.some(w=>w.id===id&&w.date<todayIso());if(wasEdit)toast('האימון עודכן');else setTimeout(()=>celebrate({title:'האימון הושלם',sub:`${data.duration?`⏱ ${fmtDur(data.duration)} · `:''}${data.exercises.length} תרגילים · ${data.exercises.reduce((a,e)=>a+e.sets.length,0)} סטים · ${fmtK(vol(data))} ק״ג נפח${newPRs.length?` · שיא חדש ב${newPRs.join(', ')}`:''}`,line:pick(MOT.workout),fx:true}),150);setTimeout(()=>$('#secWorkouts').scrollIntoView({behavior:reduce?'auto':'smooth'}),250)}
+  try{await store.saveWorkout(id,data);draftClear();if(newPRs.length)0;state.woOpen=id;closeSheets();const wasEdit=woEditing&&!woDraft._id&&state.workouts.some(w=>w.id===id&&w.date<todayIso());if(wasEdit)toast('האימון עודכן');else setTimeout(()=>celebrate({title:'האימון הושלם',sub:`${data.duration?`⏱ ${fmtDur(data.duration)} · `:''}${data.exercises.length} תרגילים · ${data.exercises.reduce((a,e)=>a+e.sets.length,0)} סטים · ${fmtK(vol(data))} ק״ג נפח${newPRs.length?` · שיא חדש ב${newPRs.join(', ')}`:''}`,line:pick(MOT.workout),fx:true,sum:compareHtml(compareWorkout(data,id))}),150);setTimeout(()=>$('#secWorkouts').scrollIntoView({behavior:reduce?'auto':'smooth'}),250)}
   catch(err){msg.className='form-msg err';msg.textContent='השמירה נכשלה. בדוק חיבור ונסה שוב.'}finally{$('#woSave').disabled=false}};
 $('#woDel').onclick=async()=>{if(!woDelArm){woDelArm=true;$('#woDel').textContent='לחץ שוב לאישור המחיקה';return}try{await store.removeWorkout(woEditing.id);draftClear();closeSheets();toast('האימון נמחק')}catch(e){$('#woMsg').textContent='המחיקה נכשלה.';$('#woMsg').className='form-msg err'}};
 $('#woNew').onclick=()=>openWorkout(null);
@@ -1625,7 +1643,7 @@ function fireworks(){if(reduce)return;const c=document.createElement('canvas');c
     for(let i=rockets.length-1;i>=0;i--){const r=rockets[i];r.y+=r.vy;x.fillStyle='#fff';x.beginPath();x.arc(r.x,r.y,2.2*dpr,0,7);x.fill();if(r.y<=r.ty){burst(r.x,r.y);rockets.splice(i,1)}}
     for(let i=P.length-1;i>=0;i--){const p=P[i];p.vx*=.985;p.vy=p.vy*.985+.06*dpr;p.x+=p.vx;p.y+=p.vy;p.l-=.012;if(p.l<=0){P.splice(i,1);continue}x.globalAlpha=Math.max(0,p.l);x.fillStyle=p.c;x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill()}
     x.globalAlpha=1;if(t-t0<3400||P.length)requestAnimationFrame(f);else c.remove()})(t0)}
-function celebrate({title,sub,line,fx}){if(fx)fireworks();const o=$('#cele');$('#celeT').textContent=title;$('#celeS').textContent=sub||'';$('#celeS').hidden=!sub;$('#celeL').textContent=line;o.classList.toggle('fxon',!!fx);o.hidden=false;requestAnimationFrame(()=>o.classList.add('show'));clearTimeout(celebrate.t);celebrate.t=setTimeout(closeCele,6500)}
+function celebrate({title,sub,line,fx,sum}){if(fx)fireworks();$('#celeSum').innerHTML=sum||'';$('#celeSum').hidden=!sum;const o=$('#cele');$('#celeT').textContent=title;$('#celeS').textContent=sub||'';$('#celeS').hidden=!sub;$('#celeL').textContent=line;o.classList.toggle('fxon',!!fx);o.hidden=false;requestAnimationFrame(()=>o.classList.add('show'));clearTimeout(celebrate.t);celebrate.t=sum?null:setTimeout(closeCele,6500)}
 function closeCele(){const o=$('#cele');o.classList.remove('show');setTimeout(()=>o.hidden=true,300)}
 $('#celeOk').onclick=closeCele;$('#cele').addEventListener('click',e=>{if(e.target.id==='cele')closeCele()});
 
@@ -1664,6 +1682,27 @@ function woDur(){if(woDraft&&woDraft._start){return{duration:Math.round((Date.no
 let timerIv=null;
 function tickTimer(){clearInterval(timerIv);const el=$('#woTimer');if(!woDraft||!woDraft._start){el.hidden=true;return}el.hidden=false;
   const f=()=>{if(!woDraft||!woDraft._start){clearInterval(timerIv);el.hidden=true;return}$('#woTimerT').textContent=fmtClock((Date.now()-woDraft._start)/1000)};f();timerIv=setInterval(f,1000)}
+
+/* ---------- workout comparison ---------- */
+function exVol(e){return(e.sets||[]).reduce((a,x)=>a+(x.kg||0)*(x.reps||0),0)}
+function compareWorkout(w,id){const items=[];let vNow=0,vPrev=0;const prevIds=new Set();
+  (w.exercises||[]).forEach(e=>{const pv=lastEx(e.name,w.date,id);if(!pv){items.push({name:e.name,st:'new',txt:'תרגיל חדש'});return}prevIds.add(pv.w.id);
+    const A=topOf(e),B=topOf(pv.e);let st,txt;
+    if(A&&B){const dk=+(A.kg-B.kg).toFixed(1),dr=A.reps-B.reps;st=dk>0||(dk===0&&dr>0)?'up':dk===0&&dr===0?'same':'down';
+      txt=dk!==0?`מ-${fc(B.kg)} ל-${fc(A.kg)} ק״ג`:dr!==0?`מ-${B.reps} ל-${A.reps} חזרות ב-${fc(A.kg)} ק״ג`:`${fc(A.kg)}×${A.reps} כמו בפעם הקודמת`;}
+    else{const ra=Math.max(0,...(e.sets||[]).map(x=>x.reps||0)),rb=Math.max(0,...(pv.e.sets||[]).map(x=>x.reps||0));
+      if(!ra&&!rb){st='same';txt='כמו בפעם הקודמת'}else{st=ra>rb?'up':ra===rb?'same':'down';txt=ra===rb?`${ra} חזרות כמו בפעם הקודמת`:`מ-${rb} ל-${ra} חזרות`}}
+    const ve=exVol(e),vp=exVol(pv.e);if(ve&&vp){vNow+=ve;vPrev+=vp}
+    items.push({name:e.name,st,txt,date:pv.w.date})});
+  const c={up:0,same:0,down:0,new:0};items.forEach(i=>c[i.st]++);
+  const volPct=vPrev?Math.round((vNow-vPrev)/vPrev*100):null;
+  const prevW=[...prevIds].map(i=>state.workouts.find(x=>x.id===i)).filter(Boolean).sort((a,b)=>a.date<b.date?1:-1)[0];
+  const durDiff=w.duration&&prevW?.duration?Math.round((w.duration-prevW.duration)/60):null;
+  return{items,c,volPct,durDiff,prevDate:prevW?.date||null,comparable:c.up+c.same+c.down}}
+function verdictOf(r){if(!r.comparable)return{t:'אימון ראשון מהסוג הזה',k:'new'};if(r.c.up>r.c.down)return{t:`השתפרת ב-${r.c.up} מתוך ${r.comparable} תרגילים`,k:'up'};if(r.c.up===r.c.down&&r.c.down===0)return{t:'שמרת על הרמה בכל התרגילים',k:'same'};if(r.c.up>=r.c.down)return{t:'אימון מאוזן מול הפעם הקודמת',k:'same'};return{t:'יום חלש יותר מהפעם הקודמת. קורה, ממשיכים.',k:'down'}}
+function compareHtml(r){if(!r.items.length)return'';const v=verdictOf(r);const ic={up:'↑',same:'=',down:'↓',new:'+'};
+  const chips=[r.volPct!=null?`<span class="cmpk ${r.volPct>0?'up':r.volPct<0?'down':'same'}">נפח ${r.volPct>0?'+':''}${r.volPct}%</span>`:'',r.durDiff!=null&&r.durDiff!==0?`<span class="cmpk same">${r.durDiff>0?'+':'−'}${Math.abs(r.durDiff)} דק׳</span>`:''].join('');
+  return `<div class="cmpv ${v.k}">${esc(v.t)}</div>${r.prevDate?`<div class="cmpsub">לעומת ${dm(r.prevDate)}${chips?' · ':''}${chips}</div>`:''}<ul class="cmpl">${r.items.map(i=>`<li class="${i.st}"><span class="cmpi">${ic[i.st]}</span><b>${esc(i.name)}</b><small>${esc(i.txt)}</small></li>`).join('')}</ul>`}
 function renderAll(){renderDailyQ();renderSteps();renderGoal();renderWorkouts();renderToday();renderPR();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
 
 /* ---------- sheets ---------- */
