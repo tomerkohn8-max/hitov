@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 <script>
-(function(){var V='1795592660';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
+(function(){var V='1795597848';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
 </script>
 </head>
 <body>
@@ -690,12 +690,33 @@ body{background:var(--paper)}
 .dailyq::before{content:"”";position:absolute;inset-inline-end:14px;top:-14px;font-size:92px;font-weight:900;color:rgba(212,242,74,.18);line-height:1}
 .dailyq .dqk{font-size:11.5px;font-weight:700;letter-spacing:.04em;color:#d4f24a}
 .dailyq p{margin:6px 0 0;font-size:19px;font-weight:700;line-height:1.45;text-wrap:balance}
+
+/* tab views */
+.offv{display:none!important}
+.vin{animation:vin .38s cubic-bezier(.2,.8,.2,1) both}
+@keyframes vin{from{opacity:.0;transform:translateY(10px)}}
+#app:not([data-v="ov"]) main>section:first-of-type:not(.offv),#app:not([data-v="ov"]) main [data-view]:not(.offv):first-child{margin-top:18px}
+.tiles{grid-template-columns:1fr 1fr}
+.todaystrip{position:relative;display:flex;align-items:center;gap:12px;width:100%;margin-top:12px;padding:11px 14px;border-radius:20px;text-align:start;color:#fff;
+  background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.3);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:transform .15s}
+.todaystrip:active{transform:scale(.98)}
+.todaystrip>span:nth-child(2){flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.todaystrip b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.todaystrip small{font-size:12px;opacity:.85}
+.todaystrip .tsi{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:17px;font-weight:900}
+.todaystrip em{flex:none;font-style:normal;font-weight:800;font-size:13.5px;padding:7px 14px;border-radius:999px;color:#1b2a05;background:radial-gradient(130% 160% at 30% 10%,#f1ffb0,#d4f24a 50%,#a8cc1c);box-shadow:0 0 14px -4px rgba(212,242,74,.9)}
+.ts-plan .tsi,.ts-none .tsi,.ts-done .tsi,.ts-draft .tsi{background:radial-gradient(130% 160% at 30% 10%,#f1ffb0,#d4f24a 50%,#a8cc1c);color:#1b2a05}
+.ts-plan,.ts-draft{border-color:rgba(212,242,74,.7);box-shadow:0 0 18px -6px rgba(212,242,74,.9)}
+.ts-weigh{border-color:#ff5cd6;box-shadow:0 0 18px -5px rgba(255,92,214,.95)}
+.ts-weigh .tsi{background:linear-gradient(135deg,#ff9cec,#ff5cd6);color:#3a0030}
+.ts-weigh em{background:linear-gradient(90deg,#ff9cec,#ff5cd6);color:#3a0030;box-shadow:0 0 14px -4px rgba(255,92,214,.9)}
+.ts-rest .tsi{background:rgba(255,255,255,.18)}
+.ts-done em,.ts-rest em{background:rgba(255,255,255,.2);color:#fff;box-shadow:none}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
 <div class="ambient" aria-hidden="true"></div>
 <div id="app" dir="rtl" lang="he">
-  <header class="hero" id="top">
+  <header class="hero" id="top" data-view="ov">
     <span class="cloud c1"></span><span class="cloud c2"></span>
     <div class="wrap">
       <div class="topbar">
@@ -713,22 +734,23 @@ body{background:var(--paper)}
         <div class="tiles">
           <div class="tile dark"><div class="v num" id="tW">—</div><div class="l">משקל נוכחי</div></div>
           <div class="tile blue"><div class="v num" id="tWa">—</div><div class="l">היקף מותן (ס״מ)</div></div>
-          <button class="tile go" id="goAdd" aria-label="הוספת שקילה">
+          <button class="tile go" id="goAdd" aria-label="הוספת שקילה" hidden>
             <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M7 17L17 7M9 7h8v8"/></svg>
           </button>
         </div>
+        <button type="button" class="todaystrip" id="todayStrip" hidden></button>
       </div>
     </div>
   </header>
 
   <main class="wrap">
-    <div class="dailyq" id="dailyQ" aria-live="polite"></div>
-    <section class="goalcard" id="secGoal" aria-labelledby="gTitle">
+    <div class="dailyq" id="dailyQ" aria-live="polite" data-view="ov"></div>
+    <section class="goalcard" id="secGoal" data-view="ov" aria-labelledby="gTitle">
       <div class="capsule" id="cap"><div class="liq" id="liq"></div><span class="shine"></span><span class="shine2"></span></div>
       <div class="gtxt"><div class="eyebrow" id="gTitle">הדרך ליעד</div><div class="pct" id="gPct">—</div><div class="sub" id="gSub">קובעים משקל יעד והקפסולה מתמלאת עם כל ק״ג שיורד.</div><button class="btn lime" id="gBtn">הגדרת יעד</button></div>
     </section>
 
-    <section id="secChart">
+    <section id="secChart" data-view="ov">
       <div class="sec-head">
         <div><div class="eyebrow">מגמה שבועית</div><h2>הגרף שלך</h2></div>
         <div class="seg" role="group" aria-label="בחירת מדד">
@@ -744,13 +766,13 @@ body{background:var(--paper)}
       </div>
     </section>
 
-    <section id="secSteps">
+    <section id="secSteps" data-view="ov">
       <div class="sec-head"><div><div class="eyebrow">מד צעדים</div><h2>צעדים</h2><p id="stSub">ממוצע יומי ב-7 הימים האחרונים</p></div>
         <button class="btn lime" id="stConnect" style="padding:9px 14px;font-size:14px;white-space:nowrap;flex:none">＋ צעדים</button></div>
       <div class="card stcard" id="stCard"></div>
     </section>
 
-    <section id="secWorkouts">
+    <section id="secWorkouts" data-view="wo">
       <div class="sec-head">
         <div><div class="eyebrow">יומן כוח</div><h2>אימונים</h2><p>כל אימון, כל סט, וההתקדמות מול הפעם הקודמת</p></div>
         <button class="btn lime" id="woNew" style="padding:9px 14px;font-size:14px;white-space:nowrap;flex:none">＋ אימון</button>
@@ -759,46 +781,46 @@ body{background:var(--paper)}
       <div class="ins" id="woList" style="margin-top:14px"></div>
     </section>
 
-    <section id="secPR">
+    <section id="secPR" data-view="wo">
       <div class="sec-head"><div><div class="eyebrow">שיאים אישיים</div><h2>כמה חזק אתה</h2><p>הסט הכי טוב בכל תרגיל, והמגמה לאורך האימונים</p></div></div>
       <div class="prlist" id="prList"></div>
     </section>
 
-    <section id="secWeeks">
+    <section id="secCompare" data-view="ph">
+      <div class="sec-head"><div><div class="eyebrow">לפני / אחרי</div><h2>השוואה</h2><p id="cmpHint">גוררים את הפס כדי להשוות</p></div></div>
+      <div id="cmp"></div>
+    </section>
+
+    <section id="secWeeks" data-view="ph">
       <div class="sec-head">
         <div><div class="eyebrow">שבוע אחרי שבוע</div><h2>שקילות ותמונות</h2><p>לחיצה על שבוע לעריכה או להוספת תמונה</p></div>
       </div>
       <div class="strip" id="strip"></div>
     </section>
 
-    <section id="secCompare">
-      <div class="sec-head"><div><div class="eyebrow">לפני / אחרי</div><h2>השוואה</h2><p id="cmpHint">גוררים את הפס כדי להשוות</p></div></div>
-      <div id="cmp"></div>
+    <section id="secTips" data-view="tp">
+      <div class="sec-head"><div><div class="eyebrow">מבוסס על הנתונים שלך</div><h2>תובנות וטיפים</h2></div></div>
+      <div class="ins" id="ins"></div>
+
+      <a class="card invcard" href="https://wa.me/?text=%D7%A9%D7%9E%D7%9F%3F%D7%A8%D7%96%D7%94%3F%D7%99%D7%A9%20%D7%9C%D7%9A%20%D7%91%D7%95%D7%9C%D7%9E%D7%99%D7%94%0A%D7%91%D7%95%D7%90%20%D7%95%D7%AA%D7%A6%D7%98%D7%A8%D7%A3%20%D7%9C%D7%90%D7%A4%D7%9C%D7%99%D7%A7%D7%A6%D7%99%D7%94%F0%9F%92%AA%F0%9F%8F%BB%0Ahttps%3A//tomerkohn8-max.github.io/hitov/%3Fjoin%3D1" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></span><span><b>הזמנת חברים לאפליקציה</b><small>שליחה בוואטסאפ עם קישור להצטרפות</small></span></a>
     </section>
 
-    <section id="localBox" hidden>
+    <section id="localBox" hidden data-view="tp">
       <div class="card" style="padding:16px">
         <h3 style="margin:0 0 4px;font-size:16.5px">הנתונים שמורים בטלפון הזה</h3>
         <p style="margin:0;color:var(--muted);font-size:13.5px">השקילות והאימונים לא עולים לשום שרת. כדאי לשמור גיבוי מדי פעם, ומגיבוי אפשר לשחזר הכל במכשיר חדש. תמונות וסרטונים נשארים במכשיר ולא נכנסים לקובץ הגיבוי.</p>
         <div class="row-btns"><button class="btn ghost" id="bkOut">שמירת גיבוי</button><label class="btn ghost" for="bkIn" style="cursor:pointer">שחזור מגיבוי</label><input type="file" id="bkIn" accept="application/json,.json" hidden></div>
       </div>
     </section>
-
-    <section id="secTips">
-      <div class="sec-head"><div><div class="eyebrow">מבוסס על הנתונים שלך</div><h2>תובנות וטיפים</h2></div></div>
-      <div class="ins" id="ins"></div>
-
-      <a class="card invcard" href="https://wa.me/?text=%D7%A9%D7%9E%D7%9F%3F%D7%A8%D7%96%D7%94%3F%D7%99%D7%A9%20%D7%9C%D7%9A%20%D7%91%D7%95%D7%9C%D7%9E%D7%99%D7%94%0A%D7%91%D7%95%D7%90%20%D7%95%D7%AA%D7%A6%D7%98%D7%A8%D7%A3%20%D7%9C%D7%90%D7%A4%D7%9C%D7%99%D7%A7%D7%A6%D7%99%D7%94%F0%9F%92%AA%F0%9F%8F%BB%0Ahttps%3A//tomerkohn8-max.github.io/hitov/%3Fjoin%3D1" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></span><span><b>הזמנת חברים לאפליקציה</b><small>שליחה בוואטסאפ עם קישור להצטרפות</small></span></a>
-    </section>
   </main>
 
   <nav class="nav" aria-label="ניווט">
     <div class="in"><span class="ind" id="navInd" aria-hidden="true"></span>
-      <button data-go="top" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9m6 10V5m6 14v-7m4 7H2"/></svg>סקירה</button>
-      <button data-go="secWorkouts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>אימונים</button>
+      <button data-v="ov" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9m6 10V5m6 14v-7m4 7H2"/></svg>סקירה</button>
+      <button data-v="wo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>אימונים</button>
       <button class="add" id="navAdd" aria-label="הוספה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></button>
-      <button data-go="secWeeks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="15" rx="3"/><circle cx="12" cy="12.5" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg>תמונות</button>
-      <button data-go="secTips"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0012 3z"/></svg>טיפים</button>
+      <button data-v="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="15" rx="3"/><circle cx="12" cy="12.5" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg>תמונות</button>
+      <button data-v="tp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0012 3z"/></svg>טיפים</button>
     </div>
   </nav>
 
@@ -839,6 +861,7 @@ body{background:var(--paper)}
     <div class="hd"><h2 id="menuTitle">מה מוסיפים?</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
     <div class="bd"><div class="menu-opts">
       <button id="mWeigh"><span class="mi" style="background:var(--sky);color:#fff"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M8 9a5 5 0 018 0l-3 3"/></svg></span><span><b>שקילה שבועית</b><span>משקל, מותן, זרועות, תמונה</span></span></button>
+      <button id="mSteps"><span class="mi" style="background:radial-gradient(130% 160% at 30% 10%,#bfe6ff,#4aa8ff 50%,#1d5fd6);color:#fff"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M8 3c2 0 3 2 3 5s-1 5-3 5-3-2-3-5 1-5 3-5zM6 15h4l-.5 4a1.5 1.5 0 01-3 0zM16 7c2 0 3 2 3 5s-1 5-3 5-3-2-3-5 1-5 3-5zM14 19h4l-.5 3a1.5 1.5 0 01-3 0z"/></svg></span><span><b>צעדים</b><span>כמה הלכת היום</span></span></button>
       <button id="mWork"><span class="mi" style="background:var(--lime);color:var(--lime-ink)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></span><span><b>אימון</b><span>תרגילים, סטים, משקלים וחזרות</span></span></button>
     </div></div>
   </div>
@@ -1400,7 +1423,8 @@ $('#woForm').onsubmit=async e=>{e.preventDefault();const msg=$('#woMsg');
 $('#woDel').onclick=async()=>{if(!woDelArm){woDelArm=true;$('#woDel').textContent='לחץ שוב לאישור המחיקה';return}try{await store.removeWorkout(woEditing.id);draftClear();closeSheets();toast('האימון נמחק')}catch(e){$('#woMsg').textContent='המחיקה נכשלה.';$('#woMsg').className='form-msg err'}};
 $('#woNew').onclick=()=>openWorkout(null);
 $('#mWeigh').onclick=()=>openEntry(null);
-$('#mWork').onclick=()=>openWorkout(null);
+$('#mWork').onclick=()=>{const D=planState?.days?.[new Date().getDay()];if(D&&!D.rest&&D.ex?.length&&!draftGet())openWorkout(null,templateFromPlan(D),'plan');else openWorkout(null)};
+$('#mSteps').onclick=()=>openSteps();
 
 function renderGoal(){
   const s=stats(),liq=$('#liq'),cap=$('#cap');
@@ -1447,6 +1471,14 @@ function renderToday(){
   const weighToday=P.weighDay===dow&&!state.weeks.some(w=>w.date===ti&&w.weight!=null);
   let nextW='';if(P.weighDay!=null&&!weighToday){const n=new Date();n.setHours(0,0,0,0);let k=(P.weighDay-dow+7)%7;if(k===0)k=7;n.setDate(n.getDate()+k);nextW=`השקילה הבאה: יום ${DAYN[P.weighDay]} ${n.getDate()}/${n.getMonth()+1}`}
   const doneW=P.weighDay===dow&&!weighToday;
+  {const ts=$('#todayStrip');if(ts){const dr0=draftGet(),wt=P.weighDay===dow&&!state.weeks.some(w=>w.date===ti&&w.weight!=null);let k=null,h='';
+    if(dr0){k='draft';h=`<span class="tsi">⏱</span><span><b>אימון בתהליך</b><small>${dr0.exercises.filter(x=>x.name).length} תרגילים נשמרו</small></span><em>המשך</em>`}
+    else if(wt){k='weigh';h=`<span class="tsi">⚖</span><span><b>היום יום שקילה</b><small>על בטן ריקה, אחרי השירותים</small></span><em>שקילה</em>`}
+    else if(D&&!D.rest&&D.ex?.length&&!done.has(ti)){k='plan';h=`<span class="tsi">🏋</span><span><b>האימון של היום: ${esc(D.title||'אימון')}</b><small>${D.ex.length} תרגילים</small></span><em>התחלה</em>`}
+    else if(done.has(ti)){k='done';h=`<span class="tsi">✓</span><span><b>התאמנת היום</b><small>כל הכבוד. לפרטים בלשונית אימונים</small></span><em>לאימונים</em>`}
+    else if(D&&D.rest){k='rest';h=`<span class="tsi">☾</span><span><b>יום מנוחה</b><small>שינה טובה וחלבון</small></span><em>התוכנית</em>`}
+    else{k='none';h=`<span class="tsi">🏋</span><span><b>מה מתאמנים היום?</b><small>תיעוד אימון או בניית תוכנית</small></span><em>אימון</em>`}
+    ts.className='todaystrip ts-'+k;ts.innerHTML=h;ts.hidden=false;ts.onclick=()=>{if(k==='draft')resumeDraft();else if(k==='weigh')openEntry(null);else if(k==='plan')openWorkout(null,templateFromPlan(D),'plan');else if(k==='none')openWorkout(null);else setView('wo')}}}
   const dr=draftGet();const drHtml=dr?`<div class="weighbar draft"><span><b>אימון בתהליך</b><small>${dr.exercises.filter(x=>x.name).length} תרגילים · נשמר אוטומטית ${new Date(dr.ts).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})}</small></span><span style="flex-direction:row;gap:6px"><button class="btn lime" id="drGo" type="button">המשך</button><button class="btn ghost" id="drDel" type="button">מחיקה</button></span></div>`:'';
   el.innerHTML=drHtml+main+(weighToday?`<div class="weighbar hot"><span><b>היום יום שקילה</b><small>על בטן ריקה, אחרי השירותים</small></span><button class="btn lime" id="weighNow" type="button">שקילה</button></div>`:`<div class="weighbar"><span>${doneW?'נשקלת היום. כל הכבוד':nextW}</span><a class="btn ghost" href="https://tomerkohn8-max.github.io/hitov/weigh-reminder.ics" target="_blank" rel="noopener">תזכורת ביומן</a></div>`)+`<div class="wkplan">${strip}</div>`;
   $('#startToday')&&($('#startToday').onclick=()=>openWorkout(null,templateFromPlan(D),'plan'));
@@ -1687,7 +1719,13 @@ $('#navAdd').onclick=()=>openSheet('menuSheet');
 document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));state.metric=b.dataset.m;renderChart()});
 function moveInd(){const b=document.querySelector('.nav button.on'),ind=$('#navInd');if(!b){ind.style.opacity=0;return}const r=b.getBoundingClientRect(),pr=b.parentElement.getBoundingClientRect();const w=Math.min(r.width-4,74);ind.style.opacity=1;ind.style.width=w+'px';ind.style.left=(r.left-pr.left+(r.width-w)/2)+'px'}
 new MutationObserver(moveInd).observe(document.querySelector('.nav .in'),{subtree:true,attributes:true,attributeFilter:['class']});addEventListener('resize',moveInd);setTimeout(moveInd,50);
-document.querySelectorAll('.nav [data-go]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById(b.dataset.go).scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})});
+let curView='ov';
+function setView(v,noScroll){curView=v;document.getElementById('app').dataset.v=v;document.querySelectorAll('[data-view]').forEach(el=>{const off=el.dataset.view!==v;el.classList.toggle('offv',off);if(!off){el.classList.remove('pre');el.classList.remove('vin');void el.offsetWidth;if(!reduce)el.classList.add('vin')}});
+  document.querySelectorAll('.nav [data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===v));if(!noScroll)window.scrollTo(0,0);
+  if(v==='ov'){try{renderChart(false)}catch(e){}}if(v==='ph'){try{renderCompare()}catch(e){}}}
+document.querySelectorAll('.nav [data-v]').forEach(b=>b.onclick=()=>setView(b.dataset.v));
+{const _siv=Element.prototype.scrollIntoView;Element.prototype.scrollIntoView=function(...a){const v=this.closest&&this.closest('[data-view]');if(v&&v.classList.contains('offv'))setView(v.dataset.view,true);return _siv.apply(this,a)}}
+setView('ov',true);
 $('#bkOut').onclick=()=>{try{const d=localStorage.getItem('hitov.local.v1')||'{}';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([d],{type:'application/json'}));a.download='hitov-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();toast('הגיבוי נשמר')}catch(e){toast('לא הצלחנו לשמור גיבוי')}};
 $('#bkIn').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!d||typeof d.weeks!=='object')throw 0;const cur=JSON.parse(localStorage.getItem('hitov.local.v1')||'{}');const m={...cur,weeks:{...(cur.weeks||{}),...d.weeks},workouts:{...(cur.workouts||{}),...(d.workouts||{})},steps:{...(d.steps||{}),...(cur.steps||{})},goal:d.goal??cur.goal??null,plan:cur.plan||d.plan,phases:(cur.phases&&cur.phases.length?cur.phases:d.phases)||[]};for(const w of Object.values(m.weeks)){if(cur.weeks?.[w.date]){w.photoKey=w.photoKey||cur.weeks[w.date].photoKey;w.videoKey=w.videoKey||cur.weeks[w.date].videoKey}}localStorage.setItem('hitov.local.v1',JSON.stringify(m));store.start(store._cb);toast('הנתונים שוחזרו')}catch(err){toast('הקובץ לא נראה כמו גיבוי של חיטוב.')}e.target.value=''};
 let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>renderChart(false),150)});
@@ -1783,7 +1821,7 @@ try{navigator.storage?.persist?.().catch(()=>{})}catch(e){}
 renderAll();
 if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
   document.querySelectorAll('main section').forEach(sec=>{const r=sec.getBoundingClientRect();if(r.top>innerHeight){sec.classList.add('reveal','pre');io.observe(sec)}})}
-if('IntersectionObserver' in window){const navIo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const id=e.target.id==='secPR'?'secWorkouts':e.target.id==='secChart'||e.target.id==='secGoal'||e.target.id==='secSteps'?'top':e.target.id==='secCompare'?'secWeeks':e.target.id;document.querySelectorAll('.nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===id))}}),{rootMargin:'-45% 0px -50% 0px'});['top','secChart','secSteps','secWorkouts','secPR','secWeeks','secCompare','secTips'].forEach(i=>navIo.observe(document.getElementById(i)))}
+
 (async()=>{
   const c=window.claude;
   let db=null;
