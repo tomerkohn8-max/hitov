@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 <script>
-(function(){var V='1795604079';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
+(function(){var V='1795604103';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
 </script>
 </head>
 <body>
@@ -715,7 +715,13 @@ body{background:var(--paper)}
 .glassbox .lead{text-shadow:0 2px 12px rgba(13,37,71,.35)}
 .pill{border-radius:999px;padding:6px 12px;white-space:nowrap}
 #weekPill{font-size:12px}
-.topbar{flex-direction:row-reverse}
+.topbar{flex-direction:row-reverse;gap:8px}
+.topbar>span:last-child{flex:0 1 auto;min-width:0;gap:5px!important}
+.topbar .brand{flex:none;gap:7px}
+.topbar .brand .logo{width:36px;height:36px}
+.topbar .bname{font-size:21px}
+.topbar .pill{padding:6px 10px}
+.topbar .sharetop{width:34px;height:34px}
 .brand{direction:ltr}
 .bname{font-family:var(--f-num);font-weight:700;letter-spacing:.01em;direction:ltr;font-size:24px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
