@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 <script>
-(function(){var V='1795604103';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
+(function(){var V='1795620809';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
 </script>
 </head>
 <body>
@@ -724,6 +724,12 @@ body{background:var(--paper)}
 .topbar .sharetop{width:34px;height:34px}
 .brand{direction:ltr}
 .bname{font-family:var(--f-num);font-weight:700;letter-spacing:.01em;direction:ltr;font-size:24px}
+
+.wotimer{display:inline-flex;align-items:center;gap:7px;margin-inline-start:auto;margin-inline-end:10px;padding:6px 12px;border-radius:999px;color:#1b2a05;background:radial-gradient(130% 160% at 30% 10%,#f1ffb0,#d4f24a 50%,#a8cc1c);box-shadow:0 0 16px -4px rgba(212,242,74,.95)}
+.wotimer b{font-size:17px;font-weight:600;direction:ltr;min-width:52px;text-align:center}
+.wotimer i{width:8px;height:8px;border-radius:50%;background:#e0245e;animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+.wodur{display:inline-block;margin-inline-start:8px;font-size:12px;font-weight:700;color:#4a6400;background:color-mix(in srgb,#d4f24a 30%,transparent);padding:1px 8px;border-radius:999px;vertical-align:middle}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -882,7 +888,7 @@ body{background:var(--paper)}
   <!-- workout sheet -->
   <div class="sheet chat" id="woSheet" role="dialog" aria-modal="true" aria-labelledby="woTitle">
     <div class="grab"></div>
-    <div class="hd"><h2 id="woTitle">אימון חדש</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <div class="hd"><h2 id="woTitle">אימון חדש</h2><span class="wotimer" id="woTimer" hidden aria-live="off"><i></i><b class="num" id="woTimerT">00:00</b></span><button class="x" data-close aria-label="סגירה">✕</button></div>
     <form class="bd" id="woForm" novalidate style="flex:1">
       <div class="fgrid">
         <div class="fld"><label for="woDate">תאריך</label><input id="woDate" type="date"></div>
@@ -1316,7 +1322,7 @@ const mgIcon=(k,cls='')=>`<span class="mg ${cls}" title="${MG[k].n}"><svg viewBo
 const woGroups=w=>MG_ORDER.filter(k=>(w.exercises||[]).some(e=>exGroup(e)===k));
 function workoutText(w){
   const [y,m,d]=w.date.split('-');const gs=woGroups(w).filter(k=>k!=='other').map(k=>MG[k].n);
-  const lines=[`🏋️ *${w.title||'אימון'}*`,`📅 ${+d}/${+m}/${y}${gs.length?` · ${gs.join(', ')}`:''}`,''];
+  const lines=[`🏋️ *${w.title||'אימון'}*`,`📅 ${+d}/${+m}/${y}${gs.length?` · ${gs.join(', ')}`:''}`,...(w.duration?[`⏱ משך האימון: ${fmtDur(w.duration)}`]:[]),''];
   (w.exercises||[]).forEach((e,i)=>{lines.push(`*${i+1}. ${e.name}*${exGroup(e)!=='other'?` (${MG[exGroup(e)].n})`:''}`);
     (e.sets||[]).forEach((x,j)=>lines.push(x.time?`   סט ${j+1}: ${x.time}`:x.kg==null&&x.reps!=null?`   סט ${j+1}: ${x.reps} חזרות`:`   סט ${j+1}: ${x.kg!=null?fc(x.kg)+' ק״ג':'—'} × ${x.reps??'—'} חזרות${x.drop?' (דרופ)':''}`));lines.push('')});
   lines.push(`סה״כ: ${(w.exercises||[]).length} תרגילים · ${nsets(w)} סטים · נפח ${Math.round(vol(w)).toLocaleString('he-IL')} ק״ג`);
@@ -1350,7 +1356,7 @@ function renderWorkouts(){
       return `<div class="ex"><div class="nm"><span>${mgIcon(exGroup(e))}${esc(e.name)}</span>${pr}</div><div class="sets">${(e.sets||[]).map(x=>`<span class="set${x.drop?' drop':''}">${x.time?esc(x.time):x.kg==null&&x.reps!=null?`${x.reps} <i>חזרות</i>`:`${fc(x.kg)}<i>kg</i> × ${x.reps??'—'}`}${x.drop?' <i>דרופ</i>':''}</span>`).join('')}</div></div>`}).join('');
     return `<article class="card wo${open?' open':''}" data-wid="${esc(w.id)}" style="animation-delay:${Math.min(i,5)*.06}s">
       <button class="wo-h" data-tog aria-expanded="${open}"><span class="wo-date"><span class="dd">${+d}</span><span class="mm">${MSHORT[+m-1]}</span></span>
-        <span class="tt"><b>${esc(w.title||'אימון')}</b><span class="mgrow">${woGroups(w).map(k=>`<span class="mgchip">${mgIcon(k)}${MG[k].n}</span>`).join('')}</span></span>
+        <span class="tt"><b>${esc(w.title||'אימון')}${w.duration?`<span class="wodur">⏱ ${fmtDur(w.duration)}</span>`:''}</b><span class="mgrow">${woGroups(w).map(k=>`<span class="mgchip">${mgIcon(k)}${MG[k].n}</span>`).join('')}</span></span>
         <span class="chev" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></span></button>
       <div class="wo-stats"><div><div class="v num">${(w.exercises||[]).length}</div><div class="l">תרגילים</div></div><div><div class="v num">${nsets(w)}</div><div class="l">סטים</div></div><div><div class="v num">${fmtK(vol(w))}</div><div class="l">נפח (ק״ג)</div></div></div>
       <div class="wo-body"><div>${exHtml}${w.note?`<p style="margin:12px 0 0;font-size:13.5px;color:var(--muted)">${esc(w.note)}</p>`:''}
@@ -1368,7 +1374,8 @@ function cloneEx(w){return(w.exercises||[]).map(e=>({name:e.name,group:e.group||
 function openWorkout(w,template,src){
   if(!w&&!template&&draftGet()){resumeDraft();return}
   woEditing=w||null;woDelArm=false;
-  woDraft={date:w?w.date:new Date().toISOString().slice(0,10),title:w?.title||template?.title||'',note:w?.note||'',exercises:w?cloneEx(w):template?cloneEx(template):[{name:'',sets:[{kg:null,reps:null}]}]};
+  woDraft={date:w?w.date:new Date().toISOString().slice(0,10),title:w?.title||template?.title||'',note:w?.note||'',exercises:w?cloneEx(w):template?cloneEx(template):[{name:'',sets:[{kg:null,reps:null}]}],_start:w?null:Date.now()};
+  tickTimer();
   $('#woTitle').textContent=w?'עריכת אימון':src==='plan'?'האימון של היום':template?'אימון חוזר':'אימון חדש';
   $('#woDate').value=woDraft.date;$('#woName').value=woDraft.title;$('#woNote').value=woDraft.note;
   $('#woMsg').textContent='';$('#woMsg').className='form-msg';$('#woDelRow').hidden=!w;$('#woDel').textContent='מחיקת האימון';
@@ -1408,18 +1415,18 @@ $('#woAddEx').onclick=()=>{woDraft.exercises.push({name:'',sets:[{kg:null,reps:n
 $('#woCopy').onclick=()=>{const l=state.workouts[state.workouts.length-1];if(!l)return;woDraft.exercises=cloneEx(l);if(!$('#woName').value)$('#woName').value=l.title||'';renderExEd();$('#woCopy').hidden=true};
 function buildExercises(){return woDraft.exercises.map(x=>({name:x.name.trim(),...(x.group?{group:x.group}:{}),...(x.weighted?{weighted:true}:{}),sets:x.sets.filter(s=>s.kg!=null||s.reps!=null||s.time).map(s=>({kg:s.kg??null,reps:s.reps??null,...(s.drop?{drop:true}:{}),...(s.time&&s.kg==null&&s.reps==null?{time:s.time}:{})}))})).filter(x=>x.name&&x.sets.length)}
 const DRAFT_K='hitov.wodraft.v1';let draftT=null;
-function draftSave(){clearTimeout(draftT);draftT=setTimeout(()=>{try{if(!woDraft)return;localStorage.setItem(DRAFT_K,JSON.stringify({ts:Date.now(),savedId:woDraft._id||woEditing?.id||null,date:$('#woDate').value,title:$('#woName').value,note:$('#woNote').value,exercises:woDraft.exercises.map(x=>({name:x.name,group:x.group||null,weighted:!!x.weighted,_saved:!!x._saved,sets:x.sets}))}))}catch(e){}},300)}
+function draftSave(){clearTimeout(draftT);draftT=setTimeout(()=>{try{if(!woDraft)return;localStorage.setItem(DRAFT_K,JSON.stringify({ts:Date.now(),start:woDraft._start||null,savedId:woDraft._id||woEditing?.id||null,date:$('#woDate').value,title:$('#woName').value,note:$('#woNote').value,exercises:woDraft.exercises.map(x=>({name:x.name,group:x.group||null,weighted:!!x.weighted,_saved:!!x._saved,sets:x.sets}))}))}catch(e){}},300)}
 function draftGet(){try{const d=JSON.parse(localStorage.getItem(DRAFT_K));if(d&&Date.now()-d.ts<36*3600e3&&d.exercises?.some(x=>x.name||x.sets?.some(z=>z.kg!=null||z.reps!=null)))return d}catch(e){}return null}
 function draftClear(){try{localStorage.removeItem(DRAFT_K)}catch(e){}}
 async function saveProgress(ei){const exercises=buildExercises();const date=$('#woDate').value;
   if(!date||!exercises.length){toast('צריך שם לתרגיל וסט אחד לפחות');return}
   const id=woEditing?.id||woDraft._id||(woDraft._id=date+'-'+Math.random().toString(36).slice(2,7));
-  const data={date,title:$('#woName').value.trim()||null,note:$('#woNote').value.trim()||null,exercises};
+  const data={date,title:$('#woName').value.trim()||null,note:$('#woNote').value.trim()||null,exercises,...woDur()};
   try{await store.saveWorkout(id,data);woEditing={id,...data};woDraft.exercises.forEach((x,i)=>{if(i<=ei||x._saved)x._saved=true});renderExEd();draftSave();toast('התרגיל נשמר');$('#woDelRow').hidden=false}
   catch(err){toast('השמירה נכשלה. הנתונים שמורים בטלפון, נסה שוב.')}}
 $('#woSheet').addEventListener('input',draftSave);$('#woSheet').addEventListener('click',()=>setTimeout(draftSave,0));
 function resumeDraft(){const d=draftGet();if(!d)return;woEditing=d.savedId?(state.workouts.find(w=>w.id===d.savedId)||{id:d.savedId}):null;woDelArm=false;
-  woDraft={date:d.date,title:d.title,note:d.note,exercises:d.exercises,_id:d.savedId||null};
+  woDraft={date:d.date,title:d.title,note:d.note,exercises:d.exercises,_id:d.savedId||null,_start:d.start||null};tickTimer();
   $('#woTitle').textContent='המשך אימון';$('#woDate').value=d.date;$('#woName').value=d.title||'';$('#woNote').value=d.note||'';$('#woMsg').textContent='';$('#woDelRow').hidden=!woEditing;$('#woCopy').hidden=true;
   $('#exNames').innerHTML=[...new Set(state.workouts.flatMap(o=>(o.exercises||[]).map(e=>e.name)))].map(n=>`<option value="${esc(n)}"></option>`).join('');renderExEd();openSheet('woSheet')}
 $('#woForm').onsubmit=async e=>{e.preventDefault();const msg=$('#woMsg');
@@ -1427,11 +1434,11 @@ $('#woForm').onsubmit=async e=>{e.preventDefault();const msg=$('#woMsg');
   const date=$('#woDate').value;
   if(!date){msg.textContent='צריך לבחור תאריך.';msg.className='form-msg err';return}
   if(!exercises.length){msg.textContent='צריך לפחות תרגיל אחד עם שם וסט אחד.';msg.className='form-msg err';return}
-  const data={date,title:$('#woName').value.trim()||null,note:$('#woNote').value.trim()||null,exercises};
+  const data={date,title:$('#woName').value.trim()||null,note:$('#woNote').value.trim()||null,exercises,...woDur()};
   const id=woEditing?.id||woDraft._id||(date+'-'+Math.random().toString(36).slice(2,7));
   $('#woSave').disabled=true;msg.className='form-msg';msg.textContent='שומר…';
   const newPRs=data.exercises.filter(x=>{const b=bestSet(x);if(!b)return false;const h=exHistory(x.name).filter(z=>z.id!==id&&z.date<=data.date);return h.length&&e1rm(b)>Math.max(...h.map(z=>z.score))+0.01}).map(x=>x.name);
-  try{await store.saveWorkout(id,data);draftClear();if(newPRs.length)0;state.woOpen=id;closeSheets();const wasEdit=woEditing&&!woDraft._id&&state.workouts.some(w=>w.id===id&&w.date<todayIso());if(wasEdit)toast('האימון עודכן');else setTimeout(()=>celebrate({title:'האימון הושלם',sub:`${data.exercises.length} תרגילים · ${data.exercises.reduce((a,e)=>a+e.sets.length,0)} סטים · ${fmtK(vol(data))} ק״ג נפח${newPRs.length?` · שיא חדש ב${newPRs.join(', ')}`:''}`,line:pick(MOT.workout),fx:true}),150);setTimeout(()=>$('#secWorkouts').scrollIntoView({behavior:reduce?'auto':'smooth'}),250)}
+  try{await store.saveWorkout(id,data);draftClear();if(newPRs.length)0;state.woOpen=id;closeSheets();const wasEdit=woEditing&&!woDraft._id&&state.workouts.some(w=>w.id===id&&w.date<todayIso());if(wasEdit)toast('האימון עודכן');else setTimeout(()=>celebrate({title:'האימון הושלם',sub:`${data.duration?`⏱ ${fmtDur(data.duration)} · `:''}${data.exercises.length} תרגילים · ${data.exercises.reduce((a,e)=>a+e.sets.length,0)} סטים · ${fmtK(vol(data))} ק״ג נפח${newPRs.length?` · שיא חדש ב${newPRs.join(', ')}`:''}`,line:pick(MOT.workout),fx:true}),150);setTimeout(()=>$('#secWorkouts').scrollIntoView({behavior:reduce?'auto':'smooth'}),250)}
   catch(err){msg.className='form-msg err';msg.textContent='השמירה נכשלה. בדוק חיבור ונסה שוב.'}finally{$('#woSave').disabled=false}};
 $('#woDel').onclick=async()=>{if(!woDelArm){woDelArm=true;$('#woDel').textContent='לחץ שוב לאישור המחיקה';return}try{await store.removeWorkout(woEditing.id);draftClear();closeSheets();toast('האימון נמחק')}catch(e){$('#woMsg').textContent='המחיקה נכשלה.';$('#woMsg').className='form-msg err'}};
 $('#woNew').onclick=()=>openWorkout(null);
@@ -1485,7 +1492,7 @@ function renderToday(){
   let nextW='';if(P.weighDay!=null&&!weighToday){const n=new Date();n.setHours(0,0,0,0);let k=(P.weighDay-dow+7)%7;if(k===0)k=7;n.setDate(n.getDate()+k);nextW=`השקילה הבאה: יום ${DAYN[P.weighDay]} ${n.getDate()}/${n.getMonth()+1}`}
   const doneW=P.weighDay===dow&&!weighToday;
   {const ts=$('#todayStrip');if(ts){const dr0=draftGet(),wt=P.weighDay===dow&&!state.weeks.some(w=>w.date===ti&&w.weight!=null);let k=null,h='';
-    if(dr0){k='draft';h=`<span class="tsi">⏱</span><span><b>אימון בתהליך</b><small>${dr0.exercises.filter(x=>x.name).length} תרגילים נשמרו</small></span><em>המשך</em>`}
+    if(dr0){k='draft';h=`<span class="tsi">⏱</span><span><b>אימון בתהליך${dr0.start?` · ${fmtDur((Date.now()-dr0.start)/1000)}`:''}</b><small>${dr0.exercises.filter(x=>x.name).length} תרגילים נשמרו</small></span><em>המשך</em>`}
     else if(wt){k='weigh';h=`<span class="tsi">⚖</span><span><b>היום יום שקילה</b><small>על בטן ריקה, אחרי השירותים</small></span><em>שקילה</em>`}
     else if(D&&!D.rest&&D.ex?.length&&!done.has(ti)){k='plan';h=`<span class="tsi">🏋</span><span><b>האימון של היום: ${esc(D.title||'אימון')}</b><small>${D.ex.length} תרגילים</small></span><em>התחלה</em>`}
     else if(done.has(ti)){k='done';h=`<span class="tsi">✓</span><span><b>התאמנת היום</b><small>כל הכבוד. לפרטים בלשונית אימונים</small></span><em>לאימונים</em>`}
@@ -1584,7 +1591,7 @@ let dayIso=null;
 function openDay(iso){dayIso=iso;const P=planState||{days:{}};const I=dayInfo(iso,P);const ti=todayIso();
   $('#dayTitle').textContent=`יום ${DAYN[I.dw]} · ${I.d.getDate()}/${I.d.getMonth()+1}`;
   let h='';
-  if(I.wos.length)h+=I.wos.map(w=>`<div class="dayitem done"><span class="dck">✓</span><div><b>${esc(w.title||'אימון')}</b><small>${(w.exercises||[]).length} תרגילים · ${nsets(w)} סטים · ${fmtK(vol(w))} ק״ג</small><span class="mgrow">${woGroups(w).map(k=>`<span class="mgchip">${mgIcon(k)}${MG[k].n}</span>`).join('')}</span></div><button type="button" class="btn ghost" data-dwo="${esc(w.id)}">פתיחה</button></div>`).join('');
+  if(I.wos.length)h+=I.wos.map(w=>`<div class="dayitem done"><span class="dck">✓</span><div><b>${esc(w.title||'אימון')}</b><small>${w.duration?`⏱ ${fmtDur(w.duration)} · `:''}${(w.exercises||[]).length} תרגילים · ${nsets(w)} סטים · ${fmtK(vol(w))} ק״ג</small><span class="mgrow">${woGroups(w).map(k=>`<span class="mgchip">${mgIcon(k)}${MG[k].n}</span>`).join('')}</span></div><button type="button" class="btn ghost" data-dwo="${esc(w.id)}">פתיחה</button></div>`).join('');
   if(state.steps[iso]!=null)h+=`<div class="dayitem"><span class="dck st">⚑</span><div><b>${state.steps[iso].toLocaleString('he-IL')} צעדים</b><small>${state.steps[iso]>=8000?'מעל היעד היומי':'מתחת ל-8,000'}</small></div></div>`;
   if(I.wi)h+=`<div class="dayitem wi"><span class="dck">⚖</span><div><b>${f1(I.wi.weight)} ק״ג</b><small>${I.wi.waist!=null?`מותן ${fc(I.wi.waist)} ס״מ`:''}</small></div><button type="button" class="btn ghost" data-dwe="${esc(I.wi.id)}">עריכה</button></div>`;
   if(!I.wos.length&&I.plan)h+=`<div class="dayitem"><span class="dck pl">●</span><div><b>מתוכנן: ${esc(I.pd.title||'אימון')}</b><small>${I.pd.ex.length} תרגילים</small></div>${iso>=ti?`<button type="button" class="btn lime" data-dstart>התחלה</button>`:''}</div>`;
@@ -1649,6 +1656,14 @@ async function handleStepsParam(){try{const q=new URLSearchParams(location.searc
 const DAILYQ=["כל יום שאתה מופיע הוא יום שאתה מנצח.", "הגוף משיג את מה שהראש מאמין בו.", "לא צריך להיות מושלם, צריך להיות עקבי.", "היום הוא עוד לבנה בגוף שאתה בונה.", "המשמעת עושה את מה שהמוטיבציה לא יכולה.", "תתחרה רק במי שהיית אתמול.", "קטן כל יום, ענק בסוף השנה.", "ההרגלים של היום הם המראה של מחר.", "אף אחד לא התחרט על אימון שעשה.", "אל תספור את הימים, תגרום לימים לספור.", "הכי קשה זה להתחיל. השאר זה רק להמשיך.", "התוצאות באות למי שלא עוזב.", "הזיעה של היום היא הביטחון של מחר.", "תהיה גאה בכל צעד קטן.", "שומן יורד בסבלנות, לא בבהלה.", "עייף? תנוח. אל תוותר.", "הגוף שלך שומע כל מה שהראש אומר. דבר יפה.", "מחר תודה לעצמך על היום.", "אין קיצורי דרך. יש דרך, ואתה עליה.", "כל ארוחה טובה היא הצבעה בעד המטרה.", "התקדמות, לא שלמות.", "מי שמתמיד מנצח את מי שמוכשר.", "היום עושים את מה שאחרים לא רוצים, מחר חיים כמו שאחרים לא יכולים.", "תשתה מים, תישן טוב, תתאמן. זה כל הסוד.", "גם יום חלש הוא יום שלא ויתרת בו.", "אתה רחוק יותר ממה שהיית, וקרוב יותר ממה שאתה חושב.", "השינוי מתחיל ברגע שאתה מחליט.", "לא בא לך? בדיוק בגלל זה.", "תהליך ארוך, תוצאה ששווה את זה.", "המראה מתעדכנת לאט. המשמעת מתעדכנת עכשיו.", "כוח זה לא רק משקולות. זה לקום גם היום.", "תאכל כמו מי שאתה רוצה להיות.", "כל סט נוסף הוא הבטחה שקיימת.", "תעשה היום משהו שהגרסה הבאה שלך תודה לך עליו.", "עקביות הופכת רגיל ליוצא דופן.", "אל תחכה ליום שני. היום זה היום.", "הגוף שלך יכול. תשכנע את הראש.", "מה שקל לא משנה אותך.", "הדרך לגוף חדש עוברת בהרגל קטן אחד ביום.", "תסתכל כמה רחוק הגעת, לא כמה נשאר.", "שקט, עבודה, תוצאות.", "חלש היום, חזק מחר. רק אל תעצור.", "מוטיבציה מתחילה אותך, הרגלים ממשיכים אותך.", "אתה לא מתאמן כי אתה שונא את הגוף, אלא כי אתה מכבד אותו.", "תלך עוד קצת. תנשום עוד קצת. תצליח.", "המספר במשקל הוא נתון, לא שיפוט.", "עוד יום, עוד הזדמנות.", "המטרה לא זזה. אתה זז אליה.", "תעשה את זה בשבילך.", "הקולות שאומרים 'אין לך כוח' טועים כל יום מחדש.", "כל ק״ג שהלך סיפר סיפור של עבודה קשה.", "מי שמתעד, משתפר.", "חזק זה מי שחוזר אחרי יום רע.", "ההבדל בין חלום ליעד הוא תוכנית.", "גם צעד אחד קדימה הוא קדימה.", "השבוע שלך מתחיל בבחירה של היום.", "בנוי מהחלטות קטנות.", "תהיה הסיבה שאתה מחייך במראה.", "הדרך ארוכה, אבל אתה כבר באמצע.", "היום עוד אחד בדרך לגרסה הכי טובה שלך."];
 function renderDailyQ(){const el=$('#dailyQ');if(!el)return;const t=new Date();const n=Math.floor((Date.UTC(t.getFullYear(),t.getMonth(),t.getDate())-Date.UTC(2026,0,1))/864e5);const i=((n*37)%DAILYQ.length+DAILYQ.length)%DAILYQ.length;
   el.innerHTML=`<span class="dqk">המשפט של היום · ${t.getDate()}/${t.getMonth()+1}</span><p>${esc(DAILYQ[i])}</p>`}
+
+/* ---------- workout timer ---------- */
+const fmtClock=sec=>{sec=Math.max(0,Math.floor(sec));const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),x=sec%60;return (h?h+':'+String(m).padStart(2,'0'):String(m).padStart(2,'0'))+':'+String(x).padStart(2,'0')};
+const fmtDur=sec=>{const m=Math.round(sec/60);if(m<60)return m+' דק׳';const h=Math.floor(m/60),r=m%60;return h+' ש׳'+(r?` ${r} דק׳`:'')};
+function woDur(){if(woDraft&&woDraft._start){return{duration:Math.round((Date.now()-woDraft._start)/1000)}}return woEditing?.duration?{duration:woEditing.duration}:{}}
+let timerIv=null;
+function tickTimer(){clearInterval(timerIv);const el=$('#woTimer');if(!woDraft||!woDraft._start){el.hidden=true;return}el.hidden=false;
+  const f=()=>{if(!woDraft||!woDraft._start){clearInterval(timerIv);el.hidden=true;return}$('#woTimerT').textContent=fmtClock((Date.now()-woDraft._start)/1000)};f();timerIv=setInterval(f,1000)}
 function renderAll(){renderDailyQ();renderSteps();renderGoal();renderWorkouts();renderToday();renderPR();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
 
 /* ---------- sheets ---------- */
