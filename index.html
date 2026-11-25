@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 <script>
-(function(){var V='1795549858';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
+(function(){var V='1795592660';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
 </script>
 </head>
 <body>
@@ -685,6 +685,11 @@ body{background:var(--paper)}
 .stcopy .btn{flex:none;padding:8px 12px;font-size:13px}
 .stnote{font-size:12.5px;color:var(--muted);margin:14px 0 0;padding:10px 12px;border-radius:12px;border:1px dashed var(--line)}
 .stmanual{margin-top:16px}
+
+.dailyq{position:relative;margin-top:18px;padding:16px 18px 18px;border-radius:24px;overflow:hidden;color:#fff;background:radial-gradient(120% 140% at 85% 0%,rgba(29,58,114,.85),rgba(8,16,40,.9));box-shadow:0 0 0 1px rgba(212,242,74,.35),0 0 26px -10px rgba(212,242,74,.8),0 20px 40px -24px rgba(5,15,45,.9);animation:rise .7s both}
+.dailyq::before{content:"”";position:absolute;inset-inline-end:14px;top:-14px;font-size:92px;font-weight:900;color:rgba(212,242,74,.18);line-height:1}
+.dailyq .dqk{font-size:11.5px;font-weight:700;letter-spacing:.04em;color:#d4f24a}
+.dailyq p{margin:6px 0 0;font-size:19px;font-weight:700;line-height:1.45;text-wrap:balance}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -717,6 +722,7 @@ body{background:var(--paper)}
   </header>
 
   <main class="wrap">
+    <div class="dailyq" id="dailyQ" aria-live="polite"></div>
     <section class="goalcard" id="secGoal" aria-labelledby="gTitle">
       <div class="capsule" id="cap"><div class="liq" id="liq"></div><span class="shine"></span><span class="shine2"></span></div>
       <div class="gtxt"><div class="eyebrow" id="gTitle">הדרך ליעד</div><div class="pct" id="gPct">—</div><div class="sub" id="gSub">קובעים משקל יעד והקפסולה מתמלאת עם כל ק״ג שיורד.</div><button class="btn lime" id="gBtn">הגדרת יעד</button></div>
@@ -1595,7 +1601,10 @@ async function handleStepsParam(){try{const q=new URLSearchParams(location.searc
   q.delete('steps');q.delete('date');history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:'')+location.hash);
   if(v==null||v<0||v>200000){toast('מספר הצעדים לא תקין');return}await store.setSteps(d,Math.round(v));
   setTimeout(()=>{toast(`נשמרו ${Math.round(v).toLocaleString('he-IL')} צעדים ל-${dm(d)}`);$('#secSteps')?.scrollIntoView({behavior:reduce?'auto':'smooth'})},600)}catch(e){}}
-function renderAll(){renderSteps();renderGoal();renderWorkouts();renderToday();renderPR();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
+const DAILYQ=["כל יום שאתה מופיע הוא יום שאתה מנצח.", "הגוף משיג את מה שהראש מאמין בו.", "לא צריך להיות מושלם, צריך להיות עקבי.", "היום הוא עוד לבנה בגוף שאתה בונה.", "המשמעת עושה את מה שהמוטיבציה לא יכולה.", "תתחרה רק במי שהיית אתמול.", "קטן כל יום, ענק בסוף השנה.", "ההרגלים של היום הם המראה של מחר.", "אף אחד לא התחרט על אימון שעשה.", "אל תספור את הימים, תגרום לימים לספור.", "הכי קשה זה להתחיל. השאר זה רק להמשיך.", "התוצאות באות למי שלא עוזב.", "הזיעה של היום היא הביטחון של מחר.", "תהיה גאה בכל צעד קטן.", "שומן יורד בסבלנות, לא בבהלה.", "עייף? תנוח. אל תוותר.", "הגוף שלך שומע כל מה שהראש אומר. דבר יפה.", "מחר תודה לעצמך על היום.", "אין קיצורי דרך. יש דרך, ואתה עליה.", "כל ארוחה טובה היא הצבעה בעד המטרה.", "התקדמות, לא שלמות.", "מי שמתמיד מנצח את מי שמוכשר.", "היום עושים את מה שאחרים לא רוצים, מחר חיים כמו שאחרים לא יכולים.", "תשתה מים, תישן טוב, תתאמן. זה כל הסוד.", "גם יום חלש הוא יום שלא ויתרת בו.", "אתה רחוק יותר ממה שהיית, וקרוב יותר ממה שאתה חושב.", "השינוי מתחיל ברגע שאתה מחליט.", "לא בא לך? בדיוק בגלל זה.", "תהליך ארוך, תוצאה ששווה את זה.", "המראה מתעדכנת לאט. המשמעת מתעדכנת עכשיו.", "כוח זה לא רק משקולות. זה לקום גם היום.", "תאכל כמו מי שאתה רוצה להיות.", "כל סט נוסף הוא הבטחה שקיימת.", "תעשה היום משהו שהגרסה הבאה שלך תודה לך עליו.", "עקביות הופכת רגיל ליוצא דופן.", "אל תחכה ליום שני. היום זה היום.", "הגוף שלך יכול. תשכנע את הראש.", "מה שקל לא משנה אותך.", "הדרך לגוף חדש עוברת בהרגל קטן אחד ביום.", "תסתכל כמה רחוק הגעת, לא כמה נשאר.", "שקט, עבודה, תוצאות.", "חלש היום, חזק מחר. רק אל תעצור.", "מוטיבציה מתחילה אותך, הרגלים ממשיכים אותך.", "אתה לא מתאמן כי אתה שונא את הגוף, אלא כי אתה מכבד אותו.", "תלך עוד קצת. תנשום עוד קצת. תצליח.", "המספר במשקל הוא נתון, לא שיפוט.", "עוד יום, עוד הזדמנות.", "המטרה לא זזה. אתה זז אליה.", "תעשה את זה בשבילך.", "הקולות שאומרים 'אין לך כוח' טועים כל יום מחדש.", "כל ק״ג שהלך סיפר סיפור של עבודה קשה.", "מי שמתעד, משתפר.", "חזק זה מי שחוזר אחרי יום רע.", "ההבדל בין חלום ליעד הוא תוכנית.", "גם צעד אחד קדימה הוא קדימה.", "השבוע שלך מתחיל בבחירה של היום.", "בנוי מהחלטות קטנות.", "תהיה הסיבה שאתה מחייך במראה.", "הדרך ארוכה, אבל אתה כבר באמצע.", "היום עוד אחד בדרך לגרסה הכי טובה שלך."];
+function renderDailyQ(){const el=$('#dailyQ');if(!el)return;const t=new Date();const n=Math.floor((Date.UTC(t.getFullYear(),t.getMonth(),t.getDate())-Date.UTC(2026,0,1))/864e5);const i=((n*37)%DAILYQ.length+DAILYQ.length)%DAILYQ.length;
+  el.innerHTML=`<span class="dqk">המשפט של היום · ${t.getDate()}/${t.getMonth()+1}</span><p>${esc(DAILYQ[i])}</p>`}
+function renderAll(){renderDailyQ();renderSteps();renderGoal();renderWorkouts();renderToday();renderPR();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
 
 /* ---------- sheets ---------- */
 let openId=null;
