@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 <script>
-(function(){var V='1795634284';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
+(function(){var V='1795765908';try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.v&&j.v!==V){var k='hitov.reloaded.'+j.v;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');var q=new URLSearchParams(location.search);q.set('v',j.v);location.replace(location.pathname+'?'+q.toString()+location.hash)}}}).catch(function(){})}catch(e){}})();
 </script>
 </head>
 <body>
@@ -958,6 +958,15 @@ body{background:var(--paper)}
     </div>
   </div>
 
+  <!-- draft choice -->
+  <div class="sheet" id="draftSheet" role="dialog" aria-modal="true" aria-labelledby="dfTitle">
+    <div class="grab"></div>
+    <div class="hd"><h2 id="dfTitle">יש אימון פתוח</h2><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <div class="bd"><p style="margin:0 0 12px;color:var(--muted)" id="dfInfo"></p>
+      <div class="row-btns" style="flex-direction:column"><button type="button" class="btn lime full" id="dfNew">התחלת אימון חדש</button><button type="button" class="btn ghost full" id="dfGo">המשך האימון הפתוח</button></div>
+      <p style="margin:12px 0 0;font-size:12.5px;color:var(--muted)">תרגילים שכבר שמרת באימון הפתוח נשארים ביומן גם אם מתחילים אימון חדש.</p></div>
+  </div>
+
   <!-- day sheet -->
   <div class="sheet" id="daySheet" role="dialog" aria-modal="true" aria-labelledby="dayTitle">
     <div class="grab"></div>
@@ -1390,7 +1399,7 @@ $('#woList').addEventListener('click',e=>{const card=e.target.closest('.wo');if(
 let woEditing=null,woDraft=null,woDelArm=false;
 function cloneEx(w){return(w.exercises||[]).map(e=>({name:e.name,group:e.group||null,weighted:!!e.weighted,sets:(e.sets||[]).map(x=>({kg:x.kg,reps:x.reps,drop:!!x.drop,...(x.time?{time:x.time}:{})}))}))}
 function openWorkout(w,template,src){
-  if(!w&&!template&&draftGet()){resumeDraft();return}
+  if(!w&&draftGet()&&!forceNew){askDraft(template,src);return}forceNew=false;
   woEditing=w||null;woDelArm=false;
   woDraft={date:w?w.date:new Date().toISOString().slice(0,10),title:w?.title||template?.title||'',note:w?.note||'',exercises:w?cloneEx(w):template?cloneEx(template):[{name:'',sets:[{kg:null,reps:null}]}],_start:w?null:Date.now()};
   tickTimer();
@@ -1434,7 +1443,7 @@ $('#woCopy').onclick=()=>{const l=state.workouts[state.workouts.length-1];if(!l)
 function buildExercises(){return woDraft.exercises.map(x=>({name:x.name.trim(),...(x.group?{group:x.group}:{}),...(x.weighted?{weighted:true}:{}),sets:x.sets.filter(s=>s.kg!=null||s.reps!=null||s.time).map(s=>({kg:s.kg??null,reps:s.reps??null,...(s.drop?{drop:true}:{}),...(s.time&&s.kg==null&&s.reps==null?{time:s.time}:{})}))})).filter(x=>x.name&&x.sets.length)}
 const DRAFT_K='hitov.wodraft.v1';let draftT=null;
 function draftSave(){clearTimeout(draftT);draftT=setTimeout(()=>{try{if(!woDraft)return;localStorage.setItem(DRAFT_K,JSON.stringify({ts:Date.now(),start:woDraft._start||null,savedId:woDraft._id||woEditing?.id||null,date:$('#woDate').value,title:$('#woName').value,note:$('#woNote').value,exercises:woDraft.exercises.map(x=>({name:x.name,group:x.group||null,weighted:!!x.weighted,_saved:!!x._saved,sets:x.sets}))}))}catch(e){}},300)}
-function draftGet(){try{const d=JSON.parse(localStorage.getItem(DRAFT_K));if(d&&Date.now()-d.ts<36*3600e3&&d.exercises?.some(x=>x.name||x.sets?.some(z=>z.kg!=null||z.reps!=null)))return d}catch(e){}return null}
+function draftGet(){try{const d=JSON.parse(localStorage.getItem(DRAFT_K));if(!d)return null;if(Date.now()-d.ts>12*3600e3){localStorage.removeItem(DRAFT_K);return null}if(d.exercises?.some(x=>x.name||x.sets?.some(z=>z.kg!=null||z.reps!=null)))return d}catch(e){}return null}
 function draftClear(){try{localStorage.removeItem(DRAFT_K)}catch(e){}}
 async function saveProgress(ei){const exercises=buildExercises();const date=$('#woDate').value;
   if(!date||!exercises.length){toast('צריך שם לתרגיל וסט אחד לפחות');return}
@@ -1703,6 +1712,12 @@ function verdictOf(r){if(!r.comparable)return{t:'אימון ראשון מהסו�
 function compareHtml(r){if(!r.items.length)return'';const v=verdictOf(r);const ic={up:'↑',same:'=',down:'↓',new:'+'};
   const chips=[r.volPct!=null?`<span class="cmpk ${r.volPct>0?'up':r.volPct<0?'down':'same'}">נפח ${r.volPct>0?'+':''}${r.volPct}%</span>`:'',r.durDiff!=null&&r.durDiff!==0?`<span class="cmpk same">${r.durDiff>0?'+':'−'}${Math.abs(r.durDiff)} דק׳</span>`:''].join('');
   return `<div class="cmpv ${v.k}">${esc(v.t)}</div>${r.prevDate?`<div class="cmpsub">לעומת ${dm(r.prevDate)}${chips?' · ':''}${chips}</div>`:''}<ul class="cmpl">${r.items.map(i=>`<li class="${i.st}"><span class="cmpi">${ic[i.st]}</span><b>${esc(i.name)}</b><small>${esc(i.txt)}</small></li>`).join('')}</ul>`}
+
+let forceNew=false;
+function askDraft(template,src){const d=draftGet();$('#dfInfo').textContent=`${d.title||'אימון'} · ${d.exercises.filter(x=>x.name).length} תרגילים${d.start?` · התחיל לפני ${fmtDur((Date.now()-d.start)/1000)}`:''}`;
+  $('#dfGo').onclick=()=>resumeDraft();
+  $('#dfNew').onclick=()=>{draftClear();forceNew=true;openWorkout(null,template||null,src);renderToday()};
+  openSheet('draftSheet')}
 function renderAll(){renderDailyQ();renderSteps();renderGoal();renderWorkouts();renderToday();renderPR();renderHero();renderChart();renderStrip();renderCompare();renderInsights()}
 
 /* ---------- sheets ---------- */
